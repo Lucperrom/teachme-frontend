@@ -1,0 +1,92 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+.header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.2em;
+  margin-top: 5px;
+}
+
+.course-title {
+  font-size: 1em;
+  color: #ccc;
+}
+
+.main {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.review {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.review-date {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.review-body {
+  margin-top: 10px;
+}
+
+.rating {
+  font-size: 1.5em; 
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star {
+  padding: 0 5px;
+  transition: color 0.2s ease-in-out;
+}
+
+.star.filled {
+  color: #FFD700;
+}
+
+.rating .star:hover,
+.rating .star:hover ~ .star {
+  color: #FFD700; 
+}
+
+.rating .star:hover ~ .star {
+  color: #ccc; 
+}
+
+.description {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+}
+
+.review:last-child {
+  border-bottom: none;
+}
