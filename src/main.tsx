@@ -1,15 +1,18 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import {createRoot} from 'react-dom/client'
 import App from './App.tsx'
 import {ChakraProvider, defaultSystem} from '@chakra-ui/react'
-import { ThemeProvider } from 'next-themes'
+import {ThemeProvider} from 'next-themes'
+import {BrowserRouter} from "react-router-dom";
+import {AuthProvider} from "./services/auth/AuthContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-      <ChakraProvider value={defaultSystem}>
-          <ThemeProvider attribute="class" disableTransitionOnChange>
-              <App />
-          </ThemeProvider>
-      </ChakraProvider>
-  </StrictMode>,
+    <BrowserRouter>
+        <ChakraProvider value={defaultSystem}>
+            <ThemeProvider attribute="class" disableTransitionOnChange>
+                <AuthProvider>
+                    <App/>
+                </AuthProvider>
+            </ThemeProvider>
+        </ChakraProvider>
+    </BrowserRouter>
 )
