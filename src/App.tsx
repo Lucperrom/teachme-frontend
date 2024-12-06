@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound.tsx";
 import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
+import CompleteProfile from "./pages/CompleteProfile.tsx";
 
 function App() {
     return (
@@ -30,6 +31,11 @@ function App() {
                     <PublicRoute>
                         <SignUp/>
                     </PublicRoute>
+                }/>
+                <Route path={AppRoute.COMPLETE_PROFILE} element={
+                    <ProtectedRoute>
+                        <CompleteProfile/>
+                    </ProtectedRoute>
                 }/>
                 <Route path={AppRoute.PROFILE}
                        element={

@@ -6,12 +6,11 @@ interface Credentials {
 }
 
 interface AuthResponse {
-    token: string;
-    user: {
-        id: string;
-        email: string;
-        name: string;
-    };
+   token: string;
+}
+
+interface RegisterResponse {
+    userId: string;
 }
 
 export const authService = {
@@ -23,8 +22,7 @@ export const authService = {
     },
 
     async register(userData: Credentials) {
-        const response = await client.post<AuthResponse>('/register', userData);
-        this.setToken(response.data.token);
+        const response = await client.post<RegisterResponse>('/api/v1/users', userData);
         return response.data;
     },
 

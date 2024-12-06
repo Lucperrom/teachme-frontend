@@ -29,7 +29,7 @@ const Login = () => {
                        placeholder="example@example.com"/>
             </Field>
 
-            <Field style={{width: 400}}>
+            <Field style={{width: 400}} label="Password">
                 <Input type="password"
                        value={password}
                        onChange={(val) => setPassword(val.currentTarget.value)}
