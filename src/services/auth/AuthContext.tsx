@@ -5,7 +5,7 @@ import client from "../axios.ts";
 interface User {
     id: string;
     email: string;
-    name: string;
+    role: string;
 }
 
 interface AuthContextType {
@@ -29,9 +29,9 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
             try {
                 const token = authService.getToken();
                 if (token) {
-                    const response = await client.get('/me');
-                    setUser(response.data.user);
+                    await loadMe()
                 }
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 authService.logout();
             } finally {
@@ -46,8 +46,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         try {
             setIsLoading(true);
             setError(null);
-            const response = await authService.login({email, password});
-            setUser(response.user);
+            await authService.login({email, password});
+            await loadMe();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed');
             throw err;
@@ -55,6 +55,11 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
             setIsLoading(false);
         }
     }, []);
+
+    const loadMe = async () => {
+        const me = await client.get('/api/v1/auth/me');
+        setUser(me.data);
+    }
 
     const logout = useCallback(async () => {
         try {
@@ -69,8 +74,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         try {
             setIsLoading(true);
             setError(null);
-            const response = await authService.register({email, password});
-            setUser(response.user);
+            await authService.register({email, password});
+            await loadMe();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Registration failed');
             throw err;

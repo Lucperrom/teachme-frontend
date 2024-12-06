@@ -7,15 +7,30 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import Profile from "./pages/Profile.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import {AppRoute} from "./constants/routes.ts";
+import Landing from "./pages/Landing.tsx";
+import PublicRoute from "./components/PublicRoute.tsx";
 
 function App() {
     return (
         <>
             <NavigationBar/>
             <Routes>
-                <Route index path={AppRoute.HOME} element={<Home/>}/>
-                <Route path={AppRoute.LOGIN} element={<Login/>}/>
-                <Route path={AppRoute.SIGNUP} element={<SignUp/>}/>
+                <Route index path={AppRoute.LANDING} element={<Landing/>}/>
+                <Route path={AppRoute.HOME} element={
+                    <ProtectedRoute>
+                        <Home/>
+                    </ProtectedRoute>
+                }/>
+                <Route path={AppRoute.LOGIN} element={
+                    <PublicRoute>
+                        <Login/>
+                    </PublicRoute>
+                }/>
+                <Route path={AppRoute.SIGNUP} element={
+                    <PublicRoute>
+                        <SignUp/>
+                    </PublicRoute>
+                }/>
                 <Route path={AppRoute.PROFILE}
                        element={
                            <ProtectedRoute>

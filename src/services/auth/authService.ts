@@ -16,8 +16,9 @@ interface AuthResponse {
 
 export const authService = {
     async login(credentials: Credentials) {
-        const response = await client.post<AuthResponse>('/signup', credentials);
+        const response = await client.post<AuthResponse>('/api/v1/auth/signin', credentials);
         this.setToken(response.data.token);
+        window.location.href = '/home';
         return response.data;
     },
 

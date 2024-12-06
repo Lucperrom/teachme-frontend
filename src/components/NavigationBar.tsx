@@ -1,10 +1,13 @@
-import {Flex, Heading} from "@chakra-ui/react";
+import {Box, Flex, Heading} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
-import {Avatar} from "./ui/avatar.tsx";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import ColorToggle from "./ColorToggle.tsx";
 import {AppRoute} from "../constants/routes.ts";
 import LinkButton from "./LinkButton.tsx";
+import {MenuContent, MenuItem, MenuRoot, MenuTrigger} from "./ui/menu.tsx";
+import {LuLogOut, LuMenu} from "react-icons/lu";
+import {Button} from "./ui/button.tsx";
+import {authService} from "../services/auth/authService.ts";
 
 const NavigationBar = () => {
     const {user} = useAuth();
@@ -29,7 +32,19 @@ const NavigationBar = () => {
 
             <Flex gap={4} alignItems="center">
                 {user ? (
-                    <Avatar/>
+                    <MenuRoot positioning={{placement: "bottom-start"}}>
+                        <MenuTrigger asChild>
+                            <Button variant="outline" size="sm">
+                                <LuMenu/>
+                            </Button>
+                        </MenuTrigger>
+                        <MenuContent>
+                            <MenuItem onClick={() => authService.logout()} value="logout" valueText="logout">
+                                <LuLogOut/>
+                                <Box flex="1">Logout</Box>
+                            </MenuItem>
+                        </MenuContent>
+                    </MenuRoot>
                 ) : (
                     <>
                         <LinkButton
