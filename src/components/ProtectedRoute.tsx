@@ -2,6 +2,7 @@ import {Navigate, useLocation} from "react-router-dom";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {ReactNode} from "react";
 import {AppRoute} from "../constants/routes.ts";
+import LoadingSpinner from "./LoadingSpinner.tsx";
 
 interface ProtectedRouteProps {
     children: ReactNode;
@@ -12,7 +13,7 @@ const ProtectedRoute = ({children}: ProtectedRouteProps) => {
     const location = useLocation();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner/>;
     }
 
     if (!user) {
