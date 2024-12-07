@@ -1,0 +1,15 @@
+:root{
+    --main-blue-color: #3aaaeb;
+    --main-green-color: #14d286;
+    --main-purple-color: #c824d477;
+}
+
+.margin-left {
+  margin-left: 1em;
+}
+
+.custom-hr {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    margin-right: 2em;
+  }

@@ -10,6 +10,7 @@ import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
+import RatingList from "./services/rating/Rating.tsx";
 
 function App() {
     return (
@@ -25,6 +26,11 @@ function App() {
                 <Route path={AppRoute.LOGIN} element={
                     <PublicRoute>
                         <Login/>
+                    </PublicRoute>
+                }/>
+                <Route path={AppRoute.RATING} element={
+                    <PublicRoute>
+                        <RatingList/>
                     </PublicRoute>
                 }/>
                 <Route path={AppRoute.SIGNUP} element={

@@ -1,0 +1,22 @@
+.rating-data{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.rating-row{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--main-purple-color);
+    border-radius: 2.25rem;
+    padding: 2rem;
+    background-color: rgb(245, 245, 245);
+    margin: 25px 0;
+}
