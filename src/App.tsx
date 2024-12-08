@@ -10,7 +10,7 @@ import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
-import RatingList from "./services/rating/Rating.tsx";
+import RatingList from "./services/rating/RatingList.tsx";
 
 function App() {
     return (

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./static/authButton.css";
 import "./static/global.css";
 import "./static/rating.css";
+import PopoverDemo from "./RatingCreate";
 
-// Definir el tipo para una valoración
 type Rating = {
   id: string;
   username: string;
@@ -32,6 +32,7 @@ function RatingList() {
     const pathArray = window.location.pathname.split("/");
     const [ratings, setRatings] = useState<Rating[]>([]);
     const [courseId] = useState(pathArray[1]);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   
     async function setUp() {
       try {
@@ -71,17 +72,22 @@ function RatingList() {
         </span>
         );
     };
-  
 
+    const onTogglePopover = () => {
+      setIsPopoverOpen(!isPopoverOpen);
+    };
+
+  
     return (
         <div className="rating-container">
           <div className="rating-header">
             <h2 className="rating-title">Course Reviews</h2>
-            <button className="auth-button blue">Add Review</button>
+            <button onClick={() => setIsPopoverOpen(true)} className="auth-button blue">Add Review</button>
           </div>
     
           <hr className="custom-hr" />
-    
+          {/* Condicionalmente renderiza el PopoverDemo */}
+          {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} />} 
           {ratings.length > 0 ? (
             <div className="ratings-list">
               {ratings.map((rating) => (
