@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./static/authButton.css";
 import "./static/global.css";
 import "./static/rating.css";
+import "./static/popover.css";
 import PopoverDemo from "./RatingCreate";
 
 type Rating = {
@@ -82,7 +83,7 @@ function RatingList() {
         <div className="rating-container">
           <div className="rating-header">
             <h2 className="rating-title">Course Reviews</h2>
-            <button onClick={() => setIsPopoverOpen(true)} className="auth-button blue">Add Review</button>
+            <button onClick={() => setIsPopoverOpen(true)} className="auth-button">Add Review</button>
           </div>
     
           <hr className="custom-hr" />

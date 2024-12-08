@@ -8,7 +8,7 @@ export const formValidators = {
     },
     notNoneTypeValidator: {
         validate: (value: number) => {
-            return value > 0;
+            return value > 0 && value <= 5;
         },
         message: "Please, select a rating"
     },

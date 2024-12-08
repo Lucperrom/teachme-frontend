@@ -80,9 +80,4 @@
     font-style: italic;
   }
 
-  .popover-wrapper {
-    display: flex; /* Make the wrapper a flex container */
-    justify-content: center; /* Center content horizontally */
-    align-items: flex-end; /* Align content at the end vertically (right-align) */
-  }
   
