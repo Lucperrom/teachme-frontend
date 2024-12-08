@@ -1,7 +1,7 @@
 :root{
-    --main-blue-color: #3aaaeb;
-    --main-green-color: #14d286;
-    --main-purple-color: #c824d477;
+  /*--main-blue-color: #3aaaeb;
+  --main-green-color: #14d286;
+  --main-purple-color: #c824d477;*/
 }
 
 .margin-left {
@@ -11,5 +11,32 @@
 .custom-hr {
     margin-top: 2em;
     margin-bottom: 1em;
-    margin-right: 2em;
   }
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #555;
+}
+
+.star-rating {
+  /*display: flex;*/
+  align-items: center;
+  margin-left: 1%;
+  margin-bottom: 5px;
+}
+
+.star {
+  color: #ddd;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.star.filled {
+  color: #ffc107;
+}
