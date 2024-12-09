@@ -6,6 +6,8 @@ import {IoMail} from "react-icons/io5";
 import {useEffect, useState} from "react";
 import client from "../services/axios.ts";
 import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
+import {BiSolidPencil} from "react-icons/bi";
+import { Button } from "../components/ui/button.tsx";
 
 const Profile = () => {
 
@@ -45,6 +47,11 @@ const Profile = () => {
                                  position="relative"
                                  bg="red.200"
                                  marginBottom={50}>
+                                <Box position="absolute" top={3} right={3}>
+                                    <Button rounded="full" >
+                                        <BiSolidPencil />
+                                    </Button>
+                                </Box>
                                 <Box position="absolute" rounded="full" padding={1} backgroundColor="white" left="4%"
                                      bottom={-50}>
                                     <Avatar
@@ -59,6 +66,7 @@ const Profile = () => {
                             <Flex direction="column"
                                   gap={3}
                                   padding="0 4% 4% 4%"
+                                  position="relative"
                                   justifyContent="space-between">
                                 <Flex justifyContent="space-between" gap={2}>
                                     <Flex direction="column" gap={2}>
@@ -76,7 +84,7 @@ const Profile = () => {
                                             {student.contactInformation.country}, {student.profileInformation.language}
                                         </Text>
                                     </Flex>
-                                    <Flex alignItems="center" gap={2}>
+                                    <Flex gap={2}>
                                         <IoMdTrophy size={25} color={getBadgeColor(student.profileInformation.plan)}/>
                                         <Text fontWeight="bold">{student.profileInformation.plan}</Text>
                                     </Flex>
