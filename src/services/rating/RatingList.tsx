@@ -11,12 +11,10 @@ import { Button } from "@chakra-ui/react";
 import {jwtDecode} from "jwt-decode";
 
 interface DecodedToken {
-  username: string;
   id: string;
   email: string;
   role: string;
 }
-
 
 type Rating = {
   id: string;
@@ -49,13 +47,14 @@ function RatingList() {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const [modalShow, setModalShow] = useState(false);
-    const [username,setUsername] = useState("");
-    const jwt: string | null = authService.getToken();
+    const [userId,setUserId] = useState("");
+    const [ratingId, setRatingId] = useState<string | "">("new");
+    const jwt: string | "" = authService.getToken();
 
     function setUpUsername(){
-      if(jwt){
+      if(jwt !=""){
         const decodedToken: DecodedToken = jwtDecode<DecodedToken>(jwt);
-        setUsername(decodedToken.username);
+        setUserId(decodedToken.id);
       }
     }
 
@@ -130,6 +129,7 @@ function RatingList() {
         );
     };
 
+
     const onTogglePopover = () => {
       setIsPopoverOpen(!isPopoverOpen);
     };
@@ -144,7 +144,7 @@ function RatingList() {
     
           <hr className="custom-hr" />
           {/* Condicionalmente renderiza el PopoverDemo */}
-          {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} />} 
+          {/* {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} />}  */}
           {ratings.length > 0 ? (
             <div className="ratings-list">
               {ratings.map((rating) => (
@@ -162,29 +162,29 @@ function RatingList() {
                       <span className="rating-description"><b>Description:</b>&nbsp;&nbsp;{rating.description}</span>
                     </div>
                   </div>
-                  {username!="" &&(
+                  {/* {userId!="" && userId==rating.id &&( */}
                   <div className="rating-options">
-                  <Link
-                    to={"/rating/" + rating.id}
-                    className="auth-button"
-                    style={{ textDecoration: "none" }}
-                  >
-                    Update
-                  </Link>
+                  <button onClick={() => {setIsPopoverOpen(true); setRatingId(rating.id)}} className="edit-button" style={{ textDecoration: "none" }}
+                  ><i className="fas fa-edit"></i>Edit Review</button>
                   <button
                     onClick={() => removeRating(rating.id)}
-                    className="auth-button danger"
-                  >
-                    Delete
+                    className="danger-button"
+                    style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                    ><i className="fa fa-trash" aria-hidden="true"></i> Delete
                   </button>
-                </div>
-              )}
+
+                  </div>
+              {/* )} */}
+
                 </div>
               ))}
+              {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} courseId={courseId} jwt={jwt} />}
+
             </div>
           ) : (
             <p className="no-ratings">No ratings available</p>
           )}
+
           <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
                     <ModalHeader
                       toggle={handleShow}

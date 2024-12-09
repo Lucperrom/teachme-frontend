@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Button, Input } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { ratingForm } from "./ratingForm";
 import "./static/popover.css";
 import "./static/rating.css";
@@ -8,9 +9,12 @@ import "./static/rating.css";
 interface PopoverDemoProps {
   isOpen: boolean; // Propiedad para controlar si el popover está abierto
   onTogglePopover: () => void;
+  ratingId: string;
+  courseId: string;
+  jwt: string;
 }
 
-function PopoverDemo({ isOpen, onTogglePopover }: PopoverDemoProps) {
+function PopoverDemo({ isOpen, onTogglePopover, ratingId, courseId, jwt}: PopoverDemoProps) {
   type FormData = {
     description: string;
     rating: number;
@@ -25,7 +29,7 @@ function PopoverDemo({ isOpen, onTogglePopover }: PopoverDemoProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'rating' ? Number(value): value,
     }));
   };
 
@@ -34,6 +38,87 @@ function PopoverDemo({ isOpen, onTogglePopover }: PopoverDemoProps) {
     console.log("Form submitted:", formData);
     onTogglePopover();
   };
+
+    // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try{
+  //     const submit = await fetch("http://api/v1/course/${courseId}/rating" + (ratingId !="new" ? "/" + ratingId : "")),
+          {
+  //          method: ratingId && ratingId !== "new" ? "PUT" : "POST";
+  //          headers: {
+  //  Authorization: `Bearer ${jwt}`,
+  //  Accept: "application/json",
+  // },
+  // body: JSON.stringify(formData)
+    
+  }
+
+
+ //         }
+  //   }
+
+  //   console.log("Form submitted:", formData);
+  //   onTogglePopover();
+  // };
+
+  type rating = {
+    description: string,
+    rating: number
+  }
+
+  const empty_rating = {
+    id: null,
+    userId: "",
+    userName: "",
+    description: "",
+    rating:0
+  }
+
+  const [message, setMessage] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [rating, setRating] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch rating details if not a new rating
+        if (ratingId !== "new" && rating !=="") {
+          const response = await fetch(`/api/v1/course/${courseId}/rating/${ratingId}`, {
+            headers: { Authorization: `Bearer ${jwt}`, 
+            'Content-Type': 'application/json'
+          }
+          });
+          const ratingData = await response.json();
+          setRating(ratingData);
+          setFormData({
+            description: ratingData.description || "",
+            rating: ratingData.rating || 0
+          })
+        }
+      } catch (error) {
+        setMessage(error.message);
+        setModalShow(true);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  useEffect(() => {
+    if (rating) {
+      const updateFormInputs = (fieldIndex : number, value) => 
+        ratingForm[fieldIndex].defaultValue = value || "";
+
+      const inputMappings = [
+        [0, rating.description],
+        [1, rating.rating]
+      ];
+
+      inputMappings.forEach(([index, value]) => updateFormInputs(index, value));
+    }
+  }, [rating]);
+
 
   return (
     <div>
