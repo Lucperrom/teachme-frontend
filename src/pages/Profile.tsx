@@ -8,10 +8,12 @@ import client from "../services/axios.ts";
 import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
 import {BiSolidPencil} from "react-icons/bi";
 import { Button } from "../components/ui/button.tsx";
+import {FileUploadRoot, FileUploadTrigger, FileUploadList} from "../components/ui/file-upload.tsx";
 
 const Profile = () => {
 
     const [student, setStudent] = useState<StudentDto | null>(null);
+    const [profilePicturePath, setProfilePicturePath] = useState<string>("");
 
     useEffect(() => {
         client.get('/api/v1/students/me').then(resp =>
@@ -52,15 +54,25 @@ const Profile = () => {
                                         <BiSolidPencil />
                                     </Button>
                                 </Box>
-                                <Box position="absolute" rounded="full" padding={1} backgroundColor="white" left="4%"
+                                <Box position="absolute" cursor="pointer" rounded="full" padding={1} backgroundColor="white" left="4%"
                                      bottom={-50}>
-                                    <Avatar
-                                        src="https://picsum.photos/200/300"
-                                        name={getFullName(student)}
-                                        width={120}
-                                        height={120}
-                                        shape="full"
-                                    />
+                                    <FileUploadRoot
+                                        onFileAccept={async (details) => {
+                                            const buffer = await details.files[0].arrayBuffer();
+                                            const blob = new Blob( [ buffer ] );
+                                            setProfilePicturePath(URL.createObjectURL(blob));
+                                        }}
+                                        accept={["image/*"]}>
+                                        <FileUploadTrigger asChild>
+                                            <Avatar
+                                                src={profilePicturePath ?? "https://picsum.photos/200/300"}
+                                                name={getFullName(student)}
+                                                width={120}
+                                                height={120}
+                                                shape="full"
+                                            />
+                                        </FileUploadTrigger>
+                                    </FileUploadRoot>
                                 </Box>
                             </Box>
                             <Flex direction="column"
