@@ -3,67 +3,94 @@ import {Avatar} from "../components/ui/avatar.tsx";
 import {IoMdTrophy} from "react-icons/io";
 import {FaPhone} from "react-icons/fa";
 import {IoMail} from "react-icons/io5";
+import {useEffect, useState} from "react";
+import client from "../services/axios.ts";
+import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
 
 const Profile = () => {
-    return (
-        <Flex direction="row" padding={10}>
-            <Card.Root width="100%" rounded="xl" overflow="hidden">
-                <Card.Body gap="2" padding={0} rounded="xl">
-                    <Box width="100%"
-                         height={200}
-                         bgAttachment="fixed"
-                         position="relative"
-                         bg="red.200"
-                         marginBottom={50}>
-                        <Box position="absolute" rounded="full" padding={1} backgroundColor="white" left="4%"
-                             bottom={-50}>
-                            <Avatar
-                                src="https://picsum.photos/200/300"
-                                name="Rami Nakkar"
-                                width={120}
-                                height={120}
-                                shape="full"
-                            />
-                        </Box>
-                    </Box>
-                    <Flex direction="column"
-                          gap={3}
-                          paddingLeft="4%"
-                          paddingRight="4%"
-                          justifyContent="space-between">
-                        <Flex justifyContent="space-between" gap={2}>
-                            <Flex direction="column" gap={2}>
-                                <Heading size="2xl">Rami Nakkar</Heading>
-                                <Flex color="gray.500" gap={2} alignItems="center">
-                                    <Text display="flex" alignItems="center" gap={2}>
-                                        <IoMail/> rami.nakkar00@gmail.com
-                                    </Text>
-                                    <Separator orientation="vertical" height="4" size="md"/>
-                                    <Text display="flex" alignItems="center" gap={2}>
-                                        <FaPhone/> +491312341234
-                                    </Text>
-                                </Flex>
-                                <Text color="gray.500">
-                                    Germany, German
-                                </Text>
-                            </Flex>
-                            <Flex alignItems="center" gap={2}>
-                                <IoMdTrophy size={25} color="bronze"/>
-                                <Text fontWeight="bold">Basic</Text>
-                            </Flex>
-                        </Flex>
-                        <Text color="gray.500">
-                            This is the card body. Lorem ipsum dolor sit amet, consectetur
-                            adipiscing elit. Curabitur nec odio vel dui euismod fermentum.
-                            Curabitur nec odio vel dui euismod fermentum.
-                        </Text>
-                    </Flex>
 
-                    <Card.Description>
-                    </Card.Description>
-                </Card.Body>
-            </Card.Root>
-        </Flex>
+    const [student, setStudent] = useState<StudentDto | null>(null);
+
+    useEffect(() => {
+        client.get('/api/v1/students/me').then(resp =>
+            setStudent(resp.data as StudentDto)
+        );
+    }, []);
+
+    const getFullName = (student: StudentDto) => {
+        return `${student?.contactInformation.name} ${student?.contactInformation.surname}`;
+    }
+
+    const getBadgeColor = (plan: SubscriptionPlan) => {
+        switch (plan) {
+            case SubscriptionPlan.BASIC:
+                return "#CD7F32";
+            case SubscriptionPlan.GOLD:
+                return "gold";
+            case SubscriptionPlan.PLATINUM:
+                return "silver";
+        }
+    }
+
+    return (
+        <>
+            {
+                student &&
+                <Flex direction="row" padding={10}>
+                    <Card.Root width="100%" rounded="xl" overflow="hidden">
+                        <Card.Body gap="2" padding={0} rounded="xl">
+                            <Box width="100%"
+                                 height={200}
+                                 bgAttachment="fixed"
+                                 position="relative"
+                                 bg="red.200"
+                                 marginBottom={50}>
+                                <Box position="absolute" rounded="full" padding={1} backgroundColor="white" left="4%"
+                                     bottom={-50}>
+                                    <Avatar
+                                        src="https://picsum.photos/200/300"
+                                        name={getFullName(student)}
+                                        width={120}
+                                        height={120}
+                                        shape="full"
+                                    />
+                                </Box>
+                            </Box>
+                            <Flex direction="column"
+                                  gap={3}
+                                  padding="0 4% 4% 4%"
+                                  justifyContent="space-between">
+                                <Flex justifyContent="space-between" gap={2}>
+                                    <Flex direction="column" gap={2}>
+                                        <Heading size="2xl">{getFullName(student)}</Heading>
+                                        <Flex color="gray.500" gap={2} alignItems="center">
+                                            <Text display="flex" alignItems="center" gap={2}>
+                                                <IoMail/> {student.contactInformation.email}
+                                            </Text>
+                                            <Separator orientation="vertical" height="4" size="md"/>
+                                            <Text display="flex" alignItems="center" gap={2}>
+                                                <FaPhone/> {student.contactInformation.phoneNumber}
+                                            </Text>
+                                        </Flex>
+                                        <Text color="gray.500">
+                                            {student.contactInformation.country}, {student.profileInformation.language}
+                                        </Text>
+                                    </Flex>
+                                    <Flex alignItems="center" gap={2}>
+                                        <IoMdTrophy size={25} color={getBadgeColor(student.profileInformation.plan)}/>
+                                        <Text fontWeight="bold">{student.profileInformation.plan}</Text>
+                                    </Flex>
+                                </Flex>
+                                {
+                                    student.profileInformation.bio !== null &&
+                                    <Text color="gray.500">{student.profileInformation.bio}</Text>
+                                }
+                            </Flex>
+                        </Card.Body>
+                    </Card.Root>
+                </Flex>
+            }
+        </>
     );
 }
 
