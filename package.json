@@ -14,13 +14,16 @@
     "@emotion/react": "^11.13.5",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
+    "@types/jwt-decode": "^3.1.0",
     "axios": "^1.7.8",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.4.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
-    "react-router-dom": "^7.0.1"
+    "react-router-dom": "^7.0.1",
+    "reactstrap": "^9.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

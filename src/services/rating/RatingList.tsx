@@ -3,7 +3,20 @@ import "./static/authButton.css";
 import "./static/global.css";
 import "./static/rating.css";
 import "./static/popover.css";
+import { Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import PopoverDemo from "./RatingCreate";
+import { Link } from "react-router-dom";
+import {authService} from "../auth/authService.ts";
+import { Button } from "@chakra-ui/react";
+import {jwtDecode} from "jwt-decode";
+
+interface DecodedToken {
+  username: string;
+  id: string;
+  email: string;
+  role: string;
+}
+
 
 type Rating = {
   id: string;
@@ -34,6 +47,19 @@ function RatingList() {
     const [ratings, setRatings] = useState<Rating[]>([]);
     const [courseId] = useState(pathArray[1]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [modalShow, setModalShow] = useState(false);
+    const [username,setUsername] = useState("");
+    const jwt: string | null = authService.getToken();
+
+    function setUpUsername(){
+      if(jwt){
+        const decodedToken: DecodedToken = jwtDecode<DecodedToken>(jwt);
+        setUsername(decodedToken.username);
+      }
+    }
+
+    
   
     async function setUp() {
       try {
@@ -51,6 +77,7 @@ function RatingList() {
         const ratingsData: Rating[] = await response.json();
         setRatings(ratingsData);
         setRatings([ratingExample]);
+        setUpUsername();
       } catch (error) {
         setRatings([ratingExample, ratingExample2]);
         console.error("Error during data fetching:", error);
@@ -60,6 +87,35 @@ function RatingList() {
   useEffect(() => {
     setUp();
   }, [courseId]);
+
+
+  //Eliminar rating
+  function removeRating(id: string) {
+    fetch(`http://api/v1/course/${courseId}/rating/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          const updatedRatings = [...ratings].filter((i) => i.id !== id);
+          setRatings(updatedRatings);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setMessage(data.message);
+        setModalShow(true);
+      });
+  }
+
+  function handleShow() {
+    setModalShow(!modalShow);
+  }
+
 
     // Función para renderizar estrellas
     const renderStars = (rating: number) => {
@@ -106,12 +162,47 @@ function RatingList() {
                       <span className="rating-description"><b>Description:</b>&nbsp;&nbsp;{rating.description}</span>
                     </div>
                   </div>
+                  {username!="" &&(
+                  <div className="rating-options">
+                  <Link
+                    to={"/rating/" + rating.id}
+                    className="auth-button"
+                    style={{ textDecoration: "none" }}
+                  >
+                    Update
+                  </Link>
+                  <button
+                    onClick={() => removeRating(rating.id)}
+                    className="auth-button danger"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
                 </div>
               ))}
             </div>
           ) : (
             <p className="no-ratings">No ratings available</p>
           )}
+          <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
+                    <ModalHeader
+                      toggle={handleShow}
+                      close={
+                        <button className="close" onClick={handleShow} type="button">
+                          &times;
+                        </button>
+                      }
+                    >
+                      Alert!
+                    </ModalHeader>
+                    <ModalBody>{message || ""}</ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" onClick={handleShow}>
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
         </div>
       );
     }

@@ -27,3 +27,11 @@
 .auth-button:focus {
   border: 2px solid #66cba1;
 }
+
+.danger{
+  border:  #e71f1f;
+}
+.danger:hover{
+  background-color:  #e71f1f;
+  box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+}
