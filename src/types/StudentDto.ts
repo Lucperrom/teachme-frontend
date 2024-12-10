@@ -20,6 +20,7 @@ interface ProfileInformationDto {
     plan: SubscriptionPlan;
     language: string;
     bio: string;
+    profilePictureUrl: string;
 }
 
 export enum SubscriptionPlan {

@@ -10,11 +10,14 @@ import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
+import {Toaster} from "./components/ui/toaster.tsx";
 
 function App() {
     return (
         <>
             <NavigationBar/>
+            <Toaster />
+
             <Routes>
                 <Route index path={AppRoute.LANDING} element={<Landing/>}/>
                 <Route path={AppRoute.HOME} element={

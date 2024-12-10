@@ -7,13 +7,13 @@ import {useEffect, useState} from "react";
 import client from "../services/axios.ts";
 import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
 import {BiSolidPencil} from "react-icons/bi";
-import { Button } from "../components/ui/button.tsx";
-import {FileUploadRoot, FileUploadTrigger, FileUploadList} from "../components/ui/file-upload.tsx";
+import {Button} from "../components/ui/button.tsx";
+import {FileUploadRoot, FileUploadTrigger} from "../components/ui/file-upload.tsx";
+import {toaster} from "../components/ui/toaster.tsx";
 
 const Profile = () => {
 
     const [student, setStudent] = useState<StudentDto | null>(null);
-    const [profilePicturePath, setProfilePicturePath] = useState<string>("");
 
     useEffect(() => {
         client.get('/api/v1/students/me').then(resp =>
@@ -36,6 +36,34 @@ const Profile = () => {
         }
     }
 
+    const uploadProfilePicture = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            await client.post(
+                `/api/v1/students/me/profile-picture/upload`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+
+            toaster.create({
+                title: "File successfully updated!",
+                type: "success",
+            });
+        } catch (error) {
+            toaster.create({
+                title: "File could not be uploaded!",
+                type: "error",
+            });
+            console.error("Error uploading profile picture:", error);
+        }
+    };
+
     return (
         <>
             {
@@ -50,22 +78,26 @@ const Profile = () => {
                                  bg="red.200"
                                  marginBottom={50}>
                                 <Box position="absolute" top={3} right={3}>
-                                    <Button rounded="full" >
-                                        <BiSolidPencil />
+                                    <Button rounded="full">
+                                        <BiSolidPencil/>
                                     </Button>
                                 </Box>
-                                <Box position="absolute" cursor="pointer" rounded="full" padding={1} backgroundColor="white" left="4%"
+                                <Box position="absolute" cursor="pointer" rounded="full" padding={1}
+                                     backgroundColor="white" left="4%"
                                      bottom={-50}>
                                     <FileUploadRoot
                                         onFileAccept={async (details) => {
-                                            const buffer = await details.files[0].arrayBuffer();
-                                            const blob = new Blob( [ buffer ] );
-                                            setProfilePicturePath(URL.createObjectURL(blob));
+                                            const file = details.files[0];
+                                            if (file) {
+                                                await uploadProfilePicture(file);
+                                            }
                                         }}
                                         accept={["image/*"]}>
                                         <FileUploadTrigger asChild>
                                             <Avatar
-                                                src={profilePicturePath ?? "https://picsum.photos/200/300"}
+                                                src={student.profileInformation.profilePictureUrl ?
+                                                    student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
+                                                    ""}
                                                 name={getFullName(student)}
                                                 width={120}
                                                 height={120}
