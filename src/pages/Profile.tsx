@@ -95,9 +95,7 @@ const Profile = () => {
                                         accept={["image/*"]}>
                                         <FileUploadTrigger asChild>
                                             <Avatar
-                                                src={student.profileInformation.profilePictureUrl ?
-                                                    student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
-                                                    ""}
+                                                src={student.profileInformation.profilePictureUrl}
                                                 name={getFullName(student)}
                                                 width={120}
                                                 height={120}
