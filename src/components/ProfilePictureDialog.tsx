@@ -1,6 +1,7 @@
 import {
     DialogActionTrigger,
-    DialogBody, DialogCloseTrigger,
+    DialogBody,
+    DialogCloseTrigger,
     DialogContent,
     DialogFooter,
     DialogHeader,
@@ -48,13 +49,13 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
             );
 
             toaster.create({
-                title: "File successfully updated!",
+                title: "Profile picture successfully updated!",
                 type: "success",
             });
             setOpen(false);
         } catch (error) {
             toaster.create({
-                title: "File could not be uploaded!",
+                title: "Profile picture could not be uploaded!",
                 type: "error",
             });
             console.error("Error uploading profile picture:", error);
@@ -62,6 +63,23 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
             setLoading(false);
         }
     };
+
+    const deleteProfilePicture = async () => {
+        try {
+            await client.delete("/api/v1/students/me/profile-picture/delete");
+
+            toaster.create({
+                title: "Profile picture deleted successfully!",
+                type: "success"
+            });
+        } catch (error) {
+            toaster.create({
+                title: "Profile picture could not be deleted!",
+                type: "error"
+            });
+            console.error(error);
+        }
+    }
 
     return (
         <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)} placement="center">
@@ -85,7 +103,8 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                         }}
                         accept={["image/*"]}>
                         <FileUploadTrigger asChild>
-                            <Box position="relative" backgroundColor={!profilePictureUrl ? "grey" : (hover ? "black" : "")}
+                            <Box position="relative"
+                                 backgroundColor={!profilePictureUrl ? "grey" : (hover ? "black" : "")}
                                  opacity={hover ? 0.5 : 1}
                                  rounded="full"
                                  onMouseLeave={() => setHover(false)}
@@ -111,9 +130,15 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
 
                     {
                         profilePictureUrl &&
-                        <DialogActionTrigger asChild>
-                            <Button disabled={loading} colorPalette="red" variant="outline">Delete</Button>
-                        </DialogActionTrigger>
+                        <Button onClick={async () => {
+                            await deleteProfilePicture();
+                            setPreviewImageFile(null);
+                            setPreviewImageUrl("");
+                            setOpen(false);
+                        }}
+                                disabled={loading}
+                                colorPalette="red"
+                                variant="outline">Delete</Button>
                     }
 
                     <Button disabled={!previewImageFile} loading={loading} onClick={async () => {
