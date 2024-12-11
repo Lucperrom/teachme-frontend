@@ -20,10 +20,10 @@ import {FileUploadRoot, FileUploadTrigger} from "./ui/file-upload.tsx";
 interface ProfilePictureDialogProps {
     children: ReactNode;
     profilePictureUrl?: string;
-    handleUpdate: (url: string) => void;
+    onUpdate: (url: string) => void;
 }
 
-const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({children, profilePictureUrl, handleUpdate}) => {
+const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({children, profilePictureUrl, onUpdate}) => {
 
     const [hover, setHover] = useState<boolean>(false);
     const [previewImageUrl, setPreviewImageUrl] = useState<string>("");
@@ -31,7 +31,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    const uploadProfilePicture = async (file: File | null) => {
+    const handleUploadProfilePicture = async (file: File | null) => {
         if (!file) return;
 
         const formData = new FormData();
@@ -49,7 +49,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                 }
             );
 
-            handleUpdate(response.data);
+            onUpdate(response.data);
 
             toaster.create({
                 title: "Profile picture successfully updated!",
@@ -67,7 +67,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
         }
     };
 
-    const deleteProfilePicture = async () => {
+    const handleDeleteProfilePicture = async () => {
         try {
             await client.delete("/api/v1/students/me/profile-picture/delete");
 
@@ -134,7 +134,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                     {
                         profilePictureUrl &&
                         <Button onClick={async () => {
-                            await deleteProfilePicture();
+                            await handleDeleteProfilePicture();
                             setPreviewImageFile(null);
                             setPreviewImageUrl("");
                             setOpen(false);
@@ -145,7 +145,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                     }
 
                     <Button disabled={!previewImageFile} loading={loading} onClick={async () => {
-                        await uploadProfilePicture(previewImageFile);
+                        await handleUploadProfilePicture(previewImageFile);
                         setPreviewImageFile(null);
                         setPreviewImageUrl("");
                     }}

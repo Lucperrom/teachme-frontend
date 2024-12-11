@@ -36,10 +36,10 @@ const countries = [
 interface EditProfileDialogProps {
     children: ReactNode;
     student: StudentDto;
-    handleUpdate: (updateStudentDto: UpdateStudentDto) => void;
+    onUpdate: (updateStudentDto: UpdateStudentDto) => void;
 }
 
-const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student, handleUpdate}) => {
+const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student, onUpdate}) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
@@ -53,23 +53,18 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
     const handleComplete = async () => {
         try {
             setLoading(true);
-            await client.put('/api/v1/students/me', {
+            const updateStudentDto = {
                 name,
                 surname,
                 country,
                 language,
                 phoneNumber,
                 bio,
-            });
+            };
 
-            handleUpdate({
-                name,
-                surname,
-                country,
-                language,
-                phoneNumber,
-                bio
-            });
+            await client.put('/api/v1/students/me', updateStudentDto);
+
+            onUpdate(updateStudentDto);
 
             toaster.create({
                 title: "Profile successfully updated!",

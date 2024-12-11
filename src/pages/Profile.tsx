@@ -54,7 +54,7 @@ const Profile = () => {
                                  bg="red.200"
                                  marginBottom={50}>
                                 <Box position="absolute" top={3} right={3}>
-                                    <EditProfileDialog handleUpdate={(updateDto) => {
+                                    <EditProfileDialog onUpdate={(updateDto) => {
                                         setStudent(prevState => {
                                            if (prevState) {
                                                return {
@@ -84,7 +84,7 @@ const Profile = () => {
                                 <Box position="absolute" cursor="pointer" rounded="full" padding={1}
                                      backgroundColor="white" left="4%"
                                      bottom={-50}>
-                                    <ProfilePictureDialog handleUpdate={
+                                    <ProfilePictureDialog onUpdate={
                                         (url) => {
                                             setStudent(prevState => {
                                                 if (prevState) {
