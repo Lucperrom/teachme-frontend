@@ -6,6 +6,7 @@ import {NativeSelectField, NativeSelectRoot} from "../components/ui/native-selec
 import client from "../services/axios.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {AppRoute} from "../constants/routes.ts";
+import {AxiosError} from "axios";
 
 const languages = [
     {value: "de", label: "German"},
@@ -21,7 +22,10 @@ const countries = [
     {value: "es", label: "Spain"},
 ]
 
+type ErrorType = {[key: string]: string};
+
 const CompleteProfile = () => {
+
     const {user} = useAuth();
 
     const [name, setName] = useState("");
@@ -31,7 +35,7 @@ const CompleteProfile = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [bio, setBio] = useState("");
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [errors, setErrors] = useState<ErrorType>({});
 
     const handleComplete = async () => {
         try {
@@ -49,8 +53,9 @@ const CompleteProfile = () => {
             });
             window.location.href = AppRoute.HOME;
         } catch (err) {
-            if (err.response.data) {
-                setErrors(err.response.data);
+            const error = err as AxiosError;
+            if (error.response?.data) {
+                setErrors(error.response.data as ErrorType);
             }
             console.log(err);
         } finally {

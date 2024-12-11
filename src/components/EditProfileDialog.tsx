@@ -18,6 +18,7 @@ import client from "../services/axios.ts";
 import {StudentDto} from "../types/StudentDto.ts";
 import {toaster} from "./ui/toaster.tsx";
 import {UpdateStudentDto} from "../types/UpdateStudentDto.ts";
+import {AxiosError} from "axios";
 
 const languages = [
     {value: "de", label: "German"},
@@ -39,6 +40,8 @@ interface EditProfileDialogProps {
     onUpdate: (updateStudentDto: UpdateStudentDto) => void;
 }
 
+type ErrorType = {[key: string]: string};
+
 const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student, onUpdate}) => {
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -49,6 +52,7 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
     const [language, setLanguage] = useState(student.profileInformation.language);
     const [phoneNumber, setPhoneNumber] = useState(student.contactInformation.phoneNumber);
     const [bio, setBio] = useState(student.profileInformation.bio);
+    const [errors, setErrors] = useState<ErrorType>({});
 
     const handleComplete = async () => {
         try {
@@ -70,11 +74,17 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                 title: "Profile successfully updated!",
                 type: "success",
             });
+
+            setErrors({});
             setOpen(false);
-        } catch (err) {
+        } catch (err: unknown) {
+            const error = err as AxiosError;
+            if (error.response?.data) {
+                setErrors(error.response.data as ErrorType);
+            }
             toaster.create({
                 title: "Profile could not be updated!",
-                type: "success",
+                type: "error",
             });
             console.log(err);
         } finally {
@@ -93,14 +103,14 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                 </DialogHeader>
                 <DialogBody>
                     <Flex alignItems="center" justifyContent="center" direction="column" gap={5}>
-                        <Field style={{width: 400}} label="Name">
+                        <Field invalid={!!errors.name} errorText={errors.name} style={{width: 400}} label="Name">
                             <Input type="text"
                                    value={name}
                                    onChange={(val) => setName(val.currentTarget.value)}
                                    placeholder="Max"/>
                         </Field>
 
-                        <Field style={{width: 400}} label="Surname">
+                        <Field invalid={!!errors.surname} errorText={errors.surname} style={{width: 400}} label="Surname">
                             <Input type="text"
                                    value={surname}
                                    onChange={(val) => setSurname(val.currentTarget.value)}
@@ -115,14 +125,14 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                             />
                         </Field>
 
-                        <Field style={{width: 400}} label="Number">
+                        <Field invalid={!!errors.phoneNumber} errorText={errors.phoneNumber} style={{width: 400}} label="Number">
                             <Input type="number"
                                    value={phoneNumber}
                                    onChange={(val) => setPhoneNumber(val.currentTarget.value)}
                                    placeholder="0123123123123"/>
                         </Field>
 
-                        <Field style={{width: 400}} label="Language">
+                        <Field invalid={!!errors.language} errorText={errors.language} style={{width: 400}} label="Language">
                             <NativeSelectRoot size="md">
                                 <NativeSelectField
                                     value={language}
