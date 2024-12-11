@@ -85,7 +85,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                         }}
                         accept={["image/*"]}>
                         <FileUploadTrigger asChild>
-                            <Box position="relative" backgroundColor={hover ? "black" : ""}
+                            <Box position="relative" backgroundColor={!profilePictureUrl ? "grey" : (hover ? "black" : "")}
                                  opacity={hover ? 0.5 : 1}
                                  rounded="full"
                                  onMouseLeave={() => setHover(false)}
@@ -108,9 +108,14 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                             setPreviewImageUrl("");
                         }} disabled={loading} variant="outline">Cancel</Button>
                     </DialogActionTrigger>
-                    <DialogActionTrigger asChild>
-                        <Button disabled={loading} colorPalette="red" variant="outline">Delete</Button>
-                    </DialogActionTrigger>
+
+                    {
+                        profilePictureUrl &&
+                        <DialogActionTrigger asChild>
+                            <Button disabled={loading} colorPalette="red" variant="outline">Delete</Button>
+                        </DialogActionTrigger>
+                    }
+
                     <Button disabled={!previewImageFile} loading={loading} onClick={async () => {
                         await uploadProfilePicture(previewImageFile);
                         setPreviewImageFile(null);
