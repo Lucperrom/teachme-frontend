@@ -31,6 +31,7 @@ const CompleteProfile = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [bio, setBio] = useState("");
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const handleComplete = async () => {
         try {
@@ -48,6 +49,9 @@ const CompleteProfile = () => {
             });
             window.location.href = AppRoute.HOME;
         } catch (err) {
+            if (err.response.data) {
+                setErrors(err.response.data);
+            }
             console.log(err);
         } finally {
             setLoading(false);
@@ -59,14 +63,16 @@ const CompleteProfile = () => {
 
             <Heading>Complete Profile</Heading>
 
-            <Field style={{width: 400}} label="Name">
+            <Field invalid={!!errors.name} errorText={errors.name} style={{width: 400}} label="Name">
                 <Input type="text"
                        value={name}
-                       onChange={(val) => setName(val.currentTarget.value)}
+                       onChange={(val) =>
+                           setName(val.currentTarget.value)
+                       }
                        placeholder="Max"/>
             </Field>
 
-            <Field style={{width: 400}} label="Surname">
+            <Field invalid={!!errors.surname} errorText={errors.surname} style={{width: 400}} label="Surname">
                 <Input type="text"
                        value={surname}
                        onChange={(val) => setSurname(val.currentTarget.value)}
@@ -81,7 +87,7 @@ const CompleteProfile = () => {
                 />
             </Field>
 
-            <Field style={{width: 400}} label="Number">
+            <Field invalid={!!errors.phoneNumber} errorText={errors.phoneNumber} style={{width: 400}} label="Number">
                 <Input type="number"
                        value={phoneNumber}
                        onChange={(val) => setPhoneNumber(val.currentTarget.value)}
@@ -94,7 +100,7 @@ const CompleteProfile = () => {
                 />
             </Field>
 
-            <Field style={{width: 400}} label="Language">
+            <Field invalid={!!errors.language} errorText={errors.language} style={{width: 400}} label="Language">
                 <NativeSelectRoot size="md">
                     <NativeSelectField
                         value={language}
