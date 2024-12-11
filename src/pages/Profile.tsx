@@ -9,6 +9,7 @@ import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
 import {BiSolidPencil} from "react-icons/bi";
 import {Button} from "../components/ui/button.tsx";
 import ProfilePictureDialog from "../components/ProfilePictureDialog.tsx";
+import EditProfileDialog from "../components/EditProfileDialog.tsx";
 
 const Profile = () => {
 
@@ -49,9 +50,11 @@ const Profile = () => {
                                  bg="red.200"
                                  marginBottom={50}>
                                 <Box position="absolute" top={3} right={3}>
-                                    <Button rounded="full">
-                                        <BiSolidPencil/>
-                                    </Button>
+                                    <EditProfileDialog student={student}>
+                                        <Button rounded="full">
+                                            <BiSolidPencil/>
+                                        </Button>
+                                    </EditProfileDialog>
                                 </Box>
                                 <Box position="absolute" cursor="pointer" rounded="full" padding={1}
                                      backgroundColor="white" left="4%"

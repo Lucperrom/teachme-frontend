@@ -11,7 +11,7 @@ const languages = [
     {value: "de", label: "German"},
     {value: "en", label: "English (UK)"},
     {value: "us", label: "English (US)"},
-    {value: "es", label: "Spaish"},
+    {value: "es", label: "Spanish"},
 ]
 
 const countries = [
