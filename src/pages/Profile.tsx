@@ -8,8 +8,7 @@ import client from "../services/axios.ts";
 import {StudentDto, SubscriptionPlan} from "../types/StudentDto.ts";
 import {BiSolidPencil} from "react-icons/bi";
 import {Button} from "../components/ui/button.tsx";
-import {FileUploadRoot, FileUploadTrigger} from "../components/ui/file-upload.tsx";
-import {toaster} from "../components/ui/toaster.tsx";
+import ProfilePictureDialog from "../components/ProfilePictureDialog.tsx";
 
 const Profile = () => {
 
@@ -36,34 +35,6 @@ const Profile = () => {
         }
     }
 
-    const uploadProfilePicture = async (file: File) => {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            await client.post(
-                `/api/v1/students/me/profile-picture/upload`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-            );
-
-            toaster.create({
-                title: "File successfully updated!",
-                type: "success",
-            });
-        } catch (error) {
-            toaster.create({
-                title: "File could not be uploaded!",
-                type: "error",
-            });
-            console.error("Error uploading profile picture:", error);
-        }
-    };
-
     return (
         <>
             {
@@ -85,26 +56,19 @@ const Profile = () => {
                                 <Box position="absolute" cursor="pointer" rounded="full" padding={1}
                                      backgroundColor="white" left="4%"
                                      bottom={-50}>
-                                    <FileUploadRoot
-                                        onFileAccept={async (details) => {
-                                            const file = details.files[0];
-                                            if (file) {
-                                                await uploadProfilePicture(file);
-                                            }
-                                        }}
-                                        accept={["image/*"]}>
-                                        <FileUploadTrigger asChild>
-                                            <Avatar
-                                                src={student.profileInformation.profilePictureUrl ?
-                                                    student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
-                                                    ""}
-                                                name={getFullName(student)}
-                                                width={120}
-                                                height={120}
-                                                shape="full"
-                                            />
-                                        </FileUploadTrigger>
-                                    </FileUploadRoot>
+                                    <ProfilePictureDialog profilePictureUrl={student.profileInformation.profilePictureUrl ?
+                                        student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
+                                        ""}>
+                                        <Avatar
+                                            src={student.profileInformation.profilePictureUrl ?
+                                                student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
+                                                ""}
+                                            name={getFullName(student)}
+                                            width={120}
+                                            height={120}
+                                            shape="full"
+                                        />
+                                    </ProfilePictureDialog>
                                 </Box>
                             </Box>
                             <Flex direction="column"
