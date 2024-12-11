@@ -20,9 +20,10 @@ import {FileUploadRoot, FileUploadTrigger} from "./ui/file-upload.tsx";
 interface ProfilePictureDialogProps {
     children: ReactNode;
     profilePictureUrl?: string;
+    handleUpdate: (url: string) => void;
 }
 
-const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({children, profilePictureUrl}) => {
+const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({children, profilePictureUrl, handleUpdate}) => {
 
     const [hover, setHover] = useState<boolean>(false);
     const [previewImageUrl, setPreviewImageUrl] = useState<string>("");
@@ -38,7 +39,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
 
         try {
             setLoading(true);
-            await client.post(
+            const response = await client.post(
                 `/api/v1/students/me/profile-picture/upload`,
                 formData,
                 {
@@ -47,6 +48,8 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                     }
                 }
             );
+
+            handleUpdate(response.data);
 
             toaster.create({
                 title: "Profile picture successfully updated!",

@@ -36,6 +36,10 @@ const Profile = () => {
         }
     }
 
+    const generateCacheInvalidatingUrl = (url: string) => {
+        return `${url}?t=${new Date().getTime()}`;
+    }
+
     return (
         <>
             {
@@ -59,9 +63,27 @@ const Profile = () => {
                                 <Box position="absolute" cursor="pointer" rounded="full" padding={1}
                                      backgroundColor="white" left="4%"
                                      bottom={-50}>
-                                    <ProfilePictureDialog profilePictureUrl={student.profileInformation.profilePictureUrl}>
+                                    <ProfilePictureDialog handleUpdate={
+                                        (url) => {
+                                            setStudent(prevState => {
+                                                if (prevState) {
+                                                    return {
+                                                        ...prevState,
+                                                        profileInformation: {
+                                                            ...prevState.profileInformation,
+                                                            profilePictureUrl: generateCacheInvalidatingUrl(url),
+                                                        }
+                                                    };
+                                                }
+                                                return prevState;
+                                            });
+                                        }
+                                    } profilePictureUrl={student.profileInformation.profilePictureUrl}>
                                         <Avatar
-                                            src={student.profileInformation.profilePictureUrl}
+                                            src={student.profileInformation.profilePictureUrl ?
+                                                generateCacheInvalidatingUrl(student.profileInformation.profilePictureUrl) :
+                                                undefined
+                                            }
                                             name={getFullName(student)}
                                             width={120}
                                             height={120}
