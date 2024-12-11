@@ -54,7 +54,28 @@ const Profile = () => {
                                  bg="red.200"
                                  marginBottom={50}>
                                 <Box position="absolute" top={3} right={3}>
-                                    <EditProfileDialog student={student}>
+                                    <EditProfileDialog handleUpdate={(updateDto) => {
+                                        setStudent(prevState => {
+                                           if (prevState) {
+                                               return {
+                                                   ...prevState,
+                                                   contactInformation: {
+                                                       ...prevState.contactInformation,
+                                                       surname: updateDto.surname,
+                                                       name: updateDto.name,
+                                                       phoneNumber: updateDto.phoneNumber,
+                                                       country: updateDto.country,
+                                                   },
+                                                   profileInformation: {
+                                                       ...prevState.profileInformation,
+                                                       bio: updateDto.bio,
+                                                       language: updateDto.language,
+                                                   }
+                                               }
+                                           }
+                                           return prevState;
+                                        });
+                                    }} student={student}>
                                         <Button rounded="full">
                                             <BiSolidPencil/>
                                         </Button>

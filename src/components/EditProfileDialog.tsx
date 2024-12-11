@@ -17,6 +17,7 @@ import {NativeSelectField, NativeSelectRoot} from "./ui/native-select.tsx";
 import client from "../services/axios.ts";
 import {StudentDto} from "../types/StudentDto.ts";
 import {toaster} from "./ui/toaster.tsx";
+import {UpdateStudentDto} from "../types/UpdateStudentDto.ts";
 
 const languages = [
     {value: "de", label: "German"},
@@ -35,9 +36,10 @@ const countries = [
 interface EditProfileDialogProps {
     children: ReactNode;
     student: StudentDto;
+    handleUpdate: (updateStudentDto: UpdateStudentDto) => void;
 }
 
-const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student}) => {
+const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student, handleUpdate}) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
@@ -58,6 +60,15 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                 language,
                 phoneNumber,
                 bio,
+            });
+
+            handleUpdate({
+                name,
+                surname,
+                country,
+                language,
+                phoneNumber,
+                bio
             });
 
             toaster.create({
