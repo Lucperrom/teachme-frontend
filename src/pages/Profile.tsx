@@ -56,13 +56,9 @@ const Profile = () => {
                                 <Box position="absolute" cursor="pointer" rounded="full" padding={1}
                                      backgroundColor="white" left="4%"
                                      bottom={-50}>
-                                    <ProfilePictureDialog profilePictureUrl={student.profileInformation.profilePictureUrl ?
-                                        student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
-                                        ""}>
+                                    <ProfilePictureDialog profilePictureUrl={student.profileInformation.profilePictureUrl}>
                                         <Avatar
-                                            src={student.profileInformation.profilePictureUrl ?
-                                                student.profileInformation.profilePictureUrl.replace("blob-storage", "localhost") :
-                                                ""}
+                                            src={student.profileInformation.profilePictureUrl}
                                             name={getFullName(student)}
                                             width={120}
                                             height={120}
