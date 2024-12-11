@@ -7,20 +7,7 @@ import client from "../services/axios.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {AppRoute} from "../constants/routes.ts";
 import {AxiosError} from "axios";
-
-const languages = [
-    {value: "de", label: "German"},
-    {value: "en", label: "English (UK)"},
-    {value: "us", label: "English (US)"},
-    {value: "es", label: "Spanish"},
-]
-
-const countries = [
-    {value: "de", label: "Germany"},
-    {value: "en", label: "United Kingdom"},
-    {value: "us", label: "USA"},
-    {value: "es", label: "Spain"},
-]
+import {countries, languages} from "countries-list";
 
 type ErrorType = {[key: string]: string};
 
@@ -110,7 +97,15 @@ const CompleteProfile = () => {
                     <NativeSelectField
                         value={language}
                         onChange={(val) => setLanguage(val.currentTarget.value)}
-                        placeholder="Select option" items={languages}/>
+                        placeholder="Select option">
+                        {
+                            Object.entries(languages).map(lang => {
+                                return (
+                                    <option key={lang[0]} value={lang[1].name}>{lang[1].native}</option>
+                                );
+                            })
+                        }
+                    </NativeSelectField>
                 </NativeSelectRoot>
             </Field>
 
@@ -119,7 +114,15 @@ const CompleteProfile = () => {
                     <NativeSelectField
                         value={country}
                         onChange={(e) => setCountry(e.currentTarget.value)}
-                        placeholder="Select option" items={countries}/>
+                        placeholder="Select option">
+                        {
+                            Object.entries(countries).map(count => {
+                                return (
+                                    <option key={count[0]} value={count[0]}>{count[1].native}</option>
+                                );
+                            })
+                        }
+                    </NativeSelectField>
                 </NativeSelectRoot>
             </Field>
 

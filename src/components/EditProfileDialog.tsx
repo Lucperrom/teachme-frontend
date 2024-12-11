@@ -19,20 +19,7 @@ import {StudentDto} from "../types/StudentDto.ts";
 import {toaster} from "./ui/toaster.tsx";
 import {UpdateStudentDto} from "../types/UpdateStudentDto.ts";
 import {AxiosError} from "axios";
-
-const languages = [
-    {value: "de", label: "German"},
-    {value: "en", label: "English (UK)"},
-    {value: "us", label: "English (US)"},
-    {value: "es", label: "Spanish"},
-]
-
-const countries = [
-    {value: "de", label: "Germany"},
-    {value: "en", label: "United Kingdom"},
-    {value: "us", label: "USA"},
-    {value: "es", label: "Spain"},
-]
+import {countries, languages} from "countries-list";
 
 interface EditProfileDialogProps {
     children: ReactNode;
@@ -40,7 +27,7 @@ interface EditProfileDialogProps {
     onUpdate: (updateStudentDto: UpdateStudentDto) => void;
 }
 
-type ErrorType = {[key: string]: string};
+type ErrorType = { [key: string]: string };
 
 const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children, student, onUpdate}) => {
 
@@ -110,7 +97,8 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                                    placeholder="Max"/>
                         </Field>
 
-                        <Field invalid={!!errors.surname} errorText={errors.surname} style={{width: 400}} label="Surname">
+                        <Field invalid={!!errors.surname} errorText={errors.surname} style={{width: 400}}
+                               label="Surname">
                             <Input type="text"
                                    value={surname}
                                    onChange={(val) => setSurname(val.currentTarget.value)}
@@ -125,19 +113,29 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                             />
                         </Field>
 
-                        <Field invalid={!!errors.phoneNumber} errorText={errors.phoneNumber} style={{width: 400}} label="Number">
+                        <Field invalid={!!errors.phoneNumber} errorText={errors.phoneNumber} style={{width: 400}}
+                               label="Number">
                             <Input type="number"
                                    value={phoneNumber}
                                    onChange={(val) => setPhoneNumber(val.currentTarget.value)}
                                    placeholder="0123123123123"/>
                         </Field>
 
-                        <Field invalid={!!errors.language} errorText={errors.language} style={{width: 400}} label="Language">
+                        <Field invalid={!!errors.language} errorText={errors.language} style={{width: 400}}
+                               label="Language">
                             <NativeSelectRoot size="md">
                                 <NativeSelectField
                                     value={language}
                                     onChange={(val) => setLanguage(val.currentTarget.value)}
-                                    placeholder="Select option" items={languages}/>
+                                    placeholder="Select option">
+                                    {
+                                        Object.entries(languages).map(lang => {
+                                            return (
+                                                <option key={lang[0]} value={lang[1].name}>{lang[1].native}</option>
+                                            );
+                                        })
+                                    }
+                                </NativeSelectField>
                             </NativeSelectRoot>
                         </Field>
 
@@ -146,7 +144,15 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                                 <NativeSelectField
                                     value={country}
                                     onChange={(e) => setCountry(e.currentTarget.value)}
-                                    placeholder="Select option" items={countries}/>
+                                    placeholder="Select option">
+                                    {
+                                        Object.entries(countries).map(count => {
+                                            return (
+                                                <option key={count[0]} value={count[0]}>{count[1].native}</option>
+                                            );
+                                        })
+                                    }
+                                </NativeSelectField>
                             </NativeSelectRoot>
                         </Field>
                     </Flex>

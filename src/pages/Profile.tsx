@@ -1,4 +1,4 @@
-import {Box, Card, Flex, Heading, Separator, Text} from "@chakra-ui/react";
+import {Box, Card, Flex, Heading, Image, Separator, Text} from "@chakra-ui/react";
 import {Avatar} from "../components/ui/avatar.tsx";
 import {IoMdTrophy} from "react-icons/io";
 import {FaPhone} from "react-icons/fa";
@@ -10,6 +10,7 @@ import {BiSolidPencil} from "react-icons/bi";
 import {Button} from "../components/ui/button.tsx";
 import ProfilePictureDialog from "../components/ProfilePictureDialog.tsx";
 import EditProfileDialog from "../components/EditProfileDialog.tsx";
+import {getCountryData, TCountryCode} from "countries-list";
 
 const Profile = () => {
 
@@ -130,9 +131,20 @@ const Profile = () => {
                                                 <FaPhone/> {student.contactInformation.phoneNumber}
                                             </Text>
                                         </Flex>
-                                        <Text color="gray.500">
-                                            {student.contactInformation.country}, {student.profileInformation.language}
-                                        </Text>
+                                        <Flex alignItems="center" gap={2} color="gray.500">
+                                            <Image
+                                                rounded="full"
+                                                height={5}
+                                                width={5}
+                                                alt={`${getCountryData(student.contactInformation.country as TCountryCode).name}-flag`}
+                                                src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${student.contactInformation.country}.svg`}/>
+                                            <Text>
+                                                {getCountryData(student.contactInformation.country as TCountryCode).name},
+                                            </Text>
+                                            <Text>
+                                                {student.profileInformation.language}
+                                            </Text>
+                                        </Flex>
                                     </Flex>
                                     <Flex gap={2}>
                                         <IoMdTrophy size={25} color={getBadgeColor(student.profileInformation.plan)}/>
