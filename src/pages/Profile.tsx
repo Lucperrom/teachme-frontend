@@ -93,7 +93,7 @@ const Profile = () => {
                                                         ...prevState,
                                                         profileInformation: {
                                                             ...prevState.profileInformation,
-                                                            profilePictureUrl: generateCacheInvalidatingUrl(url),
+                                                            profilePictureUrl: url ? generateCacheInvalidatingUrl(url) : "",
                                                         }
                                                     };
                                                 }

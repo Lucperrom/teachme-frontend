@@ -20,7 +20,7 @@ import {FileUploadRoot, FileUploadTrigger} from "./ui/file-upload.tsx";
 interface ProfilePictureDialogProps {
     children: ReactNode;
     profilePictureUrl?: string;
-    onUpdate: (url: string) => void;
+    onUpdate: (url: string | null) => void;
 }
 
 const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({children, profilePictureUrl, onUpdate}) => {
@@ -73,8 +73,11 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
 
             toaster.create({
                 title: "Profile picture deleted successfully!",
-                type: "success"
+                type: "success",
             });
+
+            onUpdate(null);
+
         } catch (error) {
             toaster.create({
                 title: "Profile picture could not be deleted!",
