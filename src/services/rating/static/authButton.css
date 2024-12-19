@@ -1,21 +1,22 @@
 .auth-button {
   padding: 1em 2.5em;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
   color: #fff;
   background-color: #28a745;
   border: none;
-  border-radius: 30px;
+  border-radius: 1.875rem;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   outline: none;
+  width: auto;
 }
 
 .auth-button:hover {
-  background-color: #218838; 
+  background-color: #218838;
   box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
 }
 
@@ -28,21 +29,15 @@
   border: 2px solid #66cba1;
 }
 
-
-/*****************/
-
-
 .edit-button {
   padding: 1em 2.5em;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
-  /*color: #fff;*/
   color: #6e6e6e;
-  /*background-color: #959595;*/
   border: 2px solid rgb(57, 57, 57);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -59,22 +54,15 @@
   box-shadow: none;
 }
 
-
-
-/*****************/
-
-
 .danger-button {
   padding: 1em 2.5em;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
-  /*color: #fff;*/
   color: rgb(57, 57, 57);
-  /*background-color: #959595;*/
   border: 2px solid rgb(57, 57, 57);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -82,7 +70,7 @@
 
 .danger-button:hover {
   color: white;
-  background-color: #800505; 
+  background-color: #800505;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
