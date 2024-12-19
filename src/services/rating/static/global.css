@@ -1,18 +1,16 @@
-:root{
+:root {
   /*--main-blue-color: #3aaaeb;
   --main-green-color: #14d286;
   --main-purple-color: #c824d477;*/
   --main-red-color: #e71f1f;
+  min-width: 396px;
 }
 
-.margin-left {
-  margin-left: 1em;
-}
-
+/* Componentes generales */
 .custom-hr {
   margin-top: 2em;
   margin-bottom: 1em;
-  }
+}
 
 .user-info {
   display: flex;
@@ -20,22 +18,21 @@
 }
 
 .avatar-icon {
-  font-size: 24px;
-  margin-right: 10px;
+  font-size: 1.5em; /* Tamaño relativo */
+  margin-right: 0.625rem;
   color: #555;
 }
 
 .star-rating {
-  /*display: flex;*/
   align-items: center;
   margin-left: 1%;
-  margin-bottom: 5px;
+  margin-bottom: 0.313rem;
 }
 
 .star {
   color: #ddd;
-  font-size: 20px;
-  margin-right: 5px;
+  font-size: 1.25rem; /* Tamaño relativo */
+  margin-right: 0.313rem;
 }
 
 .star.filled {
