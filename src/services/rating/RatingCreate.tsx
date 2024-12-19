@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Button, Input } from "@chakra-ui/react";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { ratingForm } from "./ratingForm";
 import "./static/popover.css";
 import "./static/rating.css";
+import { DateTime } from 'luxon';
 
 interface PopoverDemoProps {
   isOpen: boolean; // Propiedad para controlar si el popover está abierto
   onTogglePopover: () => void;
   ratingId: string;
   courseId: string;
-  jwt: string;
+  jwt: string | null;
+  userId: string;
 }
 
-function PopoverDemo({ isOpen, onTogglePopover, ratingId, courseId, jwt}: PopoverDemoProps) {
+function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, courseId, jwt, userId}: PopoverDemoProps) {
   type FormData = {
     description: string;
     rating: number;
@@ -25,100 +27,114 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId, courseId, jwt}: Popove
     rating: 0,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'rating' ? Number(value): value,
-    }));
+  type Rating = {
+    id: string;
+    userId: string;
+    username: string;
+    description: string;
+    rating: number;
+    date: string;
+    courseId: string;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    onTogglePopover();
-  };
-
-    // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try{
-  //     const submit = await fetch("http://api/v1/course/${courseId}/rating" + (ratingId !="new" ? "/" + ratingId : "")),
-          {
-  //          method: ratingId && ratingId !== "new" ? "PUT" : "POST";
-  //          headers: {
-  //  Authorization: `Bearer ${jwt}`,
-  //  Accept: "application/json",
-  // },
-  // body: JSON.stringify(formData)
-    
-  }
-
-
- //         }
-  //   }
-
-  //   console.log("Form submitted:", formData);
-  //   onTogglePopover();
-  // };
-
-  type rating = {
-    description: string,
-    rating: number
-  }
-
-  const empty_rating = {
-    id: null,
-    userId: "",
-    userName: "",
-    description: "",
-    rating:0
-  }
-
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [modalShow, setModalShow] = useState(false);
   const [rating, setRating] = useState(null);
+  const [ratingId,setRatingId] = useState(initialRatingId);
+  const editRatingFormRef=useRef();
+  const now = DateTime.now();
+  const formatted = now.toFormat('yyyy-MM-dd HH:mm:ss');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch rating details if not a new rating
-        if (ratingId !== "new" && rating !=="") {
-          const response = await fetch(`/api/v1/course/${courseId}/rating/${ratingId}`, {
-            headers: { Authorization: `Bearer ${jwt}`, 
-            'Content-Type': 'application/json'
-          }
-          });
-          const ratingData = await response.json();
-          setRating(ratingData);
-          setFormData({
-            description: ratingData.description || "",
-            rating: ratingData.rating || 0
-          })
-        }
-      } catch (error) {
-        setMessage(error.message);
-        setModalShow(true);
+  useEffect( () => setupRating(),[]);  
+ 
+   
+   function setupRating(){
+       if (ratingId !== "new" && ratingId==null) { 
+         const rating = fetch(
+             `/api/v1/course/${courseId}/rating/${ratingId}`, 
+             {
+               headers: {
+               Authorization: `Bearer ${jwt}`,
+             },
+           })
+           .then((r) => r.json())
+           .then((r) => {
+             if(r.message){ 
+               setMessage(r.message);
+               setModalShow( true );
+             }else {
+               setRating(r);
+               setRatingId(r.id);                
+             }
+           }).catch(m =>{
+             setMessage(m);
+             setModalShow( true );
+           });          
+     }    
+   }
+
+   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+  
+    if (name in formData) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: name === "rating" ? Number(value) : value,
+      }));
+  
+      if (rating) {
+        setRating({
+          ...rating,
+          [name]: name === "rating" ? Number(value) : value,
+        });
       }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editRatingFormRef.current) return;
+
+    const myRating: Rating = {
+      id: ratingId,
+      userId: userId,
+      username: rating.username,
+      description: formData.description,
+      rating: formData.rating,
+      courseId: courseId,
+      date: formatted,
     };
 
-    fetchData();
-  }, []);
-
-
-  useEffect(() => {
-    if (rating) {
-      const updateFormInputs = (fieldIndex : number, value) => 
-        ratingForm[fieldIndex].defaultValue = value || "";
-
-      const inputMappings = [
-        [0, rating.description],
-        [1, rating.rating]
-      ];
-
-      inputMappings.forEach(([index, value]) => updateFormInputs(index, value));
+    try {
+      const response = await fetch(
+        `/api/v1/course/${courseId}/ratings/${ratingId !== "new" ? `${ratingId}` : `${userId}`}`,
+        {
+          method: myRating.id ? "PUT" : "POST",
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(myRating),
+        }
+      );
+      const result = await response.json();
+      if (result.message) {
+        setMessage(result.message);
+        setModalShow(true);
+      } else {
+        onTogglePopover();
+      }
+    } catch (error) {
+      setMessage(String(error));
+      setModalShow(true);
     }
-  }, [rating]);
-
+  };
+    
+    function handleShow() {
+      setModalShow(false);
+      setMessage(null);
+    }
 
   return (
     <div>
@@ -186,6 +202,24 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId, courseId, jwt}: Popove
           </form>
         </PopoverContent>
       </Popover>
+      <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
+        <ModalHeader
+          toggle={handleShow}
+           close={
+            <button className="close" onClick={handleShow} type="button">
+              &times;
+            </button>
+          }
+          >
+           Alert!
+         </ModalHeader>
+        <ModalBody>{message || ""}</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleShow}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }

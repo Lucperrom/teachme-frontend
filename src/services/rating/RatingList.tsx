@@ -5,16 +5,9 @@ import "./static/rating.css";
 import "./static/popover.css";
 import { Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import PopoverDemo from "./RatingCreate";
-import { Link } from "react-router-dom";
 import {authService} from "../auth/authService.ts";
 import { Button } from "@chakra-ui/react";
-import {jwtDecode} from "jwt-decode";
-
-interface DecodedToken {
-  id: string;
-  email: string;
-  role: string;
-}
+import {useAuth} from "../auth/AuthContext.tsx";
 
 type Rating = {
   id: string;
@@ -49,20 +42,15 @@ function RatingList() {
     const [modalShow, setModalShow] = useState(false);
     const [userId,setUserId] = useState("");
     const [ratingId, setRatingId] = useState<string | "">("new");
-    const jwt: string | "" = authService.getToken();
-
-    function setUpUsername(){
-      if(jwt !=""){
-        const decodedToken: DecodedToken = jwtDecode<DecodedToken>(jwt);
-        setUserId(decodedToken.id);
-      }
+    const jwt: string | null = authService.getToken();
+    const {user} = useAuth();
+    if(user != null){
+      setUserId(user.id);
     }
 
-    
-  
     async function setUp() {
       try {
-        const response = await fetch(`http://api/v1/course/${courseId}/ratings`, {
+        const response = await fetch(`/api/v1/course/${courseId}/ratings`, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -76,7 +64,6 @@ function RatingList() {
         const ratingsData: Rating[] = await response.json();
         setRatings(ratingsData);
         setRatings([ratingExample]);
-        setUpUsername();
       } catch (error) {
         setRatings([ratingExample, ratingExample2]);
         console.error("Error during data fetching:", error);
@@ -90,7 +77,7 @@ function RatingList() {
 
   //Eliminar rating
   function removeRating(id: string) {
-    fetch(`http://api/v1/course/${courseId}/rating/${id}`, {
+    fetch(`/api/v1/course/${courseId}/rating/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -178,7 +165,7 @@ function RatingList() {
 
                 </div>
               ))}
-              {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} courseId={courseId} jwt={jwt} />}
+              {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} courseId={courseId} jwt={jwt} userId={userId} />}
 
             </div>
           ) : (
@@ -202,7 +189,7 @@ function RatingList() {
                         Close
                       </Button>
                     </ModalFooter>
-                  </Modal>
+            </Modal>
         </div>
       );
     }
