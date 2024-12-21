@@ -5,5 +5,6 @@ export enum AppRoute {
     SIGNUP = '/signup',
     PROFILE = '/profile',
     COMPLETE_PROFILE = '/complete',
-    NOT_FOUND = '*'
+    NOT_FOUND = '*',
+    FORUM = '/forum'
 }

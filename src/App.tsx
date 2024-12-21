@@ -11,6 +11,7 @@ import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+import Forum from "./pages/Forum.tsx";
 
 function App() {
     return (
@@ -47,6 +48,14 @@ function App() {
                            </ProtectedRoute>
                        }
                 />
+                <Route path={AppRoute.FORUM}
+                       element={
+                           <PublicRoute>
+                               <Forum/>
+                           </PublicRoute>
+                       }
+                />
+                
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
             </Routes>
         </>
