@@ -56,7 +56,7 @@ const SignUp = () => {
             }
         catch (err) {
             const error = err as AxiosError;
-            if (error.response?.data[0].defaultMessage == "The email is invalid"){
+            if ((error.response?.data as any)[0].defaultMessage == "The email is invalid"){
                 setError("The email is invalid");
             }
             else if (error.response?.status == 400){
