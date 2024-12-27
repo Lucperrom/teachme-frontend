@@ -51,7 +51,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
    function setupRating(){
        if (ratingId !== "new" && ratingId==null) { 
          const rating = fetch(
-             `/api/v1/course/${courseId}/rating/${ratingId}`, 
+             `http://localhost:8080/api/v1/course/${courseId}/rating/${ratingId}`, 
              {
                headers: {
                Authorization: `Bearer ${jwt}`,
@@ -107,7 +107,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
 
     try {
       const response = await fetch(
-        `/api/v1/course/${courseId}/ratings/${ratingId !== "new" ? `${ratingId}` : `${userId}`}`,
+        `http://localhost:8080/api/v1/course/${courseId}/ratings/${ratingId !== "new" ? `${ratingId}` : `${userId}`}`,
         {
           method: myRating.id ? "PUT" : "POST",
           headers: {

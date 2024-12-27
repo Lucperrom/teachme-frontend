@@ -48,15 +48,16 @@ function RatingList() {
     const jwt: string | null = authService.getToken();
     const {user} = useAuth();
     const apiKey = secret.OPENAI_API_KEY;
-    setCourseId("course1")
 
-    if(user != null){
-      setUserId(user.id);
-    }
+    useEffect(() => {
+      if (user != null) {
+        setUserId(user.id);
+      }
+    }, [user]); 
 
     async function setUp() {
       try {
-        const response = await fetch(`/api/v1/course/${courseId}/ratings/`, {
+        const response = await fetch(`http://localhost:8080/api/v1/course/${courseId}/ratings/`, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -69,7 +70,6 @@ function RatingList() {
         }
         const ratingsData: Rating[] = await response.json();
         setRatings(ratingsData);
-        setRatings([ratingExample]);
       } catch (error) {
         setRatings([ratingExample, ratingExample2]);
         console.error("Error during data fetching:", error);
@@ -83,7 +83,7 @@ function RatingList() {
 
   //Eliminar rating
   function removeRating(id: string) {
-    fetch(`/api/v1/course/${courseId}/rating/${id}`, {
+    fetch(`http://localhost:8080/api/v1/course/${courseId}/rating/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${jwt}`,
