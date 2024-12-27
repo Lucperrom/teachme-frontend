@@ -56,7 +56,7 @@ function RatingList() {
 
     async function setUp() {
       try {
-        const response = await fetch(`/api/v1/course/${courseId}/ratings`, {
+        const response = await fetch(`/api/v1/course/${courseId}/ratings/`, {
           method: "GET",
           headers: {
             Accept: "application/json",
