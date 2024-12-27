@@ -24,7 +24,8 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.1",
-    "reactstrap": "^9.1.6"
+    "reactstrap": "^9.1.6",
+    "swagger-ui-react": "^4.19.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -41,7 +42,17 @@
     "sass": "^1.81.0",
     "tailwindcss": "^3.4.16",
     "typescript": "~5.6.2",
+    "@types/swagger-ui-react": "^4.18.3",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(swagger-ui-react|swagger-client|react-syntax-highlighter)/)"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   }
 }

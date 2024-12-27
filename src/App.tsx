@@ -11,6 +11,7 @@ import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
 import RatingList from "./services/rating/RatingList.tsx";
+import SwaggerDocs from "./pages/Swagger.tsx";
 
 function App() {
     return (
@@ -51,6 +52,7 @@ function App() {
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
+                <Route path="/docs" element={<SwaggerDocs />} />
             </Routes>
         </>
     )
