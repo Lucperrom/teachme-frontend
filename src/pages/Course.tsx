@@ -1,7 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Box, Flex, Heading, Text, Spinner, VStack, Badge } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import React from 'react';
+import {
+  Badge,
+  Box,
+  Flex,
+  Heading,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface Video {
   id: string;
@@ -28,14 +35,14 @@ const Course: React.FC = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/api/v1/courses/${id}`);
+        const response = await fetch(`/api/v1/courses/${id}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch course');
+          throw new Error("Failed to fetch course");
         }
         const data = await response.json();
         setCourse(data);
       } catch (error) {
-        console.error('Error fetching course:', error);
+        console.error("Error fetching course:", error);
       } finally {
         setLoading(false);
       }
@@ -76,17 +83,21 @@ const Course: React.FC = () => {
           </VStack>
         </Box>
         <Box flex="1" p={4}>
-          <Text fontSize="lg" fontWeight="bold" mb={2}>List of course videos</Text>
+          <Text fontSize="lg" fontWeight="bold" mb={2}>
+            List of course videos
+          </Text>
           <VStack align="start" gap={2} width="100%">
-            {course.additionalResources.map(video => (
+            {course.additionalResources.map((video) => (
               <Box key={video.id} width="100%">
-                <Text fontWeight="bold" mb={2}>{video.title}</Text>
+                <Text fontWeight="bold" mb={2}>
+                  {video.title}
+                </Text>
                 <iframe
                   width="100%"
                   height="315"
                   src={`https://www.youtube.com/embed/${video.url}`}
                   title={video.title}
-                  style={{ border: 'none' }}
+                  style={{ border: "none" }}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
