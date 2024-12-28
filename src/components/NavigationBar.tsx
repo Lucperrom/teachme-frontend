@@ -8,6 +8,7 @@ import {MenuContent, MenuItem, MenuRoot, MenuTrigger} from "./ui/menu.tsx";
 import {LuLogOut, LuMenu, LuUser} from "react-icons/lu";
 import {Button} from "./ui/button.tsx";
 import {authService} from "../services/auth/authService.ts";
+import NotificationBell from "./NotificationBell.tsx";
 
 const NavigationBar = () => {
     const {user} = useAuth();
@@ -34,23 +35,26 @@ const NavigationBar = () => {
 
             <Flex gap={4} alignItems="center">
                 {user ? (
-                    <MenuRoot positioning={{placement: "bottom-start"}}>
-                        <MenuTrigger asChild>
-                            <Button variant="outline" size="sm">
-                                <LuMenu/>
-                            </Button>
-                        </MenuTrigger>
-                        <MenuContent>
-                            <MenuItem onClick={() => navigate(AppRoute.PROFILE)} value="profile" valueText="profile">
-                                <LuUser/>
-                                <Box flex="1">Profile</Box>
-                            </MenuItem>
-                            <MenuItem onClick={() => authService.logout()} value="logout" valueText="logout">
-                                <LuLogOut/>
-                                <Box flex="1">Logout</Box>
-                            </MenuItem>
-                        </MenuContent>
-                    </MenuRoot>
+                    <Flex gap={4}>
+                        <NotificationBell/>
+                        <MenuRoot positioning={{placement: "bottom-start"}}>
+                            <MenuTrigger asChild>
+                                <Button variant="outline" size="sm">
+                                    <LuMenu/>
+                                </Button>
+                            </MenuTrigger>
+                            <MenuContent>
+                                <MenuItem onClick={() => navigate(AppRoute.PROFILE)} value="profile" valueText="profile">
+                                    <LuUser/>
+                                    <Box flex="1">Profile</Box>
+                                </MenuItem>
+                                <MenuItem onClick={() => authService.logout()} value="logout" valueText="logout">
+                                    <LuLogOut/>
+                                    <Box flex="1">Logout</Box>
+                                </MenuItem>
+                            </MenuContent>
+                        </MenuRoot>
+                    </Flex>
                 ) : (
                     <>
                         <LinkButton
