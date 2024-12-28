@@ -50,14 +50,18 @@ function App() {
                            </ProtectedRoute>
                        }
                 />
-                <Route path={AppRoute.COURSES}
+                <Route path={AppRoute.COURSESLIST}
                        element={
-                               <Courses/>
+                        <ProtectedRoute>
+                            <Courses/>
+                        </ProtectedRoute>
                        }
                 />
                 <Route path={AppRoute.COURSE}
                        element={
-                               <Course/>
+                        <ProtectedRoute>
+                            <Course/>
+                        </ProtectedRoute>
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
