@@ -10,7 +10,10 @@ import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
+import Courses from "./pages/Courses.tsx";
+import Course from "./pages/Course.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+
 
 function App() {
     return (
@@ -45,6 +48,16 @@ function App() {
                            <ProtectedRoute>
                                <Profile/>
                            </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.COURSES}
+                       element={
+                               <Courses/>
+                       }
+                />
+                <Route path={AppRoute.COURSE}
+                       element={
+                               <Course/>
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
