@@ -39,12 +39,12 @@ const ratingExample2: Rating = {
 function RatingList() {
     const pathArray = window.location.pathname.split("/");
     const [ratings, setRatings] = useState<Rating[]>([]);
-    const [courseId, setCourseId] = useState(pathArray[1]);
+    const [courseId, setCourseId] = useState("course1");
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [userId,setUserId] = useState("");
-    const [ratingId, setRatingId] = useState<string | "">("new");
+    const [ratingId, setRatingId] = useState("new");
     const jwt: string | null = authService.getToken();
     const {user} = useAuth();
     const apiKey = secret.OPENAI_API_KEY;
@@ -83,7 +83,7 @@ function RatingList() {
 
   //Eliminar rating
   function removeRating(id: string) {
-    fetch(`http://localhost:8080/api/v1/course/${courseId}/rating/${id}`, {
+    fetch(`http://localhost:8080/api/v1/course/${courseId}/ratings/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${jwt}`,

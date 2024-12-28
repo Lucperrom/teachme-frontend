@@ -27,53 +27,51 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
     rating: 0,
   });
 
-  type Rating = {
-    id: string;
-    userId: string;
-    username: string;
-    description: string;
-    rating: number;
-    date: string;
-    courseId: string;
-  };
-
   const [message, setMessage] = useState<string | null>(null);
   const [modalShow, setModalShow] = useState(false);
   const [rating, setRating] = useState(null);
   const [ratingId,setRatingId] = useState(initialRatingId);
-  const editRatingFormRef=useRef();
-  const now = DateTime.now();
-  const formatted = now.toFormat('yyyy-MM-dd HH:mm:ss');
+  const editRatingFormRef=useRef<HTMLFormElement>(null);
+  const [isEdit, setIsEdit] = useState(false);
 
-  useEffect( () => setupRating(),[]);  
+  useEffect(() => { 
+    setupRating();
+  }, []);  
  
    
-   function setupRating(){
-       if (ratingId !== "new" && ratingId==null) { 
-         const rating = fetch(
-             `http://localhost:8080/api/v1/course/${courseId}/rating/${ratingId}`, 
-             {
-               headers: {
-               Authorization: `Bearer ${jwt}`,
-             },
-           })
-           .then((r) => r.json())
-           .then((r) => {
-             if(r.message){ 
-               setMessage(r.message);
-               setModalShow( true );
-             }else {
-               setRating(r);
-               setRatingId(r.id);                
-             }
-           }).catch(m =>{
-             setMessage(m);
-             setModalShow( true );
-           });          
-     }    
-   }
-
-   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  async function setupRating() {
+    if (ratingId !== "new") {
+      setIsEdit(true);
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/v1/course/${courseId}/ratings/${ratingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.message) {
+          setMessage(data.message);
+          setModalShow(true);
+        } else {
+          setRating(data);
+          setRatingId(data.id);
+  
+          // Actualiza formData con los valores obtenidos del rating
+          setFormData({
+            description: data.description || "",
+         rating: data.rating || 0,
+          });
+        }
+      } catch (error) {
+        setMessage(error.message);
+        setModalShow(true);
+      }
+    }
+  }
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
   
     if (name in formData) {
@@ -91,45 +89,51 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!editRatingFormRef.current) return;
-
-    const myRating: Rating = {
+  
+    if (editRatingFormRef.current) {
+      const isValid = editRatingFormRef.current.checkValidity(); // Usar checkValidity nativo
+      if (!isValid) {
+        setMessage("Please fix the errors in the form.");
+        setModalShow(true);
+        return;
+      }
+    }
+    const myrating = {
       id: ratingId,
-      userId: userId,
-      username: rating.username,
       description: formData.description,
-      rating: formData.rating,
+      rating: formData.rating,          
+      userId: isEdit ? rating?.userId || "" : "",
+      username: isEdit ? rating?.username || "" : "",
       courseId: courseId,
-      date: formatted,
     };
 
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/course/${courseId}/ratings/${ratingId !== "new" ? `${ratingId}` : `${userId}`}`,
+    const response = (await fetch(`http://localhost:8080/api/v1/course/${courseId}/ratings/${ratingId !== "new" ? `${ratingId}` : ""}`,
+
         {
-          method: myRating.id ? "PUT" : "POST",
+          method: ratingId !== "new"? "PUT" : "POST",
           headers: {
             Authorization: `Bearer ${jwt}`,
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(myRating),
+          body: JSON.stringify(myrating),
+        }));
+        const result = await response.json();
+        if (result.message) {
+          setMessage(result.message);
+          setModalShow(true);
+        } else {
+          onTogglePopover();
+          window.location.reload();
         }
-      );
-      const result = await response.json();
-      if (result.message) {
-        setMessage(result.message);
-        setModalShow(true);
-      } else {
-        onTogglePopover();
       }
-    } catch (error) {
-      setMessage(String(error));
-      setModalShow(true);
-    }
-  };
+
+      ratingForm.forEach((i) => (i.handleChange = handleChange));
+  
+      ratingForm[0].defaultValue = rating?.description || "";
+      ratingForm[1].defaultValue = rating?.rating || 0;
     
     function handleShow() {
       setModalShow(false);
@@ -176,7 +180,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
                   required={field.isRequired}
                   min={field.name === "rating" ? 1 : undefined}
                   max={field.name === "rating" ? 5 : undefined}
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                   className="form-input"
                 />
               </div>
