@@ -1,4 +1,4 @@
-import { Flex, Input, Textarea } from "@chakra-ui/react";
+import { Flex, Input} from "@chakra-ui/react";
 import { FunctionComponent, useState } from "react";
 import { Button } from "./ui/button";
 import {
