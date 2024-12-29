@@ -85,8 +85,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, name, description, category
         {isUpdateDialogOpen && (
         <UpdateCourseDialog
           id={id.toString()}
-          name={name}
-          description={description}
           category={category}
           duration={duration}
           level={level}
