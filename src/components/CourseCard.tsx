@@ -3,6 +3,7 @@ import { Card, Badge, HStack, Flex, Box, IconButton } from '@chakra-ui/react';
 import LinkButton from './LinkButton';
 import { IoEnterOutline } from "react-icons/io5";
 import {Trash2, SquarePen} from 'lucide-react';
+import { FaStar } from "react-icons/fa";
 import UpdateCourseDialog from './UpdateCourseDialog';
 
 interface CourseCardProps {
@@ -75,8 +76,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, name, description, category
           </HStack>
           <Box>
             <Badge fontSize="2xl" fontWeight="bold">
-              Rating: {rating}
+              Rating: {rating || 0}  <FaStar color="gold"/>
             </Badge>
+            
           </Box>
           
         </Flex>

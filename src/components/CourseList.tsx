@@ -41,7 +41,7 @@ const CourseList: React.FC<CourseListProps> = ({
             }
           );
         } else {
-          response = await fetch("/api/v1/courses", {
+          response = await fetch(`/api/v1/courses`, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
