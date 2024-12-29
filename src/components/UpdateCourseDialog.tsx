@@ -13,8 +13,6 @@ import { toaster } from "./ui/toaster";
 
 interface UpdateCourseDialogProps {
   id: string;
-  name: string;
-  description: string;
   category: string;
   duration: string;
   level: string;
@@ -30,16 +28,12 @@ enum Level {
 
 const UpdateCourseDialog: FunctionComponent<UpdateCourseDialogProps> = ({
   id,
-  name: initialName,
-  description: initialDescription,
   category: initialCategory,
   duration: initialDuration,
   level: initialLevel,
   onClose,
   onCourseUpdated,
 }) => {
-  const [name, setName] = useState<string>(initialName);
-  const [description, setDescription] = useState<string>(initialDescription);
   const [category, setCategory] = useState<string>(initialCategory);
   const [duration, setDuration] = useState<string>(initialDuration);
   const [level, setLevel] = useState<string>(initialLevel);
@@ -55,8 +49,6 @@ const UpdateCourseDialog: FunctionComponent<UpdateCourseDialogProps> = ({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          name,
-          description,
           category,
           duration,
           level,
@@ -98,16 +90,6 @@ const UpdateCourseDialog: FunctionComponent<UpdateCourseDialogProps> = ({
         </DialogHeader>
         <DialogBody>
           <Flex direction="column" gap={4}>
-            <Input
-              placeholder="Course Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Textarea
-              placeholder="Course Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
             <Input
               placeholder="Category"
               value={category}
