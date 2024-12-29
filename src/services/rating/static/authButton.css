@@ -32,69 +32,127 @@
 .edit-button {
   padding: 1em 2.5em;
   font-size: 0.875rem;
-  text-transform: uppercase;
   letter-spacing: 1.5px;
-  font-weight: 600;
-  color: #6e6e6e;
-  border: 2px solid rgb(57, 57, 57);
-  border-radius: 0.75rem;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  border: 2px solid #5c5b5b;
+  border-radius: 10px;
+  color: #5c5b5b;
+  background-color: transparent;
   cursor: pointer;
+  width: auto;
+}
+
+html.dark .edit-button {
+  padding: 1em 2.5em;
+  font-size: 0.875rem;
+  letter-spacing: 1.5px;
+  border: 2px solid rgb(198, 198, 198);
+  border-radius: 10px;
+  color: rgb(198, 198, 198);
+  background-color: transparent;
+  cursor: pointer;
+  width: auto;
 }
 
 .edit-button:hover {
-  color: white;
-  background-color: #545454;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  border: 2px solid #c37808;
+  color: #c37808;
+  box-shadow: 0 0 5px #c37808;
 }
 
-.edit-button:active {
-  color: rgb(57, 57, 57);
-  box-shadow: none;
+html.dark .edit-button:hover {
+  color: white;
+  box-shadow: 0 0 8px white;
 }
 
 .danger-button {
   padding: 1em 2.5em;
   font-size: 0.875rem;
-  text-transform: uppercase;
   letter-spacing: 1.5px;
-  font-weight: 600;
-  color: rgb(57, 57, 57);
-  border: 2px solid rgb(57, 57, 57);
-  border-radius: 0.75rem;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  border: 2px solid #5c5b5b;
+  border-radius: 10px;
+  color: #5c5b5b;
+  background-color: transparent;
   cursor: pointer;
+  width: auto;
+}
+
+html.dark .danger-button {
+  padding: 1em 2.5em;
+  font-size: 0.875rem;
+  letter-spacing: 1.5px;
+  border: 2px solid rgb(198, 198, 198);
+  border-radius: 10px;
+  color: rgb(198, 198, 198);;
+  background-color: transparent;
+  cursor: pointer;
+  width: auto;
 }
 
 .danger-button:hover {
-  color: white;
-  background-color: #800505;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  border: 2px solid #b41c1c;
+  color: #b41c1c;
+  box-shadow: 0 0 5px #b41c1c;
 }
 
-.danger-button:active {
-  color: rgb(57, 57, 57);
-  box-shadow: none;
+html.dark .danger-button:hover {
+  color: white;
+  box-shadow: 0 0 8px white;
 }
 
 .linkedIn{
   padding: 1em 2.5em;
   font-size: 0.875rem;
-  text-transform: uppercase;
   letter-spacing: 1.5px;
-  font-weight: 600;
-  color: #6e6e6e;
-  border: 2px solid rgb(57, 57, 57);
-  border-radius: 0.75rem;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  border: 2px solid #5c5b5b;
+  border-radius: 10px;
+  color: #5c5b5b;
+  background-color: transparent;
   cursor: pointer;
+  width: auto;
 }
 
 .linkedIn:hover{
+  border: 2px solid #016da7;
+  color:  #016da7 ;
+  box-shadow: 0 0 5px #016da7;
+}
+
+html.dark .linkedIn {
+  padding: 1em 2.5em;
+  font-size: 0.875rem;
+  letter-spacing: 1.5px;
+  border: 2px solid rgb(198, 198, 198);
+  border-radius: 10px;
+  color: rgb(198, 198, 198);;
+  background-color: transparent;
+  cursor: pointer;
+  width: auto;
+}
+
+html.dark .linkedIn:hover {
   color: white;
-  background-color:  #0077B5 ;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 8px white;
+}
+
+
+/* Add responsive styles for buttons */
+@media screen and (max-width: 768px) {
+  .auth-button,
+  .edit-button,
+  .danger-button,
+  .linkedIn {
+    padding: 0.75em 1.5em; /* Slightly smaller padding on mobile */
+    width: 100%; /* Full width on mobile */
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Adjust button styles for medium screens */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .auth-button,
+  .edit-button,
+  .danger-button,
+  .linkedIn {
+    padding: 0.875em 2em;
+  }
 }
