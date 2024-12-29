@@ -32,7 +32,13 @@ const SearchCourseDialog: FunctionComponent<SearchCourseProps> = ({
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/v1/courses/filter?category=${category}`
+        `/api/v1/courses/filter?category=${category}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch courses");

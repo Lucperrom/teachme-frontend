@@ -35,7 +35,12 @@ const Course: React.FC = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/v1/courses/${id}`);
+        const response = await fetch(`/api/v1/courses/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch course");
         }

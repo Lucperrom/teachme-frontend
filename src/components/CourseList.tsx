@@ -31,9 +31,22 @@ const CourseList: React.FC<CourseListProps> = ({
       try {
         let response;
         if (category) {
-          response = await fetch(`/api/v1/courses/filter?category=${category}`);
+          response = await fetch(
+            `/api/v1/courses/filter?category=${category}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
         } else {
-          response = await fetch("/api/v1/courses");
+          response = await fetch("/api/v1/courses", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
         }
         if (!response.ok) {
           throw new Error("Failed to fetch courses");

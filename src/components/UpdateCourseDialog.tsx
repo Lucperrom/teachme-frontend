@@ -52,6 +52,7 @@ const UpdateCourseDialog: FunctionComponent<UpdateCourseDialogProps> = ({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           name,
