@@ -1,0 +1,48 @@
+:root {
+  --main-red-color: #e71f1f;
+  min-width: 396px;
+}
+
+/* Add this to enforce minimum width */
+body {
+  min-width: 396px;
+  overflow-x: auto; /* Allows scrolling when width is below minimum */
+}
+
+/* Ensure all containers respect minimum width */
+#root {
+  min-width: 396px;
+}
+
+/* Componentes generales */
+.custom-hr {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-icon {
+  font-size: 1.5em; /* Tamaño relativo */
+  margin-right: 0.625rem;
+  color: #555;
+}
+
+.star-rating {
+  align-items: center;
+  margin-left: 1%;
+  margin-bottom: 0.313rem;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.25rem; /* Tamaño relativo */
+  margin-right: 0.313rem;
+}
+
+.star.filled {
+  color: #ffc107;
+}

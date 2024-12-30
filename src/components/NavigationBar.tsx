@@ -68,6 +68,13 @@ const NavigationBar = () => {
                         >
                             Sign up
                         </LinkButton>
+                        <LinkButton
+                            as={Link}
+                            to={AppRoute.SWAGGER}
+                            colorScheme="indigo"
+                        >
+                            Swagger
+                        </LinkButton>
                     </>
                 )}
                 <ColorToggle/>

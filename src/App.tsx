@@ -10,9 +10,12 @@ import {AppRoute} from "./constants/routes.ts";
 import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
+import RatingList from "./services/rating/RatingList.tsx";
+import SwaggerDocs from "./pages/Swagger.tsx";
 import Courses from "./pages/Courses.tsx";
 import Course from "./pages/Course.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+
 
 
 function App() {
@@ -31,6 +34,11 @@ function App() {
                 <Route path={AppRoute.LOGIN} element={
                     <PublicRoute>
                         <Login/>
+                    </PublicRoute>
+                }/>
+                <Route path={AppRoute.RATING} element={
+                    <PublicRoute>
+                        <RatingList/>
                     </PublicRoute>
                 }/>
                 <Route path={AppRoute.SIGNUP} element={
@@ -65,6 +73,7 @@ function App() {
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
+                <Route path="/docs" element={<SwaggerDocs />} />
             </Routes>
         </>
     )

@@ -5,7 +5,10 @@ export enum AppRoute {
     SIGNUP = '/signup',
     PROFILE = '/profile',
     COMPLETE_PROFILE = '/complete',
+    RATING = '/rating',
+    SWAGGER = '/docs',
     COURSESLIST = '/courses',
     COURSE = '/courses/:id',
+
     NOT_FOUND = '*'
 }
