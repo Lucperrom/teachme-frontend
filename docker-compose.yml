@@ -1,0 +1,8 @@
+services:
+  teachme-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: teachme-frontend
+    ports:
+      - "5173:5173"
