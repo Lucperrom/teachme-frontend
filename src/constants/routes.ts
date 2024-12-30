@@ -7,5 +7,8 @@ export enum AppRoute {
     COMPLETE_PROFILE = '/complete',
     RATING = '/rating',
     SWAGGER = '/docs',
+    COURSESLIST = '/courses',
+    COURSE = '/courses/:id',
+
     NOT_FOUND = '*'
 }

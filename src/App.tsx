@@ -12,11 +12,18 @@ import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
 import RatingList from "./services/rating/RatingList.tsx";
 import SwaggerDocs from "./pages/Swagger.tsx";
+import Courses from "./pages/Courses.tsx";
+import Course from "./pages/Course.tsx";
+import {Toaster} from "./components/ui/toaster.tsx";
+
+
 
 function App() {
     return (
         <>
             <NavigationBar/>
+            <Toaster />
+
             <Routes>
                 <Route index path={AppRoute.LANDING} element={<Landing/>}/>
                 <Route path={AppRoute.HOME} element={
@@ -49,6 +56,20 @@ function App() {
                            <ProtectedRoute>
                                <Profile/>
                            </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.COURSESLIST}
+                       element={
+                        <ProtectedRoute>
+                            <Courses/>
+                        </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.COURSE}
+                       element={
+                        <ProtectedRoute>
+                            <Course/>
+                        </ProtectedRoute>
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
