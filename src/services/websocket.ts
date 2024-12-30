@@ -1,11 +1,12 @@
 import {Client, Message, StompSubscription} from '@stomp/stompjs';
+import {Notification} from "../types/NotificationInfo.ts";
 
 class NotificationService {
     private stompClient: Client | null = null;
     private subscription: StompSubscription | null = null;
 
-    connect(userId: string, onMessageReceived: (message: any) => void): void {
-        const socketUrl = "ws://localhost:8080/notifications";
+    connect(userId: string, onNotificationReceived: (notification: Notification) => void): void {
+        const socketUrl = '/ws/v1/notifications';
 
         this.stompClient = new Client({
             webSocketFactory: () => new WebSocket(socketUrl),
@@ -18,7 +19,7 @@ class NotificationService {
                 this.subscription = this.stompClient!.subscribe(destination, (message: Message) => {
                     const content = JSON.parse(message.body);
                     console.log("Notification received:", content);
-                    onMessageReceived(content);
+                    onNotificationReceived(content);
                 });
             },
             onDisconnect: () => {
