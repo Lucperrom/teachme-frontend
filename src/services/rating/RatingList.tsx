@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./static/authButton.css";
 import "./static/global.css";
 import "./static/rating.css";
@@ -9,7 +9,6 @@ import PopoverDemo from "./RatingCreate";
 import {authService} from "../auth/authService.ts";
 import { Button } from "@chakra-ui/react";
 import {useAuth} from "../auth/AuthContext.tsx";
-import secret from "../../../secret.json"
 
 
 type Rating = {
@@ -39,7 +38,7 @@ const ratingExample2: Rating = {
 function RatingList() {
     const pathArray = window.location.pathname.split("/");
     const [ratings, setRatings] = useState<Rating[]>([]);
-    const [courseId, setCourseId] = useState("course1");
+    const [courseId] = useState(pathArray[1]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const [modalShow, setModalShow] = useState(false);
@@ -47,7 +46,7 @@ function RatingList() {
     const [ratingId, setRatingId] = useState("new");
     const jwt: string | null = authService.getToken();
     const {user} = useAuth();
-    const apiKey = secret.OPENAI_API_KEY;
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
     useEffect(() => {
       if (user != null) {
@@ -164,87 +163,110 @@ function RatingList() {
 
   
     return (
-        <div className="rating-container">
-          <div className="rating-header">
-            <h2 className="rating-title">Course Reviews</h2>
-            <button onClick={() => setIsPopoverOpen(true)} className="auth-button">Add Review</button>
-          </div>
-    
-          <hr className="custom-hr" />
-          {/* Condicionalmente renderiza el PopoverDemo */}
-          {/* {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} />}  */}
-          {ratings.length > 0 ? (
-            <div className="ratings-list">
-              {ratings.map((rating) => (
-                <div key={rating.id} className="rating-row">
-                  <div className="rating-data">
-                    <div className="rating-header-row">
-                      <div className="user-info">
-                        <i className="fa-solid fa-user avatar-icon"></i>
-                        <span className="rating-username">{rating.username}</span>
-                      </div>
-                      <div className="rating-date">{rating.date}</div>
-                    </div>
-                    <div className="rating-stars-and-description">
-                      <b>Rating:</b> {renderStars(rating.rating)}
-                      <span className="rating-description"><b>Description:</b>&nbsp;&nbsp;{rating.description}</span>
-                    </div>
-                  </div>
-                  {/* {userId!="" && userId==rating.id &&( */}
-                    <div className="rating-options">
-                      <button 
-                        onClick={() => {setIsPopoverOpen(true); setRatingId(rating.id)}} 
-                        className="edit-button" 
-                        style={{ alignItems: "center", gap: "8px" }}
-                        ><i className="fas fa-edit" style={{ marginRight: "8px" }}></i> 
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleGenerateText(rating.description)}
-                        className="linkedIn"
-                        style={{ alignItems: "center", gap: "8px" }}
-                        ><i className="fab fa-linkedin-in" style={{ marginRight: "8px" }}></i> 
-                        Share on LinkedIn
-                      </button>
-                      <button
-                        onClick={() => removeRating(rating.id)}
-                        className="danger-button"
-                        style={{ alignItems: "center", gap: "8px" }}
-                        ><i className="fa fa-trash" aria-hidden="true" style={{ marginRight: "8px" }}></i> 
-                        Delete
-                      </button>
-                    </div>
-              {/* )} */}
-
-                </div>
-              ))}
-              {isPopoverOpen && <PopoverDemo isOpen={isPopoverOpen} onTogglePopover={onTogglePopover} ratingId={ratingId} courseId={courseId} jwt={jwt} userId={userId} />}
-
-            </div>
-          ) : (
-            <p className="no-ratings">No ratings available</p>
-          )}
-
-          <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
-                    <ModalHeader
-                      toggle={handleShow}
-                      close={
-                        <button className="close" onClick={handleShow} type="button">
-                          &times;
-                        </button>
-                      }
-                    >
-                      Alert!
-                    </ModalHeader>
-                    <ModalBody>{message || ""}</ModalBody>
-                    <ModalFooter>
-                      <Button color="primary" onClick={handleShow}>
-                        Close
-                      </Button>
-                    </ModalFooter>
-            </Modal>
+      <div className="rating-container">
+        <div className="rating-header">
+          <h2 className="rating-title">Course Reviews</h2>
+          <button onClick={() => setIsPopoverOpen(true)} className="auth-button">
+            Add Review
+          </button>
         </div>
-      );
+    
+        <hr className="custom-hr" />
+    
+        {/* Renderiza el PopoverDemo siempre */}
+        {isPopoverOpen && (
+          <PopoverDemo
+            isOpen={isPopoverOpen}
+            onTogglePopover={onTogglePopover}
+            ratingId={ratingId}
+            courseId={courseId}
+            jwt={jwt}
+            userId={userId}
+          />
+        )}
+    
+        {ratings.length > 0 ? (
+          <div className="ratings-list">
+            {ratings.map((rating) => (
+              <div key={rating.id} className="rating-row">
+                <div className="rating-data">
+                  <div className="rating-header-row">
+                    <div className="user-info">
+                      <i className="fa-solid fa-user avatar-icon"></i>
+                      <span className="rating-username">{rating.username}</span>
+                    </div>
+                    <div className="rating-date">{rating.date}</div>
+                  </div>
+                  <div className="rating-stars-and-description">
+                    <b>Rating:</b> {renderStars(rating.rating)}
+                    <span className="rating-description">
+                      <b>Description:</b>&nbsp;&nbsp;{rating.description}
+                    </span>
+                  </div>
+                </div>
+                <div className="rating-options">
+                  <button
+                    onClick={() => {
+                      setIsPopoverOpen(true);
+                      setRatingId(rating.id);
+                    }}
+                    className="edit-button"
+                    style={{ alignItems: "center", gap: "8px" }}
+                  >
+                    <i className="fas fa-edit" style={{ marginRight: "8px" }}></i>
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleGenerateText(rating.description)}
+                    className="linkedIn"
+                    style={{ alignItems: "center", gap: "8px" }}
+                  >
+                    <i
+                      className="fab fa-linkedin-in"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Share on LinkedIn
+                  </button>
+                  <button
+                    onClick={() => removeRating(rating.id)}
+                    className="danger-button"
+                    style={{ alignItems: "center", gap: "8px" }}
+                  >
+                    <i
+                      className="fa fa-trash"
+                      aria-hidden="true"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="no-ratings">No ratings available</p>
+        )}
+    
+        <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
+          <ModalHeader
+            toggle={handleShow}
+            close={
+              <button className="close" onClick={handleShow} type="button">
+                &times;
+              </button>
+            }
+          >
+            Alert!
+          </ModalHeader>
+          <ModalBody>{message || ""}</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={handleShow}>
+              Close
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+    );
     }
     
     export default RatingList;

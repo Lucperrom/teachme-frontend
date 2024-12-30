@@ -5,7 +5,6 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { ratingForm } from "./ratingForm";
 import "./static/popover.css";
 import "./static/rating.css";
-import { DateTime } from 'luxon';
 
 interface PopoverDemoProps {
   isOpen: boolean; // Propiedad para controlar si el popover está abierto
@@ -16,7 +15,7 @@ interface PopoverDemoProps {
   userId: string;
 }
 
-function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, courseId, jwt, userId}: PopoverDemoProps) {
+function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, courseId, jwt}: PopoverDemoProps) {
   type FormData = {
     description: string;
     rating: number;
@@ -29,7 +28,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
 
   const [message, setMessage] = useState<string | null>(null);
   const [modalShow, setModalShow] = useState(false);
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState<{ id: string; description: string; rating: number; userId: string; username: string; } | null>(null);
   const [ratingId,setRatingId] = useState(initialRatingId);
   const editRatingFormRef=useRef<HTMLFormElement>(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -66,7 +65,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
           });
         }
       } catch (error) {
-        setMessage(error.message);
+        setMessage(error instanceof Error ? error.message : "An unknown error occurred");
         setModalShow(true);
       }
     }
@@ -129,8 +128,6 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
           window.location.reload();
         }
       }
-
-      ratingForm.forEach((i) => (i.handleChange = handleChange));
   
       ratingForm[0].defaultValue = rating?.description || "";
       ratingForm[1].defaultValue = rating?.rating || 0;
