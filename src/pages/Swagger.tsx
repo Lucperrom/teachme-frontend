@@ -7,7 +7,7 @@ export default function SwaggerDocs(){
     useEffect(() =>{loadDocs();},[]);
 
     async function loadDocs() {
-        const mydocs = await (await fetch(`http://localhost:8080/v3/api-docs`, {
+        const mydocs = await (await fetch(`/v3/api-docs`, {
             headers: {
                 "Content-Type": "application/json",
             },

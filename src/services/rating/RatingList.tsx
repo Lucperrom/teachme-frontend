@@ -56,7 +56,7 @@ function RatingList() {
 
     async function setUp() {
       try {
-        const response = await fetch(`http://localhost:8080/api/v1/course/${courseId}/ratings/`, {
+        const response = await fetch(`/api/v1/course/${courseId}/ratings/`, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -82,7 +82,7 @@ function RatingList() {
 
   //Eliminar rating
   function removeRating(id: string) {
-    fetch(`http://localhost:8080/api/v1/course/${courseId}/ratings/${id}`, {
+    fetch(`/api/v1/course/${courseId}/ratings/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${jwt}`,
