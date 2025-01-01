@@ -22,7 +22,7 @@ interface Video {
 }
 
 interface Course {
-  id: number;
+  id: number; 
   name: string;
   description: string;
   category: string;
@@ -94,7 +94,7 @@ const Course: React.FC = () => {
         </VStack>
         <Box mt={6}>
           <HStack gap={6}>
-            <LinkButton colorScheme="teal" variant="solid" to={`/courses/rating/${id}`}>
+            <LinkButton colorScheme="teal" variant="solid" to={`/courses/${id}/ratings`}>
               Rate <FaStar />
             </LinkButton>
             <LinkButton colorScheme="teal" variant="solid" to={`/courses/forum/${id}`}>
