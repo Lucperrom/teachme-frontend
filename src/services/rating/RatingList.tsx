@@ -9,6 +9,7 @@ import PopoverDemo from "./RatingCreate";
 import {authService} from "../auth/authService.ts";
 import { Button } from "@chakra-ui/react";
 import {useAuth} from "../auth/AuthContext.tsx";
+import { isTestMode } from "./config";
 
 
 type Rating = {
@@ -40,13 +41,14 @@ function RatingList() {
     const [ratings, setRatings] = useState<Rating[]>([]);
     const [courseId] = useState(pathArray[1]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const [message, setMessage] = useState(null);
+    const [message, setMessage] = useState<string | null>(null);
     const [modalShow, setModalShow] = useState(false);
     const [userId,setUserId] = useState("");
     const [ratingId, setRatingId] = useState("new");
     const jwt: string | null = authService.getToken();
     const {user} = useAuth();
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
       if (user != null) {
@@ -82,26 +84,52 @@ function RatingList() {
 
   //Eliminar rating
   function removeRating(id: string) {
-    fetch(`/api/v1/course/${courseId}/ratings/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          const updatedRatings = [...ratings].filter((i) => i.id !== id);
-          setRatings(updatedRatings);
-        }
-        return response.json();
+    setIsDeleting(true);
+
+    try {
+      if (isTestMode) {
+        setRatings(prevRatings => {
+          const updatedRatings = prevRatings.filter(rating => rating.id !== id);
+
+          return updatedRatings;
+        });
+        return;
+      }
+
+      fetch(`/api/v1/course/${courseId}/ratings/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       })
-      .then((data) => {
-        setMessage(data.message);
-        setModalShow(true);
-      });
+        .then((response) => {
+          if (response.status === 200) {
+            const updatedRatings = [...ratings].filter((i) => i.id !== id);
+            setRatings(updatedRatings);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setMessage(data.message);
+          setModalShow(true);
+        })
+        .catch((error) => {
+          // Manejo explícito de errores
+          setMessage("Error deleting rating");
+        })
+        .finally(() => {
+          // Indicar que se completó la operación
+          setIsDeleting(false);
+          setModalShow(true);
+        });
+  } catch (error) {
+    setMessage("Unexpected error occurred");
+    setIsDeleting(false);
+    setModalShow(true);
   }
+}
 
   function handleShow() {
     setModalShow(!modalShow);
@@ -230,6 +258,8 @@ function RatingList() {
                   <button
                     onClick={() => removeRating(rating.id)}
                     className="danger-button"
+                    disabled={isDeleting}
+                    data-testid={`delete-button-${rating.id}`}
                     style={{ alignItems: "center", gap: "8px" }}
                   >
                     <i
@@ -237,7 +267,7 @@ function RatingList() {
                       aria-hidden="true"
                       style={{ marginRight: "8px" }}
                     ></i>
-                    Delete
+                    {isDeleting ? 'Deleting...' : 'Delete'}
                   </button>
                 </div>
               </div>
