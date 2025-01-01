@@ -15,6 +15,7 @@ import SwaggerDocs from "./pages/Swagger.tsx";
 import Courses from "./pages/Courses.tsx";
 import Course from "./pages/Course.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+import Notifications from "./pages/Notifications.tsx";
 
 
 
@@ -55,6 +56,13 @@ function App() {
                        element={
                            <ProtectedRoute>
                                <Profile/>
+                           </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.NOTIFICATIONS}
+                       element={
+                           <ProtectedRoute>
+                               <Notifications/>
                            </ProtectedRoute>
                        }
                 />
