@@ -75,6 +75,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, name, description, category
             </IconButton>
           </HStack>
           <Box>
+            <LinkButton to={`/api/v1/courses/${id}/ratings`} fontSize="sm" color="teal.500">
+              View all ratings
+            </LinkButton>
             <Badge fontSize="2xl" fontWeight="bold">
               Rating: {rating || 0}  <FaStar color="gold"/>
             </Badge>
