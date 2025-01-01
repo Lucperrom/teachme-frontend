@@ -9,6 +9,6 @@ export interface Notification {
     title: string;
     message: string;
     type: string;
-    timestamp: string;
+    timestamp: number;
     read: boolean;
 }

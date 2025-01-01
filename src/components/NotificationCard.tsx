@@ -13,6 +13,10 @@ const NotificationCard: FC<NotificationCardProps> = ({notification, isLast}) => 
         return message.length > maxLength ? `${message.slice(0, maxLength)}...` : message;
     };
 
+    const getFormattedDateTime = (dateTime: number) => {
+        return new Date(dateTime * 1000).toLocaleString();
+    }
+
     return (
         <Flex key={notification.id}
               style={{borderBottom: isLast ? '' : '1px solid #C9D6E4'}}
@@ -28,7 +32,7 @@ const NotificationCard: FC<NotificationCardProps> = ({notification, isLast}) => 
                     <Text fontSize="sm"
                           color="gray.600">{truncateMessage(notification.message, 100)}</Text>
                     <Text fontSize="xs"
-                          color="gray.500">{new Date(notification.timestamp).toLocaleString()}</Text>
+                          color="gray.500">{getFormattedDateTime(notification.timestamp)}</Text>
                 </Card.Body>
             </Flex>
         </Flex>
