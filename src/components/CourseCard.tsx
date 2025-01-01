@@ -74,7 +74,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, name, description, category
             <SquarePen />
             </IconButton>
           </HStack>
-          <Box>
+          <Box> 
             <LinkButton to={`/api/v1/courses/${id}/ratings`} fontSize="sm" color="teal.500">
               View all ratings
             </LinkButton>

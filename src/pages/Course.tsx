@@ -22,7 +22,7 @@ interface Video {
 }
 
 interface Course {
-  id: number;
+  id: number; 
   name: string;
   description: string;
   category: string;

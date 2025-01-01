@@ -10,5 +10,5 @@ export enum AppRoute {
     COURSESLIST = '/courses',
     COURSE = '/courses/:id',
     NOTIFICATIONS = '/notifications',
-    NOT_FOUND = '*'
+    NOT_FOUND = '*' 
 }
