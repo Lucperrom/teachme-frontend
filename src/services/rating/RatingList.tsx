@@ -51,7 +51,7 @@ const ratingExample3: Rating = {
 function RatingList() {
     const pathArray = window.location.pathname.split("/");
     const [ratings, setRatings] = useState<Rating[]>([]);
-    const [courseId] = useState(pathArray[1]);
+    const [courseId] = useState(pathArray[3]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [modalShow, setModalShow] = useState(false);
@@ -258,44 +258,46 @@ const handleShow = () => {
                     </span>
                   </div>
                 </div>
-                <div className="rating-options">
-                  <button
-                    onClick={() => {
-                      setIsPopoverOpen(true);
-                      setRatingId(rating.id);
-                    }}
-                    className="edit-button"
-                    style={{ alignItems: "center", gap: "8px" }}
-                  >
-                    <i className="fas fa-edit" style={{ marginRight: "8px" }}></i>
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleGenerateText(rating.description)}
-                    className="linkedIn"
-                    style={{ alignItems: "center", gap: "8px" }}
-                  >
-                    <i
-                      className="fab fa-linkedin-in"
-                      style={{ marginRight: "8px" }}
-                    ></i>
-                    Share on LinkedIn
-                  </button>
-                  <button
-                    onClick={() => removeRating(rating.id)}
-                    className="danger-button"
-                    disabled={isDeleting}
-                    data-testid={`delete-button-${rating.id}`}
-                    style={{ alignItems: "center", gap: "8px" }}
-                  >
-                    <i
-                      className="fa fa-trash"
-                      aria-hidden="true"
-                      style={{ marginRight: "8px" }}
-                    ></i>
-                    {isDeleting ? 'Deleting...' : 'Delete'}
-                  </button>
-                </div>
+                {userId == rating.userId && (
+                  <div className="rating-options">
+                    <button
+                      onClick={() => {
+                        setIsPopoverOpen(true);
+                        setRatingId(rating.id);
+                      }}
+                      className="edit-button"
+                      style={{ alignItems: "center", gap: "8px" }}
+                    >
+                      <i className="fas fa-edit" style={{ marginRight: "8px" }}></i>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleGenerateText(rating.description)}
+                      className="linkedIn"
+                      style={{ alignItems: "center", gap: "8px" }}
+                    >
+                      <i
+                        className="fab fa-linkedin-in"
+                        style={{ marginRight: "8px" }}
+                      ></i>
+                      Share on LinkedIn
+                    </button>
+                    <button
+                      onClick={() => removeRating(rating.id)}
+                      className="danger-button"
+                      disabled={isDeleting}
+                      data-testid={`delete-button-${rating.id}`}
+                      style={{ alignItems: "center", gap: "8px" }}
+                    >
+                      <i
+                        className="fa fa-trash"
+                        aria-hidden="true"
+                        style={{ marginRight: "8px" }}
+                      ></i>
+                      {isDeleting ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
