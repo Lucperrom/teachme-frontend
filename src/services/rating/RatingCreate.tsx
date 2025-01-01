@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Button, Input } from "@chakra-ui/react";
@@ -5,6 +6,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { ratingForm } from "./ratingForm";
 import "./static/popover.css";
 import "./static/rating.css";
+import "./static/modal.css";
 
 interface PopoverDemoProps {
   isOpen: boolean; // Propiedad para controlar si el popover está abierto
@@ -132,78 +134,85 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
       ratingForm[0].defaultValue = rating?.description || "";
       ratingForm[1].defaultValue = rating?.rating || 0;
     
-    function handleShow() {
-      setModalShow(false);
-      setMessage(null);
-    }
+    const handleShow = () => {
+      if (isOpen) onTogglePopover();
+      setModalShow(!modalShow); 
+    };
 
   return (
     <div>
       {/* Superposición para difuminar el fondo */}
       <div className={`overlay ${isOpen ? 'active' : ''}`} onClick={onTogglePopover}></div>
       
-      <Popover open={isOpen}>
-        <PopoverTrigger asChild>
-          <div className="popover-wrapper">
-            <Button variant="outline" style={{ display: "none" }}>
-              Open Form
-            </Button>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="custom-popover-content">
-          <button
-            onClick={onTogglePopover}
-            className="close-button"
-            aria-label="Close"
-          >
-            ╳
-          </button>
-          <form onSubmit={handleSubmit} className="form-layout">
-            {ratingForm.map((field) => (
-              <div
-                key={field.name}
-                className={`form-field ${
-                  field.name === "rating" ? "rating-field" : "description-field"
-                }`}
-              >
-                <label htmlFor={field.name} className="form-label">
-                  {field.tag}
-                </label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type={field.type}
-                  value={formData[field.name as keyof FormData]}
-                  required={field.isRequired}
-                  min={field.name === "rating" ? 1 : undefined}
-                  max={field.name === "rating" ? 5 : undefined}
-                  onChange={handleChange}
-                  className="form-input"
-                />
-              </div>
-            ))}
-            <div className="form-actions">
-              <Button
-                type="reset"
-                variant="outline"
-                onClick={() =>
-                  setFormData({
-                    description: "",
-                    rating: 0,
-                  })
-                }
-                className="reset-button"
-              >
-                Reset
-              </Button>
-              <Button type="submit" className="submit-button">
-                Submit
+      {modalShow ? null : (
+        <Popover open={isOpen}>
+          <PopoverTrigger asChild>
+            <div className="popover-wrapper">
+              <Button variant="outline" style={{ display: "none" }}>
+                Open Form
               </Button>
             </div>
-          </form>
-        </PopoverContent>
-      </Popover>
-      <Modal isOpen={modalShow} toggle={handleShow} keyboard={false}>
+          </PopoverTrigger>
+          <PopoverContent className="custom-popover-content">
+            <button
+              onClick={onTogglePopover}
+              className="close-button"
+              aria-label="Close"
+            >
+              ╳
+            </button>
+            <form onSubmit={handleSubmit} className="form-layout">
+              {ratingForm.map((field) => (
+                <div
+                  key={field.name}
+                  className={`form-field ${
+                    field.name === "rating" ? "rating-field" : "description-field"
+                  }`}
+                >
+                  <label htmlFor={field.name} className="form-label">
+                    {field.tag}
+                  </label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type={field.type}
+                    value={formData[field.name as keyof FormData]}
+                    required={field.isRequired}
+                    min={field.name === "rating" ? 1 : undefined}
+                    max={field.name === "rating" ? 5 : undefined}
+                    onChange={handleChange}
+                    className="form-input"
+                  />
+                </div>
+              ))}
+              <div className="form-actions">
+                <Button
+                  type="reset"
+                  variant="outline"
+                  onClick={() =>
+                    setFormData({
+                      description: "",
+                      rating: 0,
+                    })
+                  }
+                  className="reset-button"
+                >
+                  Reset
+                </Button>
+                <Button type="submit" className="submit-button">
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </PopoverContent>
+        </Popover>
+      )}
+      <Modal isOpen={modalShow} toggle={() => { if (isOpen) onTogglePopover();
+              handleShow();
+            }}
+            backdrop="static"
+            keyboard={false}
+        >
         <ModalHeader
           toggle={handleShow}
            close={
