@@ -6,7 +6,7 @@ class NotificationService {
     private subscription: StompSubscription | null = null;
 
     connect(userId: string, onNotificationReceived: (notification: Notification) => void): void {
-        const socketUrl = '/ws/v1/notifications';
+        const socketUrl = `${import.meta.env.VITE_WS_URI}/ws/v1/notifications`;
 
         this.stompClient = new Client({
             webSocketFactory: () => new WebSocket(socketUrl),

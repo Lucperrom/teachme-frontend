@@ -1,4 +1,4 @@
-import {Flex} from "@chakra-ui/react";
+import {Circle, Flex} from "@chakra-ui/react";
 import {IoNotifications} from "react-icons/io5";
 import {Button} from "./ui/button.tsx";
 import {useEffect, useState} from "react";
@@ -6,6 +6,8 @@ import {useAuth} from "../services/auth/AuthContext.tsx";
 import {notificationService} from "../services/websocket.ts";
 import {Notification, NotificationsInfo} from "../types/NotificationInfo.ts";
 import client from "../services/axios.ts";
+import { Link } from "react-router-dom";
+import {AppRoute} from "../constants/routes.ts";
 
 const NotificationBell = () => {
 
@@ -15,7 +17,7 @@ const NotificationBell = () => {
 
     useEffect(() => {
         client.get(`/api/v1/notifications/info?id=${user?.id}`)
-            .then((info) => console.log(info));
+            .then((info) => setNotificationInfo(info.data as NotificationsInfo));
     }, [user]);
 
     useEffect(() => {
@@ -25,6 +27,8 @@ const NotificationBell = () => {
 
         const onNotificationReceived = (notification: Notification) => {
             console.log(notification);
+            client.get(`/api/v1/notifications/info?id=${user?.id}`)
+                .then((info) => setNotificationInfo(info.data as NotificationsInfo));
         }
 
         notificationService.connect(user.id, onNotificationReceived);
@@ -36,9 +40,15 @@ const NotificationBell = () => {
 
     return (
         <Flex alignItems="center" justifyContent="center">
-            <Button unstyled cursor="pointer">
-                <IoNotifications size={22}/>
-            </Button>
+            <Link to={AppRoute.NOTIFICATIONS}>
+                <Button position="relative" unstyled cursor="pointer">
+                    <IoNotifications size={22}/>
+                    {
+                        (notificationInfo && notificationInfo?.numberOfMessages > 0) &&
+                        <Circle position="absolute" right={0} top={0} bg="red" size={2}></Circle>
+                    }
+                </Button>
+            </Link>
         </Flex>
     );
 }

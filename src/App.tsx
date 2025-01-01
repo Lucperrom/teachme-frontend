@@ -11,6 +11,7 @@ import Landing from "./pages/Landing.tsx";
 import PublicRoute from "./components/PublicRoute.tsx";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+import Notifications from "./pages/Notifications.tsx";
 
 function App() {
     return (
@@ -44,6 +45,13 @@ function App() {
                        element={
                            <ProtectedRoute>
                                <Profile/>
+                           </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.NOTIFICATIONS}
+                       element={
+                           <ProtectedRoute>
+                               <Notifications/>
                            </ProtectedRoute>
                        }
                 />
