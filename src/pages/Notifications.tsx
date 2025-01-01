@@ -18,29 +18,26 @@ const Notifications = () => {
 
     return (
         <Flex direction="column" padding={5}>
-            {
-                notificationInfo?.numberOfMessages &&
-                <Flex direction="column" alignItems="center" justifyContent="center">
-                    <Flex direction="column" alignItems="center" justifyContent="center" gap={5}>
-                        <Heading alignSelf="flex-start">Notifications</Heading>
-                        {
-                            notificationInfo?.recentNotifications?.length === 0 &&
-                            <Text>You don't have any notifications yet.</Text>
-                        }
-                        {
-                            notificationInfo?.recentNotifications.length > 0 &&
-                            <Card.Root padding={0} width="600px" rounded="md" overflow="hidden">
-                                {
-                                    notificationInfo.recentNotifications.map((notification, idx) =>
-                                        <NotificationCard notification={notification}
-                                                          isLast={idx === notificationInfo.recentNotifications.length - 1}/>
-                                    )
-                                }
-                            </Card.Root>
-                        }
-                    </Flex>
+            <Flex direction="column" alignItems="center" justifyContent="center">
+                <Flex direction="column" alignItems="center" justifyContent="center" gap={5}>
+                    <Heading alignSelf="flex-start">Notifications</Heading>
+                    {
+                        notificationInfo?.recentNotifications?.length === 0 &&
+                        <Text>You don't have any notifications yet.</Text>
+                    }
+                    {
+                        notificationInfo && notificationInfo?.recentNotifications.length > 0 &&
+                        <Card.Root padding={0} width="600px" rounded="md" overflow="hidden">
+                            {
+                                notificationInfo.recentNotifications.map((notification, idx) =>
+                                    <NotificationCard key={idx} notification={notification}
+                                                      isLast={idx === notificationInfo.recentNotifications.length - 1}/>
+                                )
+                            }
+                        </Card.Root>
+                    }
                 </Flex>
-            }
+            </Flex>
         </Flex>
     );
 }

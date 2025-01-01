@@ -22,7 +22,7 @@ const NotificationCard: FC<NotificationCardProps> = ({notification, isLast}) => 
               bg={notification.read ? "transparent" : "#D9E8FB"}>
             <Circle bg={notification.read ? "transparent" : "#0B65C2"} size={2}></Circle>
             <Flex direction="column" justifyContent="center">
-                <Card.Title fontSize="lg"
+                <Card.Title color="black" fontSize="lg"
                             fontWeight="bold">{notification.title}</Card.Title>
                 <Card.Body padding={0}>
                     <Text fontSize="sm"
