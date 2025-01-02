@@ -57,7 +57,7 @@ function RatingList() {
     const [modalShow, setModalShow] = useState(false);
     const [userId,setUserId] = useState("");
     const [ratingId, setRatingId] = useState("new");
-    const jwt: string | null = localStorage.getItem("jwt");
+    const jwt: string | null = localStorage.getItem("token");
     const {user} = useAuth();
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const [isDeleting, setIsDeleting] = useState(false);
