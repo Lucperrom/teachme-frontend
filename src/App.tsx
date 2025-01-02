@@ -15,12 +15,17 @@ import SwaggerDocs from "./pages/Swagger.tsx";
 import Courses from "./pages/Courses.tsx";
 import Course from "./pages/Course.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
+import Forum from "./pages/Forum.tsx";
+
+
 import Notifications from "./pages/Notifications.tsx";
 import Notification from "./pages/Notification.tsx";
+
 
 function App() {
     return (
         <>
+            
             <NavigationBar/>
             <Toaster />
 
@@ -84,6 +89,13 @@ function App() {
                         <ProtectedRoute>
                             <Course/>
                         </ProtectedRoute>
+                       }
+                />
+               <Route path={AppRoute.FORUM}
+                       element={
+                           <ProtectedRoute>
+                               <Forum/>
+                           </ProtectedRoute>
                        }
                 />
                 <Route path={AppRoute.NOT_FOUND} element={<NotFound/>}/>
