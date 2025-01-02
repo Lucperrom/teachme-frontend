@@ -51,13 +51,13 @@ const ratingExample3: Rating = {
 function RatingList() {
     const pathArray = window.location.pathname.split("/");
     const [ratings, setRatings] = useState<Rating[]>([]);
-    const [courseId] = useState(pathArray[3]);
+    const [courseId] = useState(pathArray[2]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [modalShow, setModalShow] = useState(false);
     const [userId,setUserId] = useState("");
     const [ratingId, setRatingId] = useState("new");
-    const jwt: string | null = authService.getToken();
+    const jwt: string | null = localStorage.getItem("jwt");
     const {user} = useAuth();
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const [isDeleting, setIsDeleting] = useState(false);
@@ -87,6 +87,7 @@ function RatingList() {
       const response = await fetch(`/api/v1/course/${courseId}/ratings/`, {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${jwt}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },

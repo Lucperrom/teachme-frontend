@@ -37,9 +37,9 @@ function App() {
                     </PublicRoute>
                 }/>
                 <Route path={AppRoute.RATING} element={
-                    <PublicRoute>
+                    <ProtectedRoute>
                         <RatingList/>
-                    </PublicRoute>
+                    </ProtectedRoute>
                 }/>
                 <Route path={AppRoute.SIGNUP} element={
                     <PublicRoute>
