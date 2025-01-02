@@ -61,9 +61,9 @@ function App() {
                 />
                 <Route path={AppRoute.FORUM}
                        element={
-                           <PublicRoute>
+                           <ProtectedRoute>
                                <Forum/>
-                           </PublicRoute>
+                           </ProtectedRoute>
                        }
                 />
                 

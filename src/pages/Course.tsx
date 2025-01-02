@@ -97,7 +97,7 @@ const Course: React.FC = () => {
             <LinkButton colorScheme="teal" variant="solid" to={`/courses/rating/${id}`}>
               Rate <FaStar />
             </LinkButton>
-            <LinkButton colorScheme="teal" variant="solid" to={`/courses/forum/${id}`}>
+            <LinkButton colorScheme="teal" variant="solid" to={`/forums/${id}`}>
               Forum <MessageSquareMore />
             </LinkButton>
           </HStack>
