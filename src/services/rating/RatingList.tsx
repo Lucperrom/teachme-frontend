@@ -9,8 +9,6 @@ import PopoverDemo from "./RatingCreate";
 import {authService} from "../auth/authService.ts";
 import { Button } from "@chakra-ui/react";
 import {useAuth} from "../auth/AuthContext.tsx";
-import { isTestMode } from "./config";
-
 
 type Rating = {
   id: string;
@@ -61,6 +59,7 @@ function RatingList() {
     const {user} = useAuth();
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const [isDeleting, setIsDeleting] = useState(false);
+    const testMode = import.meta.env.VITE_IS_TEST_MODE;
 
     useEffect(() => {
       if (user != null) {
@@ -114,7 +113,7 @@ function RatingList() {
     setIsDeleting(true);
 
     try {
-      if (isTestMode) {
+      if (testMode === "true") {
         setRatings(prevRatings => {
           const updatedRatings = prevRatings.filter(rating => rating.id !== id);
 
@@ -140,25 +139,25 @@ function RatingList() {
         })
         .then((data) => {
           setMessage(data.message);
-          setModalShow(true);
+          if(testMode !== "true") setModalShow(true);
         })
         .catch(() => {
           setMessage("Error deleting rating");
         })
         .finally(() => {
           setIsDeleting(false);
-          setModalShow(true);
+          if(testMode !== "true") setModalShow(true);
         });
   } catch (error) {
     setMessage("Unexpected error occurred");
     setIsDeleting(false);
-    setModalShow(true);
+    if(testMode !== "true") setModalShow(true);
   }
 }
 
 const handleShow = () => {
   if (isPopoverOpen) setIsPopoverOpen(false);
-  setModalShow(!modalShow); 
+  if(testMode !== "true") setModalShow(!modalShow); 
 };
 
    //OpenAI API
@@ -258,7 +257,7 @@ const handleShow = () => {
                     </span>
                   </div>
                 </div>
-                {userId == rating.userId && (
+                {(userId == rating.userId || testMode === "true") && (
                   <div className="rating-options">
                     <button
                       onClick={() => {

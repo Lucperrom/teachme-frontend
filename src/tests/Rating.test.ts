@@ -1,11 +1,9 @@
 import { Builder, By, WebDriver, until, WebElement } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import 'jest';
-import { setTestMode } from "../services/rating/config";
 
 
 describe('Rating Component Integration Tests', () => { //npm run dev:test
-  setTestMode(true);
   let driver: WebDriver;
   const BASE_URL = 'http://localhost:5173';
   const TIMEOUT = 15000;
@@ -13,7 +11,7 @@ describe('Rating Component Integration Tests', () => { //npm run dev:test
 
   beforeAll(async () => {
     const options = new chrome.Options();
-    options.addArguments('--headless');
+    //options.addArguments('--headless');
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
 
@@ -133,17 +131,23 @@ describe('Rating Component Integration Tests', () => { //npm run dev:test
   describe('Rating Deletion', () => {
     test('should delete rating', async () => {
       const initialCount = await getRatingRows();
+  
       const deleteButton = await waitForElement(By.css('.danger-button'));
       await deleteButton.click();
-
-      await driver.executeScript("arguments[0].click();", deleteButton);
-
-      const actions = driver.actions({async: true});
-      await actions.move({origin: deleteButton}).click().perform();
-
+  
       await driver.sleep(1000);
-
+  
+      const updatedDeleteButton = await waitForElement(By.css('.danger-button'));
+  
+      await driver.executeScript("arguments[0].click();", updatedDeleteButton);
+  
+      const actions = driver.actions({ async: true });
+      await actions.move({ origin: updatedDeleteButton }).click().perform();
+  
+      await driver.sleep(1000);
+  
       const ratingsAfterClick = await getRatingRows();
+      
       return ratingsAfterClick.length < initialCount.length;
     }, DELETE_TIMEOUT);
   });
