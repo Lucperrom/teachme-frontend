@@ -6,7 +6,6 @@ import "./static/rating.css";
 import "./static/popover.css";
 import { Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import PopoverDemo from "./RatingCreate";
-import {authService} from "../auth/authService.ts";
 import { Button } from "@chakra-ui/react";
 import {useAuth} from "../auth/AuthContext.tsx";
 import { isTestMode } from "./config";
