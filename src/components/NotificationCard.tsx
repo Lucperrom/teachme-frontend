@@ -5,11 +5,13 @@ import {Notification} from "../types/NotificationInfo.ts";
 type NotificationCardProps = {
     notification: Notification;
     isLast: boolean;
+    onClick?: (notificationId: string) => void;
 }
 
-const NotificationCard: FC<NotificationCardProps> = ({notification, isLast}) => {
+const NotificationCard: FC<NotificationCardProps> = ({notification, isLast, onClick}) => {
 
     const truncateMessage = (message: string, maxLength: number) => {
+        if (!message) return;
         return message.length > maxLength ? `${message.slice(0, maxLength)}...` : message;
     };
 
@@ -19,18 +21,19 @@ const NotificationCard: FC<NotificationCardProps> = ({notification, isLast}) => 
 
     return (
         <Flex key={notification.id}
+              onClick={() => onClick ? onClick(notification.id) : null}
               style={{borderBottom: isLast ? '' : '1px solid #C9D6E4'}}
               padding={4}
               gap={5} alignItems="center" cursor="pointer"
               _hover={{ bg: notification.read ? "gray.50" : "#C5DEF9" }}
-              bg={notification.read ? "transparent" : "#D9E8FB"}>
+              bg={notification.read ? "#F4F2EE" : "#D9E8FB"}>
             <Circle bg={notification.read ? "transparent" : "#0B65C2"} size={2}></Circle>
             <Flex direction="column" justifyContent="center">
                 <Card.Title color="black" fontSize="lg"
                             fontWeight="bold">{notification.title}</Card.Title>
                 <Card.Body padding={0}>
                     <Text fontSize="sm"
-                          color="gray.600">{truncateMessage(notification.message, 100)}</Text>
+                          color="gray.600">{truncateMessage(notification.previewText, 100)}</Text>
                     <Text fontSize="xs"
                           color="gray.500">{getFormattedDateTime(notification.timestamp)}</Text>
                 </Card.Body>

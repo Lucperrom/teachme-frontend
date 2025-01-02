@@ -7,6 +7,7 @@ export interface NotificationsInfo {
 export interface Notification {
     id: string;
     title: string;
+    previewText: string;
     message: string;
     type: string;
     timestamp: number;

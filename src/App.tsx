@@ -16,8 +16,7 @@ import Courses from "./pages/Courses.tsx";
 import Course from "./pages/Course.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
 import Notifications from "./pages/Notifications.tsx";
-
-
+import Notification from "./pages/Notification.tsx";
 
 function App() {
     return (
@@ -63,6 +62,13 @@ function App() {
                        element={
                            <ProtectedRoute>
                                <Notifications/>
+                           </ProtectedRoute>
+                       }
+                />
+                <Route path={AppRoute.NOTIFICATION}
+                       element={
+                           <ProtectedRoute>
+                               <Notification/>
                            </ProtectedRoute>
                        }
                 />

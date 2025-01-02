@@ -16,9 +16,9 @@ const NotificationBell = () => {
     const {user} = useAuth();
 
     useEffect(() => {
-        client.get(`/api/v1/notifications/info?id=${user?.id}`)
+        client.get(`/api/v1/notifications/info`)
             .then((info) => setNotificationInfo(info.data as NotificationsInfo));
-    }, [user]);
+    }, []);
 
     useEffect(() => {
         if (!user) {
@@ -27,7 +27,7 @@ const NotificationBell = () => {
 
         const onNotificationReceived = (notification: Notification) => {
             console.log(notification);
-            client.get(`/api/v1/notifications/info?id=${user?.id}`)
+            client.get(`/api/v1/notifications/info`)
                 .then((info) => setNotificationInfo(info.data as NotificationsInfo));
         }
 
@@ -44,7 +44,7 @@ const NotificationBell = () => {
                 <Button position="relative" unstyled cursor="pointer">
                     <IoNotifications size={22}/>
                     {
-                        (notificationInfo && notificationInfo?.numberOfMessages > 0) &&
+                        (notificationInfo && notificationInfo?.numberOfUnreadMessages > 0) &&
                         <Circle position="absolute" right={0} top={0} bg="red" size={2}></Circle>
                     }
                 </Button>
