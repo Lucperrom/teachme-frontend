@@ -10,6 +10,7 @@ describe('Auth Component Integration Tests', () => { //npm run dev:test
 
   beforeAll(async () => {
     const options = new chrome.Options();
+    options.addArguments('--headless');
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
 
