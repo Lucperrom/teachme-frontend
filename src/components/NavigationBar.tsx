@@ -37,23 +37,26 @@ const NavigationBar = () => {
                 {user ? (
                     <Flex gap={4}>
                         <NotificationBell/>
-                        <MenuRoot positioning={{placement: "bottom-start"}}>
-                            <MenuTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                    <LuMenu/>
-                                </Button>
-                            </MenuTrigger>
-                            <MenuContent>
-                                <MenuItem onClick={() => navigate(AppRoute.PROFILE)} value="profile" valueText="profile">
-                                    <LuUser/>
-                                    <Box flex="1">Profile</Box>
-                                </MenuItem>
-                                <MenuItem onClick={() => authService.logout()} value="logout" valueText="logout">
-                                    <LuLogOut/>
-                                    <Box flex="1">Logout</Box>
-                                </MenuItem>
-                            </MenuContent>
-                        </MenuRoot>
+                        <Box data-test="menu">
+                            <MenuRoot positioning={{placement: "bottom-start"}}>
+                                <MenuTrigger asChild>
+                                    <Button variant="outline" size="sm">
+                                        <LuMenu/>
+                                    </Button>
+                                </MenuTrigger>
+                                <MenuContent>
+                                    <MenuItem data-test="menu-profile-option" onClick={() => navigate(AppRoute.PROFILE)}
+                                              value="profile" valueText="profile">
+                                        <LuUser/>
+                                        <Box flex="1">Profile</Box>
+                                    </MenuItem>
+                                    <MenuItem onClick={() => authService.logout()} value="logout" valueText="logout">
+                                        <LuLogOut/>
+                                        <Box flex="1">Logout</Box>
+                                    </MenuItem>
+                                </MenuContent>
+                            </MenuRoot>
+                        </Box>
                     </Flex>
                 ) : (
                     <>

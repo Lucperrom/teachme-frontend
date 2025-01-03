@@ -110,6 +110,7 @@ const ProfilePictureDialog: FunctionComponent<ProfilePictureDialogProps> = ({chi
                         accept={["image/*"]}>
                         <FileUploadTrigger asChild>
                             <Box position="relative"
+                                 data-test="profile-picture-modal"
                                  backgroundColor={!profilePictureUrl ? "grey" : (hover ? "black" : "")}
                                  opacity={hover ? 0.5 : 1}
                                  rounded="full"
