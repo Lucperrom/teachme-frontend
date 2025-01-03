@@ -1,5 +1,4 @@
 import {Route, Routes} from "react-router-dom";
-import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import NavigationBar from "./components/NavigationBar.tsx";
 import SignUp from "./pages/SignUp.tsx";
@@ -35,7 +34,7 @@ function App() {
                 <Route index path={AppRoute.LANDING} element={<Landing/>}/>
                 <Route path={AppRoute.HOME} element={
                     <ProtectedRoute>
-                        <Home/>
+                        <Courses/>
                     </ProtectedRoute>
                 }/>
                 <Route path={AppRoute.LOGIN} element={
@@ -83,13 +82,6 @@ function App() {
                            <ProtectedRoute>
                                <Notification/>
                            </ProtectedRoute>
-                       }
-                />
-                <Route path={AppRoute.COURSESLIST}
-                       element={
-                        <ProtectedRoute>
-                            <Courses/>
-                        </ProtectedRoute>
                        }
                 />
                 <Route path={AppRoute.COURSE}
