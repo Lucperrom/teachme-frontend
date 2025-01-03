@@ -1,24 +1,25 @@
 import {Card, Flex, Heading, Text} from "@chakra-ui/react";
-import {useEffect, useState} from "react";
-import {NotificationsInfo} from "../types/NotificationInfo.ts";
+import {useEffect} from "react";
 import {useAuth} from "../services/auth/AuthContext.tsx";
-import client from "../services/axios.ts";
 import NotificationCard from "../components/NotificationCard.tsx";
 import {useNavigate} from "react-router-dom";
 import {AppRoute} from "../constants/routes.ts";
+import {RootState, useAppDispatch} from "../services/redux/store.ts";
+import {useSelector} from "react-redux";
+import {fetchNotificationsInfo} from "../services/redux/slices/notificationsSlice.ts";
 
 const Notifications = () => {
 
-    const [notificationInfo, setNotificationInfo] = useState<NotificationsInfo | null>(null);
+    const dispatch = useAppDispatch();
+    const notificationInfo = useSelector((state: RootState) => state.notifications);
 
     const {user} = useAuth();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        client.get(`/api/v1/notifications/info`)
-            .then((info) => setNotificationInfo(info.data as NotificationsInfo));
-    }, [user]);
+        dispatch(fetchNotificationsInfo());
+    }, [dispatch, user]);
 
     const handleOnClick = (id: string) => {
         navigate(`${AppRoute.NOTIFICATIONS}/${id}`)
