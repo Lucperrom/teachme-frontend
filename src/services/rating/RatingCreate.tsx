@@ -34,6 +34,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
   const [ratingId,setRatingId] = useState(initialRatingId);
   const editRatingFormRef=useRef<HTMLFormElement>(null);
   const [isEdit, setIsEdit] = useState(false);
+  const testMode = import.meta.env.VITE_IS_TEST_MODE;
 
   useEffect(() => { 
     setupRating();
@@ -41,6 +42,8 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
  
    
   async function setupRating() {
+    console.log(testMode)
+    console.log(typeof(testMode))
     if (ratingId !== "new") {
       setIsEdit(true);
       try {
@@ -55,7 +58,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
         const data = await response.json();
         if (data.message) {
           setMessage(data.message);
-          setModalShow(true);
+          if(testMode !== "true") setModalShow(true);
         } else {
           setRating(data);
           setRatingId(data.id);
@@ -68,7 +71,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
         }
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "An unknown error occurred");
-        setModalShow(true);
+        if(testMode !== "true") setModalShow(true);
       }
     }
   }
@@ -97,7 +100,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
       const isValid = editRatingFormRef.current.checkValidity(); // Usar checkValidity nativo
       if (!isValid) {
         setMessage("Please fix the errors in the form.");
-        setModalShow(true);
+        if(testMode !== "true") setModalShow(true);
         return;
       }
     }
@@ -124,7 +127,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
         const result = await response.json();
         if (result.message) {
           setMessage(result.message);
-          setModalShow(true);
+          if(testMode !== "true") setModalShow(true);
         } else {
           onTogglePopover();
           window.location.reload();
@@ -136,7 +139,7 @@ function PopoverDemo({ isOpen, onTogglePopover, ratingId: initialRatingId, cours
     
     const handleShow = () => {
       if (isOpen) onTogglePopover();
-      setModalShow(!modalShow); 
+      if(testMode !== "true") setModalShow(!modalShow); 
     };
 
   return (

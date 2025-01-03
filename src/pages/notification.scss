@@ -1,0 +1,39 @@
+.notification-content {
+  padding: 16px;
+  padding-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.notification-content h4 {
+  margin-bottom: 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-content p {
+  margin-bottom: 16px;
+  font-size: 1em;
+  color: #555;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.notification-actions .btn {
+  padding: 8px 16px;
+  font-size: 0.9em;
+  color: #fff;
+  background-color: black;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.notification-actions .btn:hover {
+  background-color: dimgray;
+}
