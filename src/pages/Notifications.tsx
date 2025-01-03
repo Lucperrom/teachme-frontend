@@ -4,6 +4,8 @@ import {NotificationsInfo} from "../types/NotificationInfo.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import client from "../services/axios.ts";
 import NotificationCard from "../components/NotificationCard.tsx";
+import {useNavigate} from "react-router-dom";
+import {AppRoute} from "../constants/routes.ts";
 
 const Notifications = () => {
 
@@ -11,10 +13,16 @@ const Notifications = () => {
 
     const {user} = useAuth();
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        client.get(`/api/v1/notifications/info?id=${user?.id}`)
+        client.get(`/api/v1/notifications/info`)
             .then((info) => setNotificationInfo(info.data as NotificationsInfo));
     }, [user]);
+
+    const handleOnClick = (id: string) => {
+        navigate(`${AppRoute.NOTIFICATIONS}/${id}`)
+    };
 
     return (
         <Flex direction="column" padding={5}>
@@ -30,7 +38,8 @@ const Notifications = () => {
                         <Card.Root padding={0} width="600px" rounded="md" overflow="hidden">
                             {
                                 notificationInfo.recentNotifications.map((notification, idx) =>
-                                    <NotificationCard key={idx} notification={notification}
+                                    <NotificationCard onClick={notificationId => handleOnClick(notificationId)}
+                                                      key={idx} notification={notification}
                                                       isLast={idx === notificationInfo.recentNotifications.length - 1}/>
                                 )
                             }

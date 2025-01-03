@@ -9,6 +9,8 @@ export enum AppRoute {
     SWAGGER = '/docs',
     COURSESLIST = '/courses',
     COURSE = '/courses/:id',
+    FORUM = '/forums/:id',
     NOTIFICATIONS = '/notifications',
-    NOT_FOUND = '*' 
+    NOTIFICATION = '/notifications/:id',
+    NOT_FOUND = '*'
 }
