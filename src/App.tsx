@@ -23,6 +23,8 @@ import Notification from "./pages/Notification.tsx";
 
 
 function App() {
+    const isTestMode = import.meta.env.VITE_IS_TEST_MODE === "true";
+    
     return (
         <>
             
@@ -42,9 +44,15 @@ function App() {
                     </PublicRoute>
                 }/>
                 <Route path={AppRoute.RATING} element={
-                    <ProtectedRoute>
-                        <RatingList/>
-                    </ProtectedRoute>
+                    isTestMode ? (
+                        <PublicRoute>
+                            <RatingList />
+                        </PublicRoute>
+                    ) : (
+                        <ProtectedRoute>
+                            <RatingList />
+                        </ProtectedRoute>
+                    )
                 }/>
                 <Route path={AppRoute.SIGNUP} element={
                     <PublicRoute>
