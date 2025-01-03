@@ -82,7 +82,7 @@ function RatingList() {
     return userRating ? [userRating, ...sortedOtherRatings] : sortedOtherRatings;
   };
 
-
+  
   async function setUp() {
     try {
       const response = await fetch(`/api/v1/course/${courseId}/ratings/`, {
@@ -252,7 +252,7 @@ const handleShow = () => {
                       <i className="fa-solid fa-user avatar-icon"></i>
                       <span className="rating-username">{rating.username}</span>
                     </div>
-                    <div className="rating-date">{rating.date}</div>
+                    <div className="rating-date">{rating.date.split("T")[0]}</div>
                   </div>
                   <div className="rating-stars-and-description">
                     <b>Rating:</b> {renderStars(rating.rating)}
