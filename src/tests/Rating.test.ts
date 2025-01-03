@@ -31,7 +31,8 @@ describe('Rating Component Integration Tests', () => { //npm run dev:test
   });
 
   beforeEach(async () => {
-    await driver.get(`${BASE_URL}/rating`);
+    const courseId = "course1"
+    await driver.get(`${BASE_URL}/courses/${courseId}/ratings`);
     await driver.wait(until.elementLocated(By.className('rating-container')), TIMEOUT);
   });
 
