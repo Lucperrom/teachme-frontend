@@ -5,6 +5,7 @@ import PublicRoute from "./components/PublicRoute.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import { AppRoute } from "./constants/routes.ts";
 import CompleteProfile from "./pages/CompleteProfile.tsx";
+import Home from "./pages/Home.tsx";
 import Course from "./pages/Course.tsx";
 import Courses from "./pages/Courses.tsx";
 import Forum from "./pages/Forum.tsx";
@@ -33,7 +34,7 @@ function App() {
           path={AppRoute.HOME}
           element={
             <ProtectedRoute>
-              <Courses />
+              <Home />
             </ProtectedRoute>
           }
         />
@@ -96,6 +97,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Notification />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path={AppRoute.COURSESLIST}
+          element={
+            <ProtectedRoute>
+              <Courses />
             </ProtectedRoute>
           }
         />
