@@ -72,38 +72,41 @@ const SignUp = () => {
     }
 
     return (
-        <Flex alignItems="center" justifyContent="center" direction="column" gap={5}>
+        <Flex className="auth-SignUp-container" alignItems="center" justifyContent="center" direction="column" gap={5}>
 
             <Heading>Sing Up!</Heading>
 
             {error && (
-                <Text color="red.500" fontSize="sm" textAlign="center" mb={3}>
+                <Text className="auth-error-container" color="red.500" fontSize="sm" textAlign="center" mb={3}>
                     {error}
                 </Text>
             )}
             
             <Field style={{width: 400}} label="Email">
-                <Input type="email"
-                       value={email}
-                       onChange={(val) => setEmail(val.currentTarget.value)}
-                       placeholder="example@example.com"/>
+                <Input className= "Email-auth-login"
+                        type="email"
+                        value={email}
+                        onChange={(val) => setEmail(val.currentTarget.value)}
+                        placeholder="example@example.com"/>
             </Field>
 
             <Field style={{width: 400}} label="Password">
-                <Input type="password"
-                       value={password}
-                       onChange={(val) => setPassword(val.currentTarget.value)}
-                       placeholder="********"/>
+                <Input className= "Password-auth-login"
+                        type="password"
+                        value={password}
+                        onChange={(val) => setPassword(val.currentTarget.value)}
+                        placeholder="********"/>
             </Field>
 
             <Field style={{width: 400}} label="Confirm Password">
-                <Input type="password"
-                       value={confirmPassword}
-                       onChange={(val) => setConfirmPassword(val.currentTarget.value)}
-                       placeholder="********"/>
+                <Input className= "Confirm-password-auth-login"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(val) => setConfirmPassword(val.currentTarget.value)}
+                        placeholder="********"/>
             </Field>
 
-            <Button loading={loading} onClick={handleSubmit}>Sign Up</Button>
+            <Button className= "Send-SignUp" loading={loading} onClick={handleSubmit}>Sign Up</Button>
         </Flex>
     );
 }

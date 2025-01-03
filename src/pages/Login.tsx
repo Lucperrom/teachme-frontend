@@ -32,7 +32,7 @@ const Login = () => {
     }
 
     return (
-        <Flex alignItems="center" justifyContent="center" direction="column" gap={5}>
+        <Flex className="auth-login-container" alignItems="center" justifyContent="center" direction="column" gap={5}>
 
             <Heading>Login</Heading>
             
@@ -43,20 +43,22 @@ const Login = () => {
             )}
 
             <Field style={{width: 400}} label="Email">
-                <Input type="email"
-                       value={email}
-                       onChange={(val) => setEmail(val.currentTarget.value)}
-                       placeholder="example@example.com"/>
+                <Input className= "Email-auth-login" 
+                        type="email"
+                        value={email}
+                        onChange={(val) => setEmail(val.currentTarget.value)}
+                        placeholder="example@example.com"/>
             </Field>
 
             <Field style={{width: 400}} label="Password">
-                <Input type="password"
-                       value={password}
-                       onChange={(val) => setPassword(val.currentTarget.value)}
-                       placeholder="********"/>
+                <Input className= "Password-auth-login"
+                        type="password"
+                        value={password}
+                        onChange={(val) => setPassword(val.currentTarget.value)}
+                        placeholder="********"/>
             </Field>
 
-            <Button loading={loading} onClick={handleSubmit}>Login</Button>
+            <Button className= "Send-login" loading={loading} onClick={handleSubmit}>Login</Button>
         </Flex>
     );
 }
