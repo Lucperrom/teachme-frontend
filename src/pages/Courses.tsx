@@ -66,7 +66,7 @@ const Courses = () => {
         padding={5}
       >
         <Flex alignItems="center" gap={2}>
-          <Heading fontSize={35}>Cursos disponibles</Heading>
+          <Heading fontSize={35}>Available courses</Heading>
         </Flex>
         <Flex gap={4} alignItems="center">
           <IconButton aria-label="Add course" onClick={handleCreate}>
