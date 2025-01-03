@@ -59,6 +59,7 @@ function RatingList() {
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const [isDeleting, setIsDeleting] = useState(false);
     const testMode = import.meta.env.VITE_IS_TEST_MODE;
+    const [hasUserRating, setHasUserRating] = useState(false);
 
     useEffect(() => {
       if (user != null) {
@@ -71,6 +72,8 @@ function RatingList() {
     const userRating = ratingsToSort.find(rating => rating.userId === user?.id);
     const otherRatings = ratingsToSort.filter(rating => rating.userId !== user?.id);
     
+    setHasUserRating(userRating ? true : false);
+
     const sortedOtherRatings = otherRatings.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -213,15 +216,16 @@ const handleShow = () => {
     const onTogglePopover = () => {
       setIsPopoverOpen(!isPopoverOpen);
     };
-
   
     return (
       <div className="rating-container">
         <div className="rating-header">
           <h2 className="rating-title">Course Reviews</h2>
-          <button onClick={() => setIsPopoverOpen(true)} className="auth-button">
-            Add Review
-          </button>
+            {!hasUserRating && (
+              <button onClick={() => setIsPopoverOpen(true)} className="auth-button">
+                Add Review
+              </button>
+            )}
         </div>
     
         <hr className="custom-hr" />
