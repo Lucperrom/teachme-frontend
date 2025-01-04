@@ -7,7 +7,7 @@ describe('Forum Component Integration Tests', () => { //npm run dev:test
   let driver: WebDriver;
   const BASE_URL = 'http://localhost:5173';
   const TIMEOUT = 15000;
-  const DELETE_TIMEOUT = 45000;
+  //const DELETE_TIMEOUT = 45000;
 
   beforeAll(async () => {
     const options = new chrome.Options();
@@ -40,19 +40,19 @@ describe('Forum Component Integration Tests', () => { //npm run dev:test
     return driver.wait(until.elementLocated(locator), TIMEOUT);
   };
 
-  const clickElement = async (locator: By): Promise<void> => {
+/*  const clickElement = async (locator: By): Promise<void> => {
     const element = await waitForElement(locator);
     await driver.wait(until.elementIsVisible(element), TIMEOUT);
     await element.click();
-  };
+  };*/
 
   const getForumTitle = async (): Promise<WebElement[]> => {
     return driver.findElements(By.className('forum-title-input'));
   };
 
-  const getForumMessagesRows = async (): Promise<WebElement[]> => {
+  /*const getForumMessagesRows = async (): Promise<WebElement[]> => {
     return driver.findElements(By.className('forum-message-row'));
-  }
+  }*/
 
   describe('Forum Display', () => {
     test('should display the forum container', async () => {
@@ -97,7 +97,7 @@ describe('Forum Component Integration Tests', () => { //npm run dev:test
       expect(updatedTitle).toBeDefined();
     });
   });
-/* SON TEST QUE DEPENDEN DE BASE DE DATOS Y POR ELLO NO ME FUNCIONAN DESDE FRONTEND
+/* SON TEST QUE DEPENDEN DE BASE DE DATOS Y POR ELLO NO ME FUNCIONAN DESDE FRONT END
   describe('Forum message Creation', () => {
     test('Add a Forum message ', async () => {
       await clickElement(By.className('forum-message-add-button'));
