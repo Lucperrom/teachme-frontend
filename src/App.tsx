@@ -119,9 +119,15 @@ function App() {
         <Route
           path={AppRoute.FORUM}
           element={
-            <ProtectedRoute>
-              <Forum />
-            </ProtectedRoute>
+            isTestMode ? (
+              <PublicRoute>
+                <Forum />
+              </PublicRoute>
+            ) : (
+              <ProtectedRoute>
+                <Forum />
+              </ProtectedRoute>
+            )
           }
         />
         <Route path={AppRoute.NOT_FOUND} element={<NotFound />} />
