@@ -58,6 +58,7 @@ const NavigationBar = () => {
                                                         <Box flex="1">Profile</Box>
                                                     </MenuItem>
                                                     <MenuItem onClick={() => authService.logout()} value="logout"
+                                                              color="red.500"
                                                               valueText="logout"
                                                     > <LuLogOut/>
                                                         <Box flex="1">Logout</Box>
