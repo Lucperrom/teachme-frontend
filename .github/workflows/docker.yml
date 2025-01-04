@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
 
 jobs:
   build:
