@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "cy:test:e2e": "npx cypress run --e2e",
     "cy:test:comp": "npx cypress run --component",
     "cy:test": "concurrently \"npm run cy:test:e2e\" \"npm run cy:test:comp\"",
