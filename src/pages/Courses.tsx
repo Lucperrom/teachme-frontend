@@ -4,13 +4,11 @@ import { Filter, SquarePlus } from "lucide-react";
 import { useState } from "react";
 import CreateCourseDialog from "../components/CreateCourseDialog.tsx";
 import SearchCourseDialog from "../components/SearchCourseDialog.tsx";
-
 import CourseList from "../components/CourseList.tsx";
 import { toaster } from "../components/ui/toaster.tsx";
 
 const Courses = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [refresh, setRefresh] = useState<boolean>(false);
   const [isCreateDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
 
   const handleSearch = (category: string) => {
@@ -22,13 +20,13 @@ const Courses = () => {
   };
 
   const handleCourseCreated = () => {
-    setRefresh(!refresh);
     setCreateDialogOpen(false);
+    window.location.reload();
   };
 
   const handleDeleteCourse = async (id: number) => {
     try {
-      const response = await fetch(`/api/v1/courses/${id}`, {
+      const response = await fetch(`api/v1/courses/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +41,7 @@ const Courses = () => {
         title: "Course deleted successfully",
         type: "success",
       });
-      setRefresh(!refresh);
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting course:", error);
       toaster.create({
@@ -55,7 +53,7 @@ const Courses = () => {
 
   const handleUpdateCourse = (id: number, updatedCourse: unknown) => {
     console.log(`Course with id ${id} updated`, updatedCourse);
-    setRefresh(!refresh);
+    window.location.reload();
   };
 
   return (
@@ -68,7 +66,7 @@ const Courses = () => {
         padding={5}
       >
         <Flex alignItems="center" gap={2}>
-          <Heading fontSize={35}>Cursos disponibles</Heading>
+          <Heading fontSize={35}>Available courses</Heading>
         </Flex>
         <Flex gap={4} alignItems="center">
           <IconButton aria-label="Add course" onClick={handleCreate}>

@@ -92,6 +92,7 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                     <Flex alignItems="center" justifyContent="center" direction="column" gap={5}>
                         <Field invalid={!!errors.name} errorText={errors.name} style={{width: 400}} label="Name">
                             <Input type="text"
+                                   data-test="edit-name-input"
                                    value={name}
                                    onChange={(val) => setName(val.currentTarget.value)}
                                    placeholder="Max"/>
@@ -100,6 +101,7 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                         <Field invalid={!!errors.surname} errorText={errors.surname} style={{width: 400}}
                                label="Surname">
                             <Input type="text"
+                                   data-test="edit-surname-input"
                                    value={surname}
                                    onChange={(val) => setSurname(val.currentTarget.value)}
                                    placeholder="Mustermann"/>
@@ -162,7 +164,7 @@ const EditProfileDialog: FunctionComponent<EditProfileDialogProps> = ({children,
                         <Button disabled={loading} variant="outline">Cancel</Button>
                     </DialogActionTrigger>
 
-                    <Button loading={loading} onClick={handleComplete}>Save</Button>
+                    <Button data-test="save-button" loading={loading} onClick={handleComplete}>Save</Button>
                 </DialogFooter>
                 <DialogCloseTrigger/>
             </DialogContent>

@@ -77,7 +77,7 @@ const Profile = () => {
                                            return prevState;
                                         });
                                     }} student={student}>
-                                        <Button rounded="full">
+                                        <Button data-test="edit-profile-button" rounded="full">
                                             <BiSolidPencil/>
                                         </Button>
                                     </EditProfileDialog>
@@ -102,6 +102,7 @@ const Profile = () => {
                                         }
                                     } profilePictureUrl={student.profileInformation.profilePictureUrl}>
                                         <Avatar
+                                            data-test="profile-picture"
                                             src={student.profileInformation.profilePictureUrl ?
                                                 generateCacheInvalidatingUrl(student.profileInformation.profilePictureUrl) :
                                                 undefined
@@ -121,9 +122,9 @@ const Profile = () => {
                                   justifyContent="space-between">
                                 <Flex justifyContent="space-between" gap={2}>
                                     <Flex direction="column" gap={2}>
-                                        <Heading size="2xl">{getFullName(student)}</Heading>
+                                        <Heading data-test="profile-name" size="2xl">{getFullName(student)}</Heading>
                                         <Flex color="gray.500" gap={2} alignItems="center">
-                                            <Text display="flex" alignItems="center" gap={2}>
+                                            <Text data-test="profile-email" display="flex" alignItems="center" gap={2}>
                                                 <IoMail/> {student.contactInformation.email}
                                             </Text>
                                             <Separator orientation="vertical" height="4" size="md"/>
@@ -148,12 +149,12 @@ const Profile = () => {
                                     </Flex>
                                     <Flex gap={2}>
                                         <IoMdTrophy size={25} color={getBadgeColor(student.profileInformation.plan)}/>
-                                        <Text fontWeight="bold">{student.profileInformation.plan}</Text>
+                                        <Text data-test="profile-plan" fontWeight="bold">{student.profileInformation.plan}</Text>
                                     </Flex>
                                 </Flex>
                                 {
                                     student.profileInformation.bio !== null &&
-                                    <Text color="gray.500">{student.profileInformation.bio}</Text>
+                                    <Text data-test="profile-bio" color="gray.500">{student.profileInformation.bio}</Text>
                                 }
                             </Flex>
                         </Card.Body>

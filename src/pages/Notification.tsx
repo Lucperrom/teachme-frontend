@@ -8,6 +8,8 @@ import './notification.scss';
 import {Button} from "../components/ui/button.tsx";
 import {IoMdArrowBack} from "react-icons/io";
 import {AppRoute} from "../constants/routes.ts";
+import {useAppDispatch} from "../services/redux/store.ts";
+import {markNotificationAsRead} from "../services/redux/slices/notificationsSlice.ts";
 
 const Notification = () => {
 
@@ -15,15 +17,19 @@ const Notification = () => {
 
     const { id } = useParams()
 
+    const dispatch = useAppDispatch();
+
     const navigate = useNavigate();
 
     useEffect(() => {
         client.get(`/api/v1/notifications/${id}`)
             .then(response => setNotification(response.data as NotificationDto))
             .then(() => {
-                client.put(`/api/v1/notifications/read?id=${id}`)
+                if (id) {
+                    dispatch(markNotificationAsRead(id));
+                }
             })
-    }, [id]);
+    }, [dispatch, id]);
 
     return (
         <Flex direction="column" position="relative" padding={5} alignItems="center">

@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Importa la instancia de Axios
-import { authService } from '../services/auth/authService';
-import { ClassNames } from '@emotion/react';
-import { StudentDto } from '../types/StudentDto';
 import { useParams } from "react-router-dom";
 
 import {
@@ -38,8 +35,6 @@ interface User {
     enabled: boolean;
 }
 
-type ErrorType = { [key: string]: string };
-
 interface Student {
     id: string;
     userId: string;
@@ -56,16 +51,16 @@ const Forum: React.FC = () => {
     const [forumCreationDate, setForumCreationDate] = useState<Date | null>(null);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [messages, setMessages] = useState<ForumMessage[]>([]);
-    const [editingMessageId, setEditingMessageId] = useState<String | null>(null);
+    const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
     const [editedContent, setEditedContent] = useState('');
     const [newMessageContent, setNewMessageContent] = useState('');
     const { id } = useParams<{ id: string }>();
     const [user, setUser] = useState<User | null>(null);
-    const [errorTitle, setErrorTitle] = useState<string>(null);
-    const [errorNewMessage, setErrorNewMessage] = useState<string>(null);
-    const [errorEditMessage, setErrorEditMessage] = useState<string>(null);
+    const [errorTitle, setErrorTitle] = useState<string | null>(null);
+    const [errorNewMessage, setErrorNewMessage] = useState<string | null>(null);
+    const [errorEditMessage, setErrorEditMessage] = useState<string | null>(null);
     const [students, setStudents] = useState<Student[]>([]);
-    const [errors, setErrors] = useState<String>(null);
+    const [errors, setErrors] = useState<string | null>(null);
 
 
     useEffect(() => {
@@ -172,7 +167,7 @@ const Forum: React.FC = () => {
         setErrorNewMessage('');
         if (!newMessageContent.trim()) return;
         try {
-            const response = await fetch("/api/v1/forums/${id}/messages", {
+            await fetch("/api/v1/forums/${id}/messages", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -277,6 +272,7 @@ const Forum: React.FC = () => {
             <Box mb={6}>
               
                 {isEditingTitle ? (
+                    <>
                     <HStack>
 
                         <Input
@@ -292,12 +288,14 @@ const Forum: React.FC = () => {
                         <Button colorScheme="gray" onClick={handleCancelEditTitle}>
                             Cancelar
                         </Button>
+                        
                     </HStack>
                     {errorTitle && (
                         <Text color="red.500" fontSize="sm" >
                             {errorTitle}
                         </Text>
-                    )}
+                    )} 
+                </>
                 ) : (
                     <Flex justify="space-between" align="center">
                         <Heading>{forumTitle}</Heading>
@@ -330,7 +328,7 @@ const Forum: React.FC = () => {
                 </Field>
             </Box>
 
-            <VStack align="start" spacing={4} p={4} borderWidth={1} borderRadius="md" borderColor="gray.300">
+            <VStack align="start" p={4} borderWidth={1} borderRadius="md" borderColor="gray.300">
                 {messages.map((message) => (
                     <Box key={message.id} w="100%" borderBottomWidth={1} borderColor="gray.200" pb={4}>
                         <Text fontWeight="bold">{getStudentName(message.userId)}</Text>
