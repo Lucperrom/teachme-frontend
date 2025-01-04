@@ -25,8 +25,8 @@ const NotificationCard: FC<NotificationCardProps> = ({notification, isLast, onCl
               style={{borderBottom: isLast ? '' : '1px solid #C9D6E4'}}
               padding={4}
               gap={5} alignItems="center" cursor="pointer"
-              _hover={{ bg: notification.read ? "gray.50" : "#C5DEF9" }}
-              bg={notification.read ? "#F4F2EE" : "#D9E8FB"}>
+              _hover={{ bg: notification.read ? "#F4F2EE" : "#C5DEF9" }}
+              bg={notification.read ? "gray.50" : "#D9E8FB"}>
             <Circle bg={notification.read ? "transparent" : "#0B65C2"} size={2}></Circle>
             <Flex direction="column" justifyContent="center">
                 <Card.Title color="black" fontSize="lg"
