@@ -28,6 +28,16 @@ interface ForumMessage {
     lastModifDate: Date;
 }
 
+interface Forum {
+    id: string;
+    name: string;
+    courseId: string;
+    creationDate: Date;
+    lastModifDate: Date;
+}
+
+
+
 interface User {
     id: string;
     email: string;
@@ -46,6 +56,40 @@ interface ContactInformation {
     email: string;
 }
 
+const ForumExample: Forum = {
+    id: 'course1',
+    name: 'Título del Foro',
+    courseId: 'course1',
+    creationDate: new Date(),
+    lastModifDate: new Date(),
+};
+
+const ForumMessagesExample: ForumMessage[] = [
+    {
+        id: '1',
+        userId: '1',
+        content: 'Mensaje de ejemplo',
+        creationDate: new Date(),
+        forumId: 'course1',
+        lastModifDate: new Date(),
+    },
+    {
+        id: '2',
+        userId: '2',
+        content: 'Otro mensaje de ejemplo',
+        creationDate: new Date(),
+        forumId: 'course1',
+        lastModifDate: new Date(),
+    },
+];
+
+const ExampleUser1: User = {
+    id: '1',
+    email: '1@mail.com',
+    role: 'ADMIN',
+    enabled: true,
+};
+
 const Forum: React.FC = () => {
     const [forumTitle, setForumTitle] = useState('Título del Foro');
     const [forumCreationDate, setForumCreationDate] = useState<Date | null>(null);
@@ -61,6 +105,8 @@ const Forum: React.FC = () => {
     const [errorEditMessage, setErrorEditMessage] = useState<string | null>(null);
     const [students, setStudents] = useState<Student[]>([]);
     const [errors, setErrors] = useState<string | null>(null);
+    
+    const testMode = import.meta.env.VITE_IS_TEST_MODE;
 
 
     useEffect(() => {
@@ -84,7 +130,13 @@ const Forum: React.FC = () => {
                 },
             });
             setMessages(await m.json());
-
+            if (!forum.ok) {
+                setForumTitle(ForumExample.name);
+                setForumCreationDate(ForumExample.creationDate);
+                setMessages(ForumMessagesExample);
+                setUser(ExampleUser1);
+              
+            }else{
             let u = await fetch(`/api/v1/auth/me`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -92,11 +144,8 @@ const Forum: React.FC = () => {
                 },
             })
             u = await u.json();
-            console.log(u);
+           
             setUser(u as unknown as User);
-            /*axios.get( `/api/v1/auth/me` ).then(resp =>
-                {setUser(resp.data as User); console.log(resp.data)}
-            );*/
 
             let studentsResponse = await fetch(`/api/v1/students`, {
                 headers: {
@@ -107,7 +156,7 @@ const Forum: React.FC = () => {
             let StudentData = await studentsResponse.json();
 
             console.log(StudentData);
-            setStudents(StudentData as Student[]);
+            setStudents(StudentData as Student[]);}
         };
         console.log(students);
 
@@ -267,22 +316,22 @@ const Forum: React.FC = () => {
 
 
     return (
-
-        <Box p={4} fontFamily="Arial, sans-serif">
+        
+        <Box className="forum-container" p={4} fontFamily="Arial, sans-serif">
             <Box mb={6}>
               
                 {isEditingTitle ? (
                     <>
                     <HStack>
 
-                        <Input
+                        <Input className='forum-title-input'
                             value={forumTitle}
                             onChange={handleTitleChange}
                             size="lg"
                             borderColor="gray.300"
                         />
                         
-                        <Button colorScheme="teal" onClick={handleTitleSave}>
+                        <Button className='save-forum-title' colorScheme="teal" onClick={handleTitleSave}>
                             Guardar
                         </Button>
                         <Button colorScheme="gray" onClick={handleCancelEditTitle}>
@@ -298,10 +347,10 @@ const Forum: React.FC = () => {
                 </>
                 ) : (
                     <Flex justify="space-between" align="center">
-                        <Heading>{forumTitle}</Heading>
-                        {user?.role == 'ADMIN' ?
+                        <Heading className='forum-title-input'>{forumTitle}</Heading>
+                        {user?.role == 'ADMIN'  || testMode ?
                             (
-                                <Button colorScheme="teal" onClick={handleTitleEdit}>
+                                <Button className='forum-title-edit' colorScheme="teal" onClick={handleTitleEdit}>
                                     Editar
                                 </Button>) : null}
 
@@ -314,15 +363,14 @@ const Forum: React.FC = () => {
                     value={newMessageContent}
                     onChange={(e: { target: { value: any; }; }) => setNewMessageContent(e.target.value)}
                     placeholder="Escribe un nuevo mensaje..."
-                    size="md"
-                    borderColor="gray.300"
+                    size="md" className='forum-message-content-new-input'
                 />
                     {errorNewMessage && (
                         <Text color="red.500" fontSize="sm" >
                             {errorNewMessage}
                         </Text>
                     )}
-                    <Button mt={2} colorScheme="teal" onClick={handleAddMessage}>
+                    <Button className='forum-message-add-button' mt={2} colorScheme="teal" onClick={handleAddMessage}>
                         Añadir Mensaje
                     </Button>
                 </Field>
@@ -330,7 +378,7 @@ const Forum: React.FC = () => {
 
             <VStack align="start" p={4} borderWidth={1} borderRadius="md" borderColor="gray.300">
                 {messages.map((message) => (
-                    <Box key={message.id} w="100%" borderBottomWidth={1} borderColor="gray.200" pb={4}>
+                    <Box className="forum-message-row" key={message.id} w="100%" borderBottomWidth={1} borderColor="gray.200" pb={4}>
                         <Text fontWeight="bold">{getStudentName(message.userId)}</Text>
                         {editingMessageId === message.id ? (
                             <Box>
@@ -340,7 +388,7 @@ const Forum: React.FC = () => {
                                         onChange={(e) => setEditedContent(e.target.value)}
                                         size="sm"
                                         borderColor="gray.300"
-                                        mb={2}
+                                        mb={2} className='forum-message-content-input'
                                     />
                                 </Field>
                                 {errorEditMessage && (
@@ -366,7 +414,7 @@ const Forum: React.FC = () => {
                                         <Button size="sm" colorScheme="blue" onClick={() => handleEditMessage(message.id, message.content)}>
                                             Editar
                                         </Button>
-                                        <Button size="sm" colorScheme="red" onClick={() => handleDeleteMessage(message.id)}>
+                                        <Button className='delete-forum-message' size="sm" colorScheme="red" onClick={() => handleDeleteMessage(message.id)}>
                                             Eliminar
                                         </Button>
                                     </HStack>
