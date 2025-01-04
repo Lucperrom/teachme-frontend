@@ -11,10 +11,15 @@ import {Button} from "../components/ui/button.tsx";
 import ProfilePictureDialog from "../components/ProfilePictureDialog.tsx";
 import EditProfileDialog from "../components/EditProfileDialog.tsx";
 import {getCountryData, TCountryCode} from "countries-list";
+import {useAuth} from "../services/auth/AuthContext.tsx";
+import {MdVerified} from "react-icons/md";
+import {Tooltip} from "../components/ui/tooltip.tsx";
 
 const Profile = () => {
 
     const [student, setStudent] = useState<StudentDto | null>(null);
+
+    const {user} = useAuth();
 
     useEffect(() => {
         client.get('/api/v1/students/me').then(resp =>
@@ -57,24 +62,24 @@ const Profile = () => {
                                 <Box position="absolute" top={3} right={3}>
                                     <EditProfileDialog onUpdate={(updateDto) => {
                                         setStudent(prevState => {
-                                           if (prevState) {
-                                               return {
-                                                   ...prevState,
-                                                   contactInformation: {
-                                                       ...prevState.contactInformation,
-                                                       surname: updateDto.surname,
-                                                       name: updateDto.name,
-                                                       phoneNumber: updateDto.phoneNumber,
-                                                       country: updateDto.country,
-                                                   },
-                                                   profileInformation: {
-                                                       ...prevState.profileInformation,
-                                                       bio: updateDto.bio,
-                                                       language: updateDto.language,
-                                                   }
-                                               }
-                                           }
-                                           return prevState;
+                                            if (prevState) {
+                                                return {
+                                                    ...prevState,
+                                                    contactInformation: {
+                                                        ...prevState.contactInformation,
+                                                        surname: updateDto.surname,
+                                                        name: updateDto.name,
+                                                        phoneNumber: updateDto.phoneNumber,
+                                                        country: updateDto.country,
+                                                    },
+                                                    profileInformation: {
+                                                        ...prevState.profileInformation,
+                                                        bio: updateDto.bio,
+                                                        language: updateDto.language,
+                                                    }
+                                                }
+                                            }
+                                            return prevState;
                                         });
                                     }} student={student}>
                                         <Button data-test="edit-profile-button" rounded="full">
@@ -122,7 +127,14 @@ const Profile = () => {
                                   justifyContent="space-between">
                                 <Flex justifyContent="space-between" gap={2}>
                                     <Flex direction="column" gap={2}>
-                                        <Heading data-test="profile-name" size="2xl">{getFullName(student)}</Heading>
+                                        <Flex alignItems="center" direction="row" gap={2}>
+                                            <Heading data-test="profile-name"
+                                                     size="2xl">{getFullName(student)}</Heading>
+                                            <Tooltip content={user?.enabled ? "Verified user" : "Pending email verification"}>
+                                                <MdVerified cursor="pointer" size={20}
+                                                            fill={user?.enabled ? "mediumseagreen" : "darkgray"}/>
+                                            </Tooltip>
+                                        </Flex>
                                         <Flex color="gray.500" gap={2} alignItems="center">
                                             <Text data-test="profile-email" display="flex" alignItems="center" gap={2}>
                                                 <IoMail/> {student.contactInformation.email}
@@ -149,12 +161,14 @@ const Profile = () => {
                                     </Flex>
                                     <Flex gap={2}>
                                         <IoMdTrophy size={25} color={getBadgeColor(student.profileInformation.plan)}/>
-                                        <Text data-test="profile-plan" fontWeight="bold">{student.profileInformation.plan}</Text>
+                                        <Text data-test="profile-plan"
+                                              fontWeight="bold">{student.profileInformation.plan}</Text>
                                     </Flex>
                                 </Flex>
                                 {
                                     student.profileInformation.bio !== null &&
-                                    <Text data-test="profile-bio" color="gray.500">{student.profileInformation.bio}</Text>
+                                    <Text data-test="profile-bio"
+                                          color="gray.500">{student.profileInformation.bio}</Text>
                                 }
                             </Flex>
                         </Card.Body>

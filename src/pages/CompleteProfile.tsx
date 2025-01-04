@@ -36,7 +36,7 @@ const CompleteProfile = () => {
                 language,
                 phoneNumber,
                 bio,
-                plan: "BASIC" // for now :)
+                plan: user?.role === "ADMIN" ? "GOLD" : "BASIC" // for now :)
             });
             window.location.href = AppRoute.HOME;
         } catch (err) {
