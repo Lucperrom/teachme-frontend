@@ -1,6 +1,7 @@
 import React, {createContext, useCallback, useContext, useEffect, useState} from 'react';
 import {authService} from "./authService.ts";
 import client from "../axios.ts";
+import {StudentDto} from "../../types/StudentDto.ts";
 
 interface User {
     id: string;
@@ -10,6 +11,7 @@ interface User {
 
 interface AuthContextType {
     user: User | null;
+    student: StudentDto | null;
     isLoading: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<void>;
@@ -22,13 +24,15 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({children}: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [student, setStudent] = useState<StudentDto | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [profileCompleted, setProfileCompleted] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const loadStudent = useCallback(async () => {
         try {
-            await client.get('/api/v1/students/me');
+            const response = await client.get<StudentDto>('/api/v1/students/me');
+            setStudent(response.data);
             setProfileCompleted(true);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
@@ -100,6 +104,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
 
     const value = {
         user,
+        student,
         isLoading: loading,
         error,
         login,

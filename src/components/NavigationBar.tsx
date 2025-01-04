@@ -1,5 +1,5 @@
 import {Box, Flex, Heading} from "@chakra-ui/react";
-import {LuLogOut, LuMenu, LuUser} from "react-icons/lu";
+import {LuLogOut, LuUser} from "react-icons/lu";
 import {Link, useNavigate} from "react-router-dom";
 import {AppRoute} from "../constants/routes.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
@@ -9,9 +9,10 @@ import LinkButton from "./LinkButton.tsx";
 import NotificationBell from "./NotificationBell.tsx";
 import {Button} from "./ui/button.tsx";
 import {MenuContent, MenuItem, MenuRoot, MenuTrigger} from "./ui/menu.tsx";
+import {Avatar} from "./ui/avatar.tsx";
 
 const NavigationBar = () => {
-    const {user, profileCompleted} = useAuth();
+    const {user, profileCompleted, student} = useAuth();
 
     const navigate = useNavigate();
 
@@ -44,8 +45,9 @@ const NavigationBar = () => {
                                         <Box data-test="menu">
                                             <MenuRoot positioning={{placement: "bottom-start"}}>
                                                 <MenuTrigger asChild>
-                                                    <Button variant="outline" size="sm">
-                                                        <LuMenu/>
+                                                    <Button unstyled cursor="pointer" outline="transparent" size="sm">
+                                                        <Avatar
+                                                            name={`${student?.contactInformation.name} ${student?.contactInformation.surname}`}/>
                                                     </Button>
                                                 </MenuTrigger>
                                                 <MenuContent>
