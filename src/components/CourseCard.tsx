@@ -62,6 +62,7 @@ const CourseCard: FC<CourseCardProps> = ({
 
     const handleStartCourse = async () => {
         setIsLoading(true);
+        // @ts-ignore
         try {
             await client.post(`/api/v1/students/me/courses/${id}/enroll`);
             toaster.create({
@@ -72,8 +73,9 @@ const CourseCard: FC<CourseCardProps> = ({
             navigate(`${AppRoute.COURSESLIST}/${id}`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
+            console.error(error);
             toaster.create({
-                title: "Unexpected error!",
+                title: error.response.data.message,
                 type: "error",
             });
         } finally {
