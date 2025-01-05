@@ -64,7 +64,7 @@ const CourseCard: FC<CourseCardProps> = ({
                 title: "Successfully enrolled in course!",
                 type: "success",
             });
-            await reloadStudent();
+            navigate(`${AppRoute.COURSESLIST}/${id}`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             toaster.create({
@@ -93,7 +93,11 @@ const CourseCard: FC<CourseCardProps> = ({
                 transition="all 0.2s"
                 cursor="pointer"
                 position="relative"
-                onClick={() => navigate(`${AppRoute.COURSESLIST}/${id}`)}
+                onClick={() => {
+                    if (student?.enrolledCourses.includes(String(id))) {
+                        navigate(`${AppRoute.COURSESLIST}/${id}`);
+                    }
+                }}
             >
                 <Card.Body>
                     {
