@@ -21,8 +21,8 @@ interface Video {
   url: string;
 }
 
-interface Course {
-  id: number; 
+export interface Course {
+  id: number;
   name: string;
   description: string;
   category: string;
