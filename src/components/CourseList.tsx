@@ -1,7 +1,8 @@
-import {Box, SimpleGrid, Spinner, Text} from "@chakra-ui/react";
-import {useEffect, useState} from "react";
+import {SimpleGrid} from "@chakra-ui/react";
+import {FC, useEffect, useState} from "react";
 import CourseCard from "../components/CourseCard.tsx";
 import {useAuth} from "../services/auth/AuthContext.tsx";
+import {Skeleton} from "./ui/skeleton.tsx";
 
 interface Course {
     id: number;
@@ -19,7 +20,7 @@ interface CourseListProps {
     onUpdate: (id: number, updatedCourse: unknown) => void;
 }
 
-const CourseList: React.FC<CourseListProps> = ({
+const CourseList: FC<CourseListProps> = ({
                                                    category,
                                                    onDelete,
                                                    onUpdate,
@@ -59,35 +60,41 @@ const CourseList: React.FC<CourseListProps> = ({
             } catch (error) {
                 console.error("Error fetching courses:", error);
             } finally {
-                setLoading(false);
+                setTimeout(
+                    () => {
+                        setLoading(false);
+                    }, 500)
             }
         };
 
         fetchCourses();
     }, [category]);
 
-    if (loading) {
-        return (
-            <Box textAlign="center" py={10}>
-                <Spinner size="xl"/>
-                <Text mt={4}>Loading courses...</Text>
-            </Box>
-        );
-    }
     return (
-        <SimpleGrid columns={[1, 2, 3]} gap={10} m={4} mt={8}>
-            {courses.map((course) => {
-                    if (!student?.enrolledCourses.includes(String(course.id))) {
-                        return (<CourseCard
-                            key={course.id}
-                            {...course}
-                            onDelete={onDelete}
-                            onUpdate={onUpdate}
-                        />);
-                    }
-                }
-            )}
-        </SimpleGrid>
+        <>
+            {
+                loading ?
+                    <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
+                        {[1, 2, 3].map((_, idx) => {
+                                return <Skeleton borderRadius="lg" key={idx} width="full" height="270px"/>
+                            }
+                        )}
+                    </SimpleGrid> :
+                    <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
+                        {courses.map((course) => {
+                                if (!student?.enrolledCourses.includes(String(course.id))) {
+                                    return (<CourseCard
+                                        key={course.id}
+                                        {...course}
+                                        onDelete={onDelete}
+                                        onUpdate={onUpdate}
+                                    />);
+                                }
+                            }
+                        )}
+                    </SimpleGrid>
+            }
+        </>
     );
 };
 

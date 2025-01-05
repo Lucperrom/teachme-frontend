@@ -23,8 +23,8 @@ interface CourseCardProps {
     duration: string;
     level: string;
     rating: number;
-    onDelete: (id: number) => void;
-    onUpdate: (id: number, updatedCourse: unknown) => void;
+    onDelete?: (id: number) => void;
+    onUpdate?: (id: number, updatedCourse: unknown) => void;
 }
 
 const CourseCard: FC<CourseCardProps> = ({
@@ -44,7 +44,9 @@ const CourseCard: FC<CourseCardProps> = ({
     const {isAdmin, student, reloadStudent} = useAuth();
 
     const handleDelete = () => {
-        onDelete(id);
+        if (onDelete) {
+            onDelete(id);
+        }
     };
 
     const handleUpdate = () => {
@@ -52,7 +54,9 @@ const CourseCard: FC<CourseCardProps> = ({
     };
 
     const handleCourseUpdated = (updatedCourse: unknown) => {
-        onUpdate(id, updatedCourse);
+        if (onUpdate) {
+            onUpdate(id, updatedCourse);
+        }
         setUpdateDialogOpen(false);
     };
 
@@ -64,6 +68,7 @@ const CourseCard: FC<CourseCardProps> = ({
                 title: "Successfully enrolled in course!",
                 type: "success",
             });
+            await reloadStudent();
             navigate(`${AppRoute.COURSESLIST}/${id}`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
