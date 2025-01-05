@@ -1,10 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import notificationsReducer from "./slices/notificationsSlice.ts";
+import confettiReducer from "./slices/confettiSlice.ts";
 import {useDispatch} from "react-redux";
 
 const store = configureStore({
     reducer: {
-        notifications: notificationsReducer
+        notifications: notificationsReducer,
+        confetti: confettiReducer,
+
     },
 })
 

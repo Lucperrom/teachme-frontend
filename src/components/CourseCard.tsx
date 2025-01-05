@@ -14,7 +14,9 @@ import {IoBookOutline} from 'react-icons/io5';
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import client from "../services/axios.ts";
 import {toaster} from "./ui/toaster.tsx";
-import { FaRegCheckCircle } from 'react-icons/fa';
+import {FaRegCheckCircle} from 'react-icons/fa';
+import {useAppDispatch} from "../services/redux/store.ts";
+import {toggleConfetti} from "../services/redux/slices/confettiSlice.ts";
 
 interface CourseCardProps {
     id: number;
@@ -42,6 +44,8 @@ const CourseCard: FC<CourseCardProps> = ({
     const [isUpdateDialogOpen, setUpdateDialogOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const dispatch = useAppDispatch();
+
     const {isAdmin, student, reloadStudent} = useAuth();
 
     const handleDelete = () => {
@@ -68,6 +72,8 @@ const CourseCard: FC<CourseCardProps> = ({
                 title: "Successfully completed course!",
                 type: "success",
             });
+            dispatch(toggleConfetti());
+            setIsLoading(true);
             await reloadStudent();
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (_) {
@@ -75,6 +81,8 @@ const CourseCard: FC<CourseCardProps> = ({
                 title: "Error completing course!",
                 type: "error",
             });
+        } finally {
+            setTimeout(() => dispatch(toggleConfetti()), 5000);
         }
     }
 
@@ -125,40 +133,40 @@ const CourseCard: FC<CourseCardProps> = ({
                 <Card.Body>
                     {
                         isAdmin() ?
-                        <MenuRoot positioning={{placement: "bottom-start"}}>
-                            <MenuTrigger asChild>
-                                <Button _hover={{color: "gray"}}
-                                        style={{display: "flex", alignItems: "center", justifyContent: "center"}}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                        }}
-                                        unstyled height={10}
-                                        width={10} cursor="pointer" position="absolute" right={3} top={3}>
-                                    <HiOutlineDotsVertical size={22}/>
-                                </Button>
-                            </MenuTrigger>
-                            <MenuContent>
-                                <MenuItem onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleUpdate();
-                                }}
-                                          cursor="pointer"
-                                          value="edit" valueText="edit">
-                                    <MdOutlineEdit/>
-                                    <Box flex="1">Edit</Box>
-                                </MenuItem>
-                                <MenuItem onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDelete();
-                                }} value="delete"
-                                          cursor="pointer"
-                                          color="red.500"
-                                          valueText="delete">
-                                    <MdDeleteOutline/>
-                                    <Box flex="1">Delete</Box>
-                                </MenuItem>
-                            </MenuContent>
-                        </MenuRoot> :
+                            <MenuRoot positioning={{placement: "bottom-start"}}>
+                                <MenuTrigger asChild>
+                                    <Button _hover={{color: "gray"}}
+                                            style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                            unstyled height={10}
+                                            width={10} cursor="pointer" position="absolute" right={3} top={3}>
+                                        <HiOutlineDotsVertical size={22}/>
+                                    </Button>
+                                </MenuTrigger>
+                                <MenuContent>
+                                    <MenuItem onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdate();
+                                    }}
+                                              cursor="pointer"
+                                              value="edit" valueText="edit">
+                                        <MdOutlineEdit/>
+                                        <Box flex="1">Edit</Box>
+                                    </MenuItem>
+                                    <MenuItem onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete();
+                                    }} value="delete"
+                                              cursor="pointer"
+                                              color="red.500"
+                                              valueText="delete">
+                                        <MdDeleteOutline/>
+                                        <Box flex="1">Delete</Box>
+                                    </MenuItem>
+                                </MenuContent>
+                            </MenuRoot> :
                             (
                                 <>
                                     {
@@ -167,12 +175,17 @@ const CourseCard: FC<CourseCardProps> = ({
                                         <MenuRoot positioning={{placement: "bottom-start"}}>
                                             <MenuTrigger asChild>
                                                 <Button _hover={{color: "gray"}}
-                                                        style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center"
+                                                        }}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                         }}
                                                         unstyled height={10}
-                                                        width={10} cursor="pointer" position="absolute" right={3} top={3}>
+                                                        width={10} cursor="pointer" position="absolute" right={3}
+                                                        top={3}>
                                                     <HiOutlineDotsVertical size={22}/>
                                                 </Button>
                                             </MenuTrigger>
@@ -185,7 +198,7 @@ const CourseCard: FC<CourseCardProps> = ({
                                                           color="green.500"
                                                           value="complete"
                                                           valueText="complete">
-                                                    <FaRegCheckCircle />
+                                                    <FaRegCheckCircle/>
                                                     <Box flex="1">Complete Course</Box>
                                                 </MenuItem>
                                             </MenuContent>

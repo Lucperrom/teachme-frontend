@@ -9,7 +9,7 @@ import {AppRoute} from "../constants/routes.ts";
 import {AxiosError} from "axios";
 import {countries, languages} from "countries-list";
 
-type ErrorType = {[key: string]: string};
+type ErrorType = { [key: string]: string };
 
 const CompleteProfile = () => {
 

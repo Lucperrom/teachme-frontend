@@ -7,6 +7,17 @@ import CourseCard from "../components/CourseCard.tsx";
 import {toaster} from "../components/ui/toaster.tsx";
 import {Skeleton} from "../components/ui/skeleton.tsx";
 import {useAuth} from "../services/auth/AuthContext.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../services/redux/store.ts";
+import ConfettiExplosion, {ConfettiProps} from "react-confetti-explosion";
+
+const largeProps: ConfettiProps = {
+    force: 0.8,
+    duration: 3000,
+    particleCount: 300,
+    width: 1600,
+    colors: ['#041E43', '#1471BF', '#5BB4DC', '#FC027B', '#66D805'],
+};
 
 const Home = () => {
 
@@ -16,6 +27,8 @@ const Home = () => {
     const [isMyCompletedCoursesLoading, setIsMyCompletedCoursesLoading] = useState<boolean>(false);
 
     const {isAdmin, student} = useAuth();
+
+    const {confetti} = useSelector((state: RootState) => state.confetti);
 
     useEffect(() => {
         setIsMyCoursesLoading(true);
@@ -60,10 +73,15 @@ const Home = () => {
     return (
         <Flex direction="column" padding={5}>
             {
+                confetti &&
+                <Box position="absolute" right="50%" bottom="50%">
+                    <ConfettiExplosion {...largeProps} />
+                </Box>
+            }
+            {
                 isAdmin() ? <Heading>Admin</Heading> :
                     <Box>
                         <Heading>My courses</Heading>
-
                         {
                             isMyCoursesLoading ?
                                 <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
