@@ -1,16 +1,14 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import LinkButton from "../components/LinkButton";
 
 const Home = () => {
     return (
-        <Box>
-            <Text>Home</Text>
-            <HStack gap={6}>
+        <Box p={8}>
+        <HStack gap={6}>
             <LinkButton colorScheme="teal" variant="solid" to={`/courses`}>
-            Go to course catalog 
+                Go to course catalog
             </LinkButton>
-            
-          </HStack>
+        </HStack>
         </Box>
     );
 }
