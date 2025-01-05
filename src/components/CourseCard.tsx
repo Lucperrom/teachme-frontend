@@ -8,6 +8,9 @@ import {Button} from "./ui/button.tsx";
 import {MenuContent, MenuItem, MenuRoot, MenuTrigger} from "./ui/menu.tsx";
 import {MdDeleteOutline, MdOutlineEdit} from 'react-icons/md';
 import {Rating} from "./ui/rating.tsx";
+import {LuHourglass} from "react-icons/lu";
+import {TbCategory} from "react-icons/tb";
+import {IoBookOutline} from 'react-icons/io5';
 
 interface CourseCardProps {
     id: number;
@@ -102,16 +105,27 @@ const CourseCard: React.FC<CourseCardProps> = ({
                     <Card.Title mb="2"> {name}</Card.Title>
                     <Card.Description mb={4}> {description} </Card.Description>
                     <Flex direction="row" gap={4} flexWrap="wrap">
-                        <Badge colorPalette="teal">{category}</Badge>
-                        <Badge colorPalette="blue">{duration}</Badge>
-                        <Badge colorPalette="purple">{level}</Badge>
+                        <Badge colorPalette="teal">
+                            <TbCategory/>
+                            {category}
+                        </Badge>
+                        <Badge colorPalette="blue">
+                            <LuHourglass/>
+                            {duration}
+                        </Badge>
+                        <Badge colorPalette="purple">
+                            <IoBookOutline/>
+                            {level}
+                        </Badge>
                     </Flex>
                 </Card.Body>
                 <Card.Footer>
                     <Link to={`/courses/${id}/ratings`}>
                         <Flex direction="row" alignItems="center" gap={2}>
                             <Flex direction="row" gap={1}>
-                                <Text fontWeight="bold" fontSize="md">{rating | 0}</Text>
+                                {
+                                    rating && <Text fontWeight="bold" fontSize="md">{rating | 0},0</Text>
+                                }
                                 <Rating colorPalette="orange" value={rating | 0} defaultValue={0}
                                         size="sm"/>
                             </Flex>
