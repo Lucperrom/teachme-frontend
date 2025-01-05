@@ -129,7 +129,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
                                 <Rating colorPalette="orange" value={rating | 0} defaultValue={0}
                                         size="sm"/>
                             </Flex>
-                            <Text color="gray" fontSize="sm" _hover={{textDecoration: "underline"}}>View all</Text>
+                            <Button cursor="pointer" unstyled onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/courses/${id}/ratings`);
+                            }}>
+                                <Text color="gray" fontSize="sm" _hover={{textDecoration: "underline"}}>View all</Text>
+                            </Button>
                         </Flex>
                     </Link>
                 </Card.Footer>
