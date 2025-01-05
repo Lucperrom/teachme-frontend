@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+ENV VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY
+
 RUN npm run build
 
 FROM node:23-alpine
