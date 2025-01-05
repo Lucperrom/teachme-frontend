@@ -53,12 +53,14 @@ const NavigationBar = () => {
                                                 <MenuContent>
                                                     <MenuItem data-test="menu-profile-option"
                                                               onClick={() => navigate(AppRoute.PROFILE)}
+                                                              cursor="pointer"
                                                               value="profile" valueText="profile"
                                                     > <LuUser/>
                                                         <Box flex="1">Profile</Box>
                                                     </MenuItem>
                                                     <MenuItem onClick={() => authService.logout()} value="logout"
                                                               color="red.500"
+                                                              cursor="pointer"
                                                               valueText="logout"
                                                     > <LuLogOut/>
                                                         <Box flex="1">Logout</Box>
