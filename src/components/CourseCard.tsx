@@ -14,6 +14,7 @@ import {IoBookOutline} from 'react-icons/io5';
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import client from "../services/axios.ts";
 import {toaster} from "./ui/toaster.tsx";
+import { FaRegCheckCircle } from 'react-icons/fa';
 
 interface CourseCardProps {
     id: number;
@@ -60,9 +61,25 @@ const CourseCard: FC<CourseCardProps> = ({
         setUpdateDialogOpen(false);
     };
 
+    const handleCompleteCourse = async () => {
+        try {
+            await client.post(`/api/v1/students/me/courses/${id}/complete`);
+            toaster.create({
+                title: "Successfully completed course!",
+                type: "success",
+            });
+            await reloadStudent();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_) {
+            toaster.create({
+                title: "Error completing course!",
+                type: "error",
+            });
+        }
+    }
+
     const handleStartCourse = async () => {
         setIsLoading(true);
-        // @ts-ignore
         try {
             await client.post(`/api/v1/students/me/courses/${id}/enroll`);
             toaster.create({
@@ -71,7 +88,6 @@ const CourseCard: FC<CourseCardProps> = ({
             });
             await reloadStudent();
             navigate(`${AppRoute.COURSESLIST}/${id}`);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             console.error(error);
             toaster.create({
@@ -108,7 +124,7 @@ const CourseCard: FC<CourseCardProps> = ({
             >
                 <Card.Body>
                     {
-                        isAdmin() &&
+                        isAdmin() ?
                         <MenuRoot positioning={{placement: "bottom-start"}}>
                             <MenuTrigger asChild>
                                 <Button _hover={{color: "gray"}}
@@ -142,7 +158,41 @@ const CourseCard: FC<CourseCardProps> = ({
                                     <Box flex="1">Delete</Box>
                                 </MenuItem>
                             </MenuContent>
-                        </MenuRoot>
+                        </MenuRoot> :
+                            (
+                                <>
+                                    {
+                                        student?.enrolledCourses.includes(String(id)) &&
+                                        !student?.completedCourses.includes(String(id)) &&
+                                        <MenuRoot positioning={{placement: "bottom-start"}}>
+                                            <MenuTrigger asChild>
+                                                <Button _hover={{color: "gray"}}
+                                                        style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                        }}
+                                                        unstyled height={10}
+                                                        width={10} cursor="pointer" position="absolute" right={3} top={3}>
+                                                    <HiOutlineDotsVertical size={22}/>
+                                                </Button>
+                                            </MenuTrigger>
+                                            <MenuContent>
+                                                <MenuItem onClick={async (e) => {
+                                                    e.stopPropagation();
+                                                    await handleCompleteCourse();
+                                                }}
+                                                          cursor="pointer"
+                                                          color="green.500"
+                                                          value="complete"
+                                                          valueText="complete">
+                                                    <FaRegCheckCircle />
+                                                    <Box flex="1">Complete Course</Box>
+                                                </MenuItem>
+                                            </MenuContent>
+                                        </MenuRoot>
+                                    }
+                                </>
+                            )
                     }
                     <Card.Title mb="2"> {name}</Card.Title>
                     <Card.Description mb={4}> {description} </Card.Description>
@@ -188,7 +238,12 @@ const CourseCard: FC<CourseCardProps> = ({
                                         await handleStartCourse();
                                     }}
                                     ml="auto">Start Course</Button> :
-                                <Button ml="auto">Continue</Button>)
+                                <>
+                                    {
+                                        !student?.completedCourses.includes(String(id)) &&
+                                        <Button ml="auto">Continue</Button>
+                                    }
+                                </>)
                         }
                     </Flex>
                 </Card.Footer>
