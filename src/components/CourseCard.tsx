@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {FC, useState} from 'react';
 import {Badge, Box, Card, Flex, Text} from '@chakra-ui/react';
 import UpdateCourseDialog from './UpdateCourseDialog';
 import {Link, useNavigate} from "react-router-dom";
@@ -24,17 +24,17 @@ interface CourseCardProps {
     onUpdate: (id: number, updatedCourse: unknown) => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({
-                                                   id,
-                                                   name,
-                                                   description,
-                                                   category,
-                                                   duration,
-                                                   level,
-                                                   rating,
-                                                   onDelete,
-                                                   onUpdate
-                                               }) => {
+const CourseCard: FC<CourseCardProps> = ({
+                                             id,
+                                             name,
+                                             description,
+                                             category,
+                                             duration,
+                                             level,
+                                             rating,
+                                             onDelete,
+                                             onUpdate
+                                         }) => {
     const [isUpdateDialogOpen, setUpdateDialogOpen] = useState<boolean>(false);
 
     const handleDelete = () => {
