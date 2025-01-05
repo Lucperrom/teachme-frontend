@@ -19,6 +19,8 @@ interface AuthContextType {
     logout: () => Promise<void>;
     register: (email: string, password: string) => Promise<void>;
     profileCompleted: boolean;
+    isAdmin: () => boolean;
+    reloadStudent: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -45,6 +47,13 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         const me = await client.get('/api/v1/auth/me');
         setUser(me.data);
     }, []);
+
+    const isAdmin = () => {
+        if (user) {
+            return user.role === "ADMIN";
+        }
+        return false;
+    }
 
     useEffect(() => {
         const loadUser = async () => {
@@ -101,7 +110,12 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [loadMe]);
+
+    const reloadStudent = async () => {
+        const response = await client.get<StudentDto>('/api/v1/students/me');
+        setStudent(response.data);
+    }
 
     const value = {
         user,
@@ -112,6 +126,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         logout,
         register,
         profileCompleted,
+        isAdmin,
+        reloadStudent
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
