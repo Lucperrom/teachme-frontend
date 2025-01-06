@@ -1,4 +1,4 @@
-import {Box, Flex, Heading, HStack, SimpleGrid} from "@chakra-ui/react";
+import {Box, Flex, Heading, SimpleGrid, Text} from "@chakra-ui/react";
 import LinkButton from "../components/LinkButton";
 import {useEffect, useState} from "react";
 import client from "../services/axios.ts";
@@ -81,7 +81,12 @@ const Home = () => {
             {
                 isAdmin() ? <Heading>Admin</Heading> :
                     <Box>
-                        <Heading>My courses</Heading>
+                        <Flex justifyContent="space-between" alignItems="center" gap={4}>
+                            <Heading>My courses</Heading>
+                            <LinkButton width="min-content" colorScheme="teal" variant="solid" to={`/courses`}>
+                                Go To Course Catalog
+                            </LinkButton>
+                        </Flex>
                         {
                             isMyCoursesLoading ?
                                 <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
@@ -90,17 +95,32 @@ const Home = () => {
                                         }
                                     )}
                                 </SimpleGrid> :
-                                <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
-                                    {myCourses.map((course) => {
-                                            if (!student?.completedCourses.includes(String(course.id))) {
-                                                return (<CourseCard
-                                                    rating={0} key={course.id}
-                                                    {...course}
-                                                />);
-                                            }
-                                        }
-                                    )}
-                                </SimpleGrid>
+                                (
+                                    myCourses.filter(course => !student?.completedCourses.includes(String(course.id))).length > 0 ?
+                                        <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
+                                            {myCourses.map((course) => {
+                                                    if (!student?.completedCourses.includes(String(course.id))) {
+                                                        return (<CourseCard
+                                                            rating={0} key={course.id}
+                                                            {...course}
+                                                        />);
+                                                    }
+                                                }
+                                            )}
+                                        </SimpleGrid> :
+                                        <Flex direction="column" align="center" justify="center" padding={10}
+                                              textAlign="center">
+                                            <Text fontSize="xl" fontWeight="bold" color="gray.700" mb={4}>
+                                                No pending courses!
+                                            </Text>
+                                            <Text fontSize="lg" color="gray.500" mb={6}>
+                                                Checkout the course Catalog for Courses!
+                                            </Text>
+                                            <LinkButton colorScheme="teal" variant="solid" to={`/courses`}>
+                                                Go To Course Catalog
+                                            </LinkButton>
+                                        </Flex>
+                                )
                         }
 
                         {
@@ -127,13 +147,6 @@ const Home = () => {
                         }
                     </Box>
             }
-
-            <HStack gap={6}>
-                <LinkButton colorScheme="teal" variant="solid" to={`/courses`}>
-                    Go to course catalog
-                </LinkButton>
-
-            </HStack>
         </Flex>
     );
 }
