@@ -1,10 +1,11 @@
-import {Box, Button, Flex, Grid, Heading, Text,} from "@chakra-ui/react";
+import {Button, Flex, Grid, Heading, Text,} from "@chakra-ui/react";
 import client from "../services/axios.ts";
 import {useEffect, useState} from "react";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {Certificate} from "../types/Certificate.ts";
 import {AppRoute} from "../constants/routes.ts";
 import {useNavigate} from "react-router-dom";
+import CertificateCard from "../components/CertificateCard.tsx";
 
 const Certificates = () => {
 
@@ -32,31 +33,7 @@ const Certificates = () => {
                     gap={6}
                 >
                     {certificates.map((certificate) => (
-                        <Box
-                            key={certificate.courseId}
-                            rounded="lg"
-                            p={5}
-                            borderWidth={1}
-                            overflow="hidden"
-                        >
-                            <Heading size="md" mb={2}>
-                                {certificate.courseName}
-                            </Heading>
-                            <Text mb={4} fontSize="sm" color="gray.500">
-                                Completed on: {new Date(certificate.completionDate).toLocaleDateString()}
-                            </Text>
-                            <Flex justifyContent="space-between" alignItems="center">
-                                <Button
-                                    size="sm"
-                                    onClick={() => {
-                                    }}>
-                                    Download
-                                </Button>
-                                <Text fontSize="sm" color="gray.400">
-                                    #{certificate.id}
-                                </Text>
-                            </Flex>
-                        </Box>
+                        <CertificateCard key={certificate.id} certificate={certificate}/>
                     ))}
                 </Grid>
             ) : (

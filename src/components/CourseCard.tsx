@@ -17,9 +17,12 @@ import {toaster} from "./ui/toaster.tsx";
 import {FaRegCheckCircle} from 'react-icons/fa';
 import {useAppDispatch} from "../services/redux/store.ts";
 import {toggleConfetti} from "../services/redux/slices/confettiSlice.ts";
+import {LiaCertificateSolid} from "react-icons/lia";
+import {Tooltip} from "./ui/tooltip.tsx";
 
 interface CourseCardProps {
     id: number;
+    certified?: boolean;
     name: string;
     description: string;
     category: string;
@@ -32,6 +35,7 @@ interface CourseCardProps {
 
 const CourseCard: FC<CourseCardProps> = ({
                                              id,
+                                             certified,
                                              name,
                                              description,
                                              category,
@@ -207,8 +211,20 @@ const CourseCard: FC<CourseCardProps> = ({
                                 </>
                             )
                     }
-                    <Card.Title mb="2"> {name}</Card.Title>
-                    <Card.Description mb={4}> {description} </Card.Description>
+                    <Card.Title mb="2">
+                        <Flex alignItems="center" justifyContent="space-between">
+                            {name}
+                            {
+                                certified &&
+                                <Flex _hover={{color: "gray"}}>
+                                    <Tooltip content={"Certificate issued"}>
+                                        <LiaCertificateSolid cursor="pointer" size={22}/>
+                                    </Tooltip>
+                                </Flex>
+                            }
+                        </Flex>
+                    </Card.Title>
+                    <Card.Description mb={4}>{description}</Card.Description>
                     <Flex direction="row" gap={4} flexWrap="wrap">
                         <Badge colorPalette="teal">
                             <TbCategory/>

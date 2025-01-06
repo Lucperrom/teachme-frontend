@@ -138,7 +138,7 @@ const Home = () => {
                                             {myCompletedCourses.map((course) => {
                                                     return (<CourseCard
                                                         rating={0} key={course.id}
-                                                        {...course}                        />);
+                                                        {...course} certified={true}                       />);
                                                 }
                                             )}
                                         </SimpleGrid>
