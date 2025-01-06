@@ -10,6 +10,8 @@ import NotificationBell from "./NotificationBell.tsx";
 import {Button} from "./ui/button.tsx";
 import {MenuContent, MenuItem, MenuRoot, MenuTrigger} from "./ui/menu.tsx";
 import {Avatar} from "./ui/avatar.tsx";
+import {LiaCertificateSolid} from "react-icons/lia";
+import {GoHome} from "react-icons/go";
 
 const NavigationBar = () => {
     const {user, profileCompleted, student} = useAuth();
@@ -51,12 +53,27 @@ const NavigationBar = () => {
                                                     </Button>
                                                 </MenuTrigger>
                                                 <MenuContent>
+                                                    <MenuItem data-test="menu-home-option"
+                                                              onClick={() => navigate(AppRoute.HOME)}
+                                                              cursor="pointer"
+                                                              value="home" valueText="home"
+                                                    > <GoHome/>
+                                                        <Box flex="1">Home</Box>
+                                                    </MenuItem>
                                                     <MenuItem data-test="menu-profile-option"
                                                               onClick={() => navigate(AppRoute.PROFILE)}
                                                               cursor="pointer"
                                                               value="profile" valueText="profile"
                                                     > <LuUser/>
                                                         <Box flex="1">Profile</Box>
+                                                    </MenuItem>
+                                                    <MenuItem data-test="menu-certificates-option"
+                                                              onClick={() => navigate(AppRoute.CERTIFICATES)}
+                                                              cursor="pointer"
+                                                              value="certificates" valueText="certificates"
+                                                    >
+                                                        <LiaCertificateSolid/>
+                                                        <Box flex="1">Certificates</Box>
                                                     </MenuItem>
                                                     <MenuItem onClick={() => authService.logout()} value="logout"
                                                               color="red.500"

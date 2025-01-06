@@ -1,4 +1,4 @@
-import {SimpleGrid} from "@chakra-ui/react";
+import {Flex, SimpleGrid, Text} from "@chakra-ui/react";
 import {FC, useEffect, useState} from "react";
 import CourseCard from "../components/CourseCard.tsx";
 import {useAuth} from "../services/auth/AuthContext.tsx";
@@ -21,10 +21,10 @@ interface CourseListProps {
 }
 
 const CourseList: FC<CourseListProps> = ({
-                                                   category,
-                                                   onDelete,
-                                                   onUpdate,
-                                               }) => {
+                                             category,
+                                             onDelete,
+                                             onUpdate,
+                                         }) => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -80,19 +80,36 @@ const CourseList: FC<CourseListProps> = ({
                             }
                         )}
                     </SimpleGrid> :
-                    <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
-                        {courses.map((course) => {
-                                if (!student?.enrolledCourses.includes(String(course.id))) {
-                                    return (<CourseCard
-                                        key={course.id}
-                                        {...course}
-                                        onDelete={onDelete}
-                                        onUpdate={onUpdate}
-                                    />);
-                                }
+                    (
+                        <>
+                            {
+                                courses.filter(course => !student?.enrolledCourses.includes(String(course.id))).length > 0 ?
+                                    <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
+                                        {courses.map((course) => {
+                                                if (!student?.enrolledCourses.includes(String(course.id))) {
+                                                    return (<CourseCard
+                                                        key={course.id}
+                                                        {...course}
+                                                        onDelete={onDelete}
+                                                        onUpdate={onUpdate}
+                                                    />);
+                                                }
+                                            }
+                                        )}
+                                    </SimpleGrid> :
+                                    <Flex direction="column" align="center" justify="center" padding={10}
+                                          textAlign="center">
+                                        <Text fontSize="xl" fontWeight="bold" color="gray.700" mb={4}>
+                                            No New Courses Available
+                                        </Text>
+                                        <Text fontSize="lg" color="gray.500" mb={6}>
+                                            We’re working on adding new courses. Check back later!
+                                        </Text>
+                                    </Flex>
                             }
-                        )}
-                    </SimpleGrid>
+                        </>
+
+                    )
             }
         </>
     );
