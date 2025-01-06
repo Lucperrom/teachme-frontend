@@ -111,6 +111,12 @@ const CourseCard: FC<CourseCardProps> = ({
         }
     }
 
+    const truncateDescription = (text: string) => {
+        const MAX = 400;
+        const points = text.length > MAX ? " ..." : "";
+        return text.slice(0, Math.min(text.length, MAX)) + points;
+    }
+
     const navigate = useNavigate();
 
     return (
@@ -224,7 +230,7 @@ const CourseCard: FC<CourseCardProps> = ({
                             }
                         </Flex>
                     </Card.Title>
-                    <Card.Description mb={4}>{description}</Card.Description>
+                    <Card.Description mb={4}>{truncateDescription(description)}</Card.Description>
                     <Flex direction="row" gap={4} flexWrap="wrap">
                         <Badge colorPalette="teal">
                             <TbCategory/>
