@@ -1,4 +1,4 @@
-import {Box, Flex, Heading} from "@chakra-ui/react";
+import {Box, Text, Flex, Heading} from "@chakra-ui/react";
 import {IconButton} from "@chakra-ui/react/button";
 import {Filter, SquarePlus} from "lucide-react";
 import {useState} from "react";
@@ -61,6 +61,15 @@ const Courses = () => {
 
     return (
         <Box padding={5}>
+
+            {
+                !isAdmin() &&
+                <Flex direction="column" alignItems="center" gap={5} justifyContent="center">
+                    <Heading fontSize="3xl">All the Skills you need!</Heading>
+                    <Text>Teachme offers a wide range of courses on essential skills and in-demand technical topics for professional development.</Text>
+                </Flex>
+            }
+
             <Flex
                 width="100%"
                 alignItems="center"
