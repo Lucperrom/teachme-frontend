@@ -6,10 +6,12 @@ import {Certificate} from "../types/Certificate.ts";
 import {AppRoute} from "../constants/routes.ts";
 import {useNavigate} from "react-router-dom";
 import CertificateCard from "../components/CertificateCard.tsx";
+import {Skeleton} from "../components/ui/skeleton.tsx";
 
 const Certificates = () => {
 
     const [certificates, setCertificates] = useState<Certificate[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const {student} = useAuth();
 
     const navigate = useNavigate();
@@ -17,9 +19,11 @@ const Certificates = () => {
     useEffect(() => {
         if (!student) return;
 
+        setIsLoading(true);
         client
             .get<Certificate[]>(`/api/v1/certificates/${student?.id}`)
-            .then((response) => setCertificates(response.data));
+            .then((response) => setCertificates(response.data))
+            .finally(() => setTimeout(() => setIsLoading(false), 500));
     }, [student]);
 
     return (
@@ -28,14 +32,31 @@ const Certificates = () => {
                 My Certificates
             </Heading>
             {certificates.length > 0 ? (
-                <Grid
-                    templateColumns={{base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)"}}
-                    gap={6}
-                >
-                    {certificates.map((certificate) => (
-                        <CertificateCard key={certificate.id} certificate={certificate}/>
-                    ))}
-                </Grid>
+                <>
+
+                    {
+                        isLoading ?
+                            <Grid
+                                templateColumns={{base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)"}}
+                                gap={6}
+                            >
+                                {
+                                    [1, 2, 3].map((_, idx) => (
+                                        <Skeleton borderRadius="lg" key={`certificate-skeleton-${idx}`} width="full"
+                                                  height="187px"/>
+                                    ))
+                                }
+                            </Grid> :
+                            <Grid
+                                templateColumns={{base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)"}}
+                                gap={6}
+                            >
+                                {certificates.map((certificate) => (
+                                    <CertificateCard key={certificate.id} certificate={certificate}/>
+                                ))}
+                            </Grid>
+                    }
+                </>
             ) : (
                 <Flex
                     direction="column"

@@ -24,6 +24,7 @@ const CertificateCard: FC<CertificateCardProps> = ({certificate}) => {
                 border="2px dashed"
                 borderColor="gray.300"
                 rounded="lg"
+                height="100%"
                 padding={6}
                 pb={3}
                 bg="white"
