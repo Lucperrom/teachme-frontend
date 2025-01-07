@@ -67,7 +67,7 @@ const NavigationBar = () => {
                                                     > <LuUser/>
                                                         <Box flex="1">Profile</Box>
                                                     </MenuItem>
-                                                    <MenuItem data-test="menu-certificates-option"
+                                                    <MenuItem data-test="menu-certificate-option"
                                                               onClick={() => navigate(AppRoute.CERTIFICATES)}
                                                               cursor="pointer"
                                                               value="certificates" valueText="certificates"

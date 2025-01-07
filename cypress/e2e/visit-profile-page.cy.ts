@@ -44,6 +44,16 @@ describe('Profile Page E2E Tests', () => {
       body: { id: '1', email: 'john.doe@example.com', role: 'student' },
     });
 
+    cy.intercept('GET', '/api/v1/students/me/courses', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/v1/students/me/completed-courses', {
+      statusCode: 200,
+      body: [],
+    });
+
     cy.intercept('POST', '/api/v1/auth/signin', {
       statusCode: 200,
       body: { token: 'mock-token' },

@@ -30,7 +30,7 @@ const CertificateCard: FC<CertificateCardProps> = ({certificate}) => {
                 bg="white"
             >
                 <Flex justifyContent="space-between" mb={4} direction="row" gap={2} alignItems="self-start">
-                    <Heading size="lg" color="gray.700">
+                    <Heading data-test="certificate-name" size="lg" color="gray.700">
                         {certificate.courseName}
                     </Heading>
 
@@ -44,6 +44,7 @@ const CertificateCard: FC<CertificateCardProps> = ({certificate}) => {
 
                     <Tooltip content={"Download Certificate"}>
                         <Button unstyled cursor="pointer"
+                                data-test="certificate-download-button"
                                 _hover={{color: "gray.500"}}
                                 onClick={(e) => {
                                     e.stopPropagation();

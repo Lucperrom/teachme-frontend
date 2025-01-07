@@ -17,8 +17,6 @@ const Certificates = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!student) return;
-
         setIsLoading(true);
         client
             .get<Certificate[]>(`/api/v1/certificates/${student?.id}`)
@@ -43,7 +41,7 @@ const Certificates = () => {
                                 {
                                     [1, 2, 3].map((_, idx) => (
                                         <Skeleton borderRadius="lg" key={`certificate-skeleton-${idx}`} width="full"
-                                                  height="187px"/>
+                                                  height="px"/>
                                     ))
                                 }
                             </Grid> :

@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
+import {BrowserRouter} from 'react-router-dom';
 import Profile from '../pages/Profile.tsx'
 import {ChakraProvider, defaultSystem} from "@chakra-ui/react";
+import {AuthProvider} from "../services/auth/AuthContext.tsx";
 
 describe('<Profile />', () => {
 
@@ -48,10 +50,15 @@ describe('<Profile />', () => {
         // see: https://on.cypress.io/mounting-react
         cy.viewport(800, 800);
         cy.mount(
-            <ChakraProvider value={defaultSystem}>
-                <Profile/>
-            </ChakraProvider>
-        );
+            <BrowserRouter>
+                <AuthProvider>
+                    <ChakraProvider value={defaultSystem}>
+                        <Profile/>
+                    </ChakraProvider>
+                </AuthProvider>
+            </BrowserRouter>
+        )
+        ;
 
         cy.get('[data-test=profile-name]').should('contain', 'John Doe');
         cy.get('[data-test=profile-email]').should('contain', 'john.doe@example.com');
@@ -65,9 +72,13 @@ describe('<Profile />', () => {
         // see: https://on.cypress.io/mounting-react
         cy.viewport(800, 800);
         cy.mount(
-            <ChakraProvider value={defaultSystem}>
-                <Profile/>
-            </ChakraProvider>
+            <BrowserRouter>
+                <AuthProvider>
+                    <ChakraProvider value={defaultSystem}>
+                        <Profile/>
+                    </ChakraProvider>
+                </AuthProvider>
+            </BrowserRouter>
         );
 
         cy.get('[data-test=edit-profile-button]').click();
