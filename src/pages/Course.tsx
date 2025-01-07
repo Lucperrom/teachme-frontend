@@ -241,7 +241,7 @@ const Course: React.FC = () => {
                     Lectures
                 </Text>
                 <Text fontSize="md" color="gray.600" mb={4}>
-                    Explore these the lectures to start your journey. Click on any card to learn start!
+                    Explore these the lectures to start your journey. Click on any card to start learning!
                 </Text>
                 <VStack maxWidth="100%" boxSizing="border-box" align="start">
                     {course.additionalResources.map((video) => {
