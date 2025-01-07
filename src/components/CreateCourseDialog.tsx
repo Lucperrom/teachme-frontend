@@ -48,6 +48,12 @@ const CreateCourseDialog: FunctionComponent<CreateCourseDialogProps> = ({
 
             onCourseCreated();
             onClose();
+
+            setCategory("");
+            setName("");
+            setDuration("");
+            setDescription("");
+            setLevel(Level.BEGINNER);
         } catch (error) {
             console.error("Error creating course:", error);
             toaster.create({
