@@ -223,9 +223,14 @@ const CourseCard: FC<CourseCardProps> = ({
                             {
                                 certified &&
                                 <Flex _hover={{color: "gray"}}>
-                                    <Tooltip content={"Certificate issued"}>
-                                        <LiaCertificateSolid cursor="pointer" size={22}/>
-                                    </Tooltip>
+                                    <Button unstyled onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(AppRoute.CERTIFICATES);
+                                    }}>
+                                        <Tooltip content={"Certificate issued"}>
+                                            <LiaCertificateSolid cursor="pointer" size={22}/>
+                                        </Tooltip>
+                                    </Button>
                                 </Flex>
                             }
                         </Flex>

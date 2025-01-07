@@ -28,7 +28,7 @@ const CourseList: FC<CourseListProps> = ({
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const {student} = useAuth();
+    const {student, isAdmin} = useAuth();
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -100,10 +100,14 @@ const CourseList: FC<CourseListProps> = ({
                                     <Flex direction="column" align="center" justify="center" padding={10}
                                           textAlign="center">
                                         <Text fontSize="xl" fontWeight="bold" color="gray.700" mb={4}>
-                                            No New Courses Available
+                                            {
+                                                isAdmin() ? "No Courses Created" : "No New Courses Available"
+                                            }
                                         </Text>
                                         <Text fontSize="lg" color="gray.500" mb={6}>
-                                            We’re working on adding new courses. Check back later!
+                                            {
+                                                isAdmin() ? "Create New Courses" : "We’re working on adding new courses. Check back later!"
+                                            }
                                         </Text>
                                     </Flex>
                             }

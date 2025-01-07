@@ -1,8 +1,8 @@
-import {Badge, Box, Flex, Heading, Spinner, Text, VStack,} from "@chakra-ui/react";
+import {Badge, Box, Card, Collapsible, Flex, Heading, Spinner, Text, useMediaQuery, VStack,} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import LinkButton from '../components/LinkButton';
 import {MessageSquareMore} from 'lucide-react';
-import {FaRegCheckCircle} from "react-icons/fa";
+import {FaBook, FaRegCheckCircle} from "react-icons/fa";
 import {useNavigate, useParams} from "react-router-dom";
 import client from "../services/axios.ts";
 import {TbCategory} from "react-icons/tb";
@@ -17,11 +17,13 @@ import {useAppDispatch} from "../services/redux/store.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {MdNewReleases} from "react-icons/md";
 import {Rating} from "../components/ui/rating.tsx";
+import {GoDotFill} from "react-icons/go";
 
 interface Video {
     id: string;
     title: string;
     url: string;
+    description: string;
 }
 
 export interface Course {
@@ -46,6 +48,8 @@ const Course: React.FC = () => {
     const {reloadStudent} = useAuth();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    const [isLargerThan800] = useMediaQuery(['(min-width: 800px)'], {ssr: false});
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -102,7 +106,8 @@ const Course: React.FC = () => {
     return (
         <Box p={4}>
             <Flex direction={{base: 'column', md: 'row'}} gap={4}>
-                <Box overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md" borderRadius="md">
+                <Box maxHeight="85vh" overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md"
+                     borderRadius="md">
                     <MenuRoot positioning={{placement: "bottom-start"}}>
                         <MenuTrigger asChild>
                             <Button _hover={{color: "gray"}}
@@ -184,27 +189,79 @@ const Course: React.FC = () => {
                         </Box>
                     </Flex>
                 </Box>
-                <Box flex="1" p={4} bg="white" boxShadow="md" borderRadius="md" maxHeight="80vh" overflowY="auto">
-                    <Text fontSize="lg" fontWeight="bold" mb={2}>
-                        List of Course Videos
+                <Box flex="1" maxHeight="85vh" p={4} bg="white" boxShadow="md" borderRadius="md" overflowY="scroll"
+                     maxWidth={isLargerThan800 ? "50vw" : "100vw"}>
+                    <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Lectures
                     </Text>
-                    <VStack align="start" gap={2} width="100%">
-                        {course.additionalResources.map((video) => (
-                            <Box key={video.url} width="100%">
-                                <Text fontWeight="bold" mb={2}>
-                                    {video.title}
-                                </Text>
-                                <iframe
-                                    width="100%"
-                                    height="315"
-                                    src={`https://www.youtube.com/embed/${video.url}`}
-                                    title={video.title}
-                                    style={{border: "none"}}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </Box>
-                        ))}
+                    <VStack maxWidth="100%" boxSizing="border-box" align="start">
+                        {course.additionalResources.map((video) => {
+                            return (
+                                <Collapsible.Root width="100%" key={video.url}>
+                                    <Collapsible.Trigger width="100%" paddingY="1">
+                                        <Card.Root
+                                            borderWidth="1px"
+                                            borderRadius="lg"
+                                            width="100%"
+                                            p={5}
+                                            boxShadow="xs"
+                                            _hover={{boxShadow: 'lg', transform: 'scale(1.01)'}}
+                                            transition="all 0.2s"
+                                            display="block"
+                                            cursor="pointer"
+                                            position="relative"
+                                        >
+                                            <Flex
+                                                flex="1"
+                                                width="100%"
+                                                fontWeight="bold"
+                                                direction="row"
+                                                alignItems="center"
+                                                gap={1}
+                                                overflow="hidden"
+                                            >
+                                                <FaBook style={{flexShrink: 0}}/>
+                                                <GoDotFill style={{flexShrink: 0}} size={10}/>
+                                                <Text
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: video.title,
+                                                    }}
+                                                    style={{
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        flex: "1",
+                                                    }}
+                                                ></Text>
+                                            </Flex>
+                                        </Card.Root>
+                                    </Collapsible.Trigger>
+                                    <Collapsible.Content>
+                                        <Flex p={5} borderWidth="1px">
+                                            {
+                                                <Text textWrap="wrap"
+                                                      style={{
+                                                          flexGrow: 1,
+                                                          maxWidth: "50%",
+                                                          overflow: "hidden",
+                                                          textOverflow: "ellipsis",
+                                                          whiteSpace: "normal",
+                                                      }}
+                                                >{video.description}</Text>
+                                            }
+                                            <iframe
+                                                width="50%"
+                                                src={`https://www.youtube.com/embed/${video.url.replace("https://www.youtube.com/watch?v=", "")}`}
+                                                title={video.title}
+                                                style={{border: "none"}}
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </Flex>
+                                    </Collapsible.Content>
+                                </Collapsible.Root>
+                            )
+                        })}
                     </VStack>
                 </Box>
             </Flex>

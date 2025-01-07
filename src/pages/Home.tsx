@@ -79,7 +79,14 @@ const Home = () => {
                 </Box>
             }
             {
-                isAdmin() ? <Heading>Admin</Heading> :
+                isAdmin() ?
+                    <Flex justifyContent="space-between" alignItems="center" gap={4}>
+                        <Heading>Admin</Heading>
+                        <LinkButton width="min-content" colorScheme="teal" variant="solid" to={`/courses`}>
+                            Go To Course Catalog
+                        </LinkButton>
+                    </Flex>
+                    :
                     <Box>
                         <Flex justifyContent="space-between" alignItems="center" gap={4}>
                             <Heading>My courses</Heading>
@@ -96,10 +103,11 @@ const Home = () => {
                                     )}
                                 </SimpleGrid> :
                                 (
-                                    myCourses.filter(course => !student?.completedCourses.includes(String(course.id))).length > 0 ?
+                                    myCourses &&
+                                    myCourses.filter(course => course &&course.id && !student?.completedCourses.includes(String(course.id))).length > 0 ?
                                         <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
                                             {myCourses.map((course) => {
-                                                    if (!student?.completedCourses.includes(String(course.id))) {
+                                                    if (course?.id && !student?.completedCourses.includes(String(course.id))) {
                                                         return (<CourseCard
                                                             rating={0} key={course.id}
                                                             {...course}
@@ -136,9 +144,11 @@ const Home = () => {
                                         </SimpleGrid> :
                                         <SimpleGrid columns={[1, 2, 3]} gap={5} m={4} mt={8}>
                                             {myCompletedCourses.map((course) => {
-                                                    return (<CourseCard
-                                                        rating={0} key={course.id}
-                                                        {...course} certified={true}                       />);
+                                                    if (course?.id) {
+                                                        return (<CourseCard
+                                                            rating={0} key={course.id}
+                                                            {...course} certified={true}/>);
+                                                    }
                                                 }
                                             )}
                                         </SimpleGrid>
