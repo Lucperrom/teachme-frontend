@@ -45,7 +45,7 @@ const Course: React.FC = () => {
 
     const [_, setIsLoading] = useState<boolean>(false);
 
-    const {reloadStudent} = useAuth();
+    const {reloadStudent, student} = useAuth();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -108,37 +108,41 @@ const Course: React.FC = () => {
             <Flex direction={{base: 'column', md: 'row'}} gap={4}>
                 <Box maxHeight="85vh" overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md"
                      borderRadius="md">
-                    <MenuRoot positioning={{placement: "bottom-start"}}>
-                        <MenuTrigger asChild>
-                            <Button _hover={{color: "gray"}}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center"
-                                    }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                    }}
-                                    unstyled height={10}
-                                    width={10} cursor="pointer" position="absolute" right={3}
-                                    top={3}>
-                                <HiOutlineDotsVertical size={22}/>
-                            </Button>
-                        </MenuTrigger>
-                        <MenuContent>
-                            <MenuItem onClick={async (e) => {
-                                e.stopPropagation();
-                                await handleCompleteCourse();
-                            }}
-                                      cursor="pointer"
-                                      color="green.500"
-                                      value="complete"
-                                      valueText="complete">
-                                <FaRegCheckCircle/>
-                                <Box flex="1">Complete Course</Box>
-                            </MenuItem>
-                        </MenuContent>
-                    </MenuRoot>
+                    {
+                        !student?.completedCourses.includes(String(course.id)) &&
+                        <MenuRoot positioning={{placement: "bottom-start"}}>
+                            <MenuTrigger asChild>
+                                <Button _hover={{color: "gray"}}
+                                        style={{
+                                            zIndex: 999,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                        unstyled height={10}
+                                        width={10} cursor="pointer" position="absolute" right={3}
+                                        top={3}>
+                                    <HiOutlineDotsVertical size={22}/>
+                                </Button>
+                            </MenuTrigger>
+                            <MenuContent>
+                                <MenuItem onClick={async (e) => {
+                                    e.stopPropagation();
+                                    await handleCompleteCourse();
+                                }}
+                                          cursor="pointer"
+                                          color="green.500"
+                                          value="complete"
+                                          valueText="complete">
+                                    <FaRegCheckCircle/>
+                                    <Box flex="1">Complete Course</Box>
+                                </MenuItem>
+                            </MenuContent>
+                        </MenuRoot>
+                    }
 
                     <Flex position="relative" height="full" direction="column" justifyContent="space-between">
                         <Flex direction="column">
