@@ -8,9 +8,7 @@ RUN npm install
 
 COPY . .
 
-ENV VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY
-
-RUN npm run build
+RUN --mount=type=secret,id=openai_api_key,env=VITE_OPENAI_API_KEY npm run build
 
 FROM node:23-alpine
 
