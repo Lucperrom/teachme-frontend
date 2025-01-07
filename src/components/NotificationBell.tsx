@@ -1,4 +1,4 @@
-import {Circle, Flex} from "@chakra-ui/react";
+import {Circle} from "@chakra-ui/react";
 import {IoNotifications} from "react-icons/io5";
 import {Button} from "./ui/button.tsx";
 import {useEffect} from "react";
@@ -39,17 +39,15 @@ const NotificationBell = () => {
     }, [user]);
 
     return (
-        <Flex alignItems="center" justifyContent="center">
-            <Link to={AppRoute.NOTIFICATIONS}>
-                <Button position="relative" unstyled cursor="pointer">
-                    <IoNotifications size={22}/>
-                    {
-                        (notificationInfo && notificationInfo?.numberOfUnreadMessages > 0) &&
-                        <Circle position="absolute" right={0} top={0} bg="red" size={2}></Circle>
-                    }
-                </Button>
-            </Link>
-        </Flex>
+        <Link style={{display: "flex", alignItems: "center", justifyContent: "center"}} to={AppRoute.NOTIFICATIONS}>
+            <Button position="relative" unstyled cursor="pointer">
+                <IoNotifications size={22}/>
+                {
+                    (notificationInfo && notificationInfo?.numberOfUnreadMessages > 0) &&
+                    <Circle position="absolute" right={0} top={0} bg="red" size={2}></Circle>
+                }
+            </Button>
+        </Link>
     );
 }
 
