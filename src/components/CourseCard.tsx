@@ -135,7 +135,7 @@ const CourseCard: FC<CourseCardProps> = ({
                 cursor="pointer"
                 position="relative"
                 onClick={() => {
-                    if (student?.enrolledCourses.includes(String(id))) {
+                    if (student?.enrolledCourses.includes(String(id)) || isAdmin()) {
                         navigate(`${AppRoute.COURSESLIST}/${id}`);
                     }
                 }}

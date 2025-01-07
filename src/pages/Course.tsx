@@ -13,11 +13,24 @@ import {Button} from "../components/ui/button.tsx";
 import {HiOutlineDotsVertical} from "react-icons/hi";
 import {toaster} from "../components/ui/toaster.tsx";
 import {toggleConfetti} from "../services/redux/slices/confettiSlice.ts";
-import {useAppDispatch} from "../services/redux/store.ts";
+import {RootState, useAppDispatch} from "../services/redux/store.ts";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import {MdNewReleases} from "react-icons/md";
 import {Rating} from "../components/ui/rating.tsx";
 import {GoDotFill} from "react-icons/go";
+import ConfettiExplosion, {ConfettiProps} from "react-confetti-explosion";
+import {useSelector} from "react-redux";
+import {AppRoute} from "../constants/routes.ts";
+import {Tooltip} from "../components/ui/tooltip.tsx";
+import {LiaCertificateSolid} from "react-icons/lia";
+
+const largeProps: ConfettiProps = {
+    force: 0.8,
+    duration: 3000,
+    particleCount: 300,
+    width: 1600,
+    colors: ['#041E43', '#1471BF', '#5BB4DC', '#FC027B', '#66D805'],
+};
 
 interface Video {
     id: string;
@@ -42,10 +55,11 @@ const Course: React.FC = () => {
     const {id} = useParams<{ id: string }>();
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const {confetti} = useSelector((state: RootState) => state.confetti);
 
     const [_, setIsLoading] = useState<boolean>(false);
 
-    const {reloadStudent, student} = useAuth();
+    const {reloadStudent, student, isAdmin} = useAuth();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -105,43 +119,72 @@ const Course: React.FC = () => {
 
     return (
         <Box p={4}>
-            <Flex direction={{base: 'column', md: 'row'}} gap={4}>
+            <Flex position="relative" direction={{base: 'column', md: 'row'}} gap={4}>
+                {
+                    confetti &&
+                    <Box position="absolute" right="50%" bottom="50%">
+                        <ConfettiExplosion {...largeProps} />
+                    </Box>
+                }
                 <Box maxHeight="85vh" overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md"
                      borderRadius="md">
                     {
-                        !student?.completedCourses.includes(String(course.id)) &&
-                        <MenuRoot positioning={{placement: "bottom-start"}}>
-                            <MenuTrigger asChild>
-                                <Button _hover={{color: "gray"}}
-                                        style={{
-                                            zIndex: 999,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center"
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                        }}
-                                        unstyled height={10}
-                                        width={10} cursor="pointer" position="absolute" right={3}
-                                        top={3}>
-                                    <HiOutlineDotsVertical size={22}/>
-                                </Button>
-                            </MenuTrigger>
-                            <MenuContent>
-                                <MenuItem onClick={async (e) => {
-                                    e.stopPropagation();
-                                    await handleCompleteCourse();
-                                }}
-                                          cursor="pointer"
-                                          color="green.500"
-                                          value="complete"
-                                          valueText="complete">
-                                    <FaRegCheckCircle/>
-                                    <Box flex="1">Complete Course</Box>
-                                </MenuItem>
-                            </MenuContent>
-                        </MenuRoot>
+                        !isAdmin() &&
+                        (!student?.completedCourses.includes(String(course.id)) ?
+                            <MenuRoot positioning={{placement: "bottom-start"}}>
+                                <MenuTrigger asChild>
+                                    <Button _hover={{color: "gray"}}
+                                            style={{
+                                                zIndex: 999,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                            unstyled height={10}
+                                            width={10} cursor="pointer" position="absolute" right={3}
+                                            top={3}>
+                                        <HiOutlineDotsVertical size={22}/>
+                                    </Button>
+                                </MenuTrigger>
+                                <MenuContent>
+                                    <MenuItem onClick={async (e) => {
+                                        e.stopPropagation();
+                                        await handleCompleteCourse();
+                                    }}
+                                              cursor="pointer"
+                                              color="green.500"
+                                              value="complete"
+                                              valueText="complete">
+                                        <FaRegCheckCircle/>
+                                        <Box flex="1">Complete Course</Box>
+                                    </MenuItem>
+                                </MenuContent>
+                            </MenuRoot> :
+                            <>
+                                {
+                                    <Button _hover={{color: "gray"}}
+                                            style={{
+                                                zIndex: 999,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(AppRoute.CERTIFICATES);
+                                            }}
+                                            unstyled height={10}
+                                            width={10} cursor="pointer" position="absolute" right={3}
+                                            top={3}>
+                                        <Tooltip content={"Certificate issued"}>
+                                            <LiaCertificateSolid cursor="pointer" size={22}/>
+                                        </Tooltip>
+                                    </Button>
+                                }
+                            </>)
                     }
 
                     <Flex position="relative" height="full" direction="column" justifyContent="space-between">
