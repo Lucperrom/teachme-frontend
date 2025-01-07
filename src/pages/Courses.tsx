@@ -1,18 +1,50 @@
 import {Box, Text, Flex, Heading} from "@chakra-ui/react";
 import {IconButton} from "@chakra-ui/react/button";
 import {Filter, SquarePlus} from "lucide-react";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import CreateCourseDialog from "../components/CreateCourseDialog.tsx";
 import SearchCourseDialog from "../components/SearchCourseDialog.tsx";
 import CourseList from "../components/CourseList.tsx";
 import {toaster} from "../components/ui/toaster.tsx";
 import {useAuth} from "../services/auth/AuthContext.tsx";
+import client from "../services/axios.ts";
+
+export interface CourseDto {
+    id: number;
+    name: string;
+    description: string;
+    category: string;
+    duration: string;
+    level: string;
+    rating: number;
+}
 
 const Courses = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [isCreateDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
 
+    const [courses, setCourses] = useState<CourseDto[]>([]);
+    const [loading, setLoading] = useState(true);
+
     const {isAdmin} = useAuth();
+
+    const fetchCourses = useCallback(async () => {
+        try {
+            const response = await client.get<CourseDto[]>(`/api/v1/courses${selectedCategory ? `/filter?category=${selectedCategory}` : ''}`);
+            setCourses(response.data);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        } finally {
+            setTimeout(
+                () => {
+                    setLoading(false);
+                }, 500)
+        }
+    }, [selectedCategory]);
+
+    useEffect(() => {
+        fetchCourses();
+    }, [fetchCourses, selectedCategory])
 
     const handleSearch = (category: string) => {
         setSelectedCategory(category);
@@ -22,29 +54,19 @@ const Courses = () => {
         setCreateDialogOpen(true);
     };
 
-    const handleCourseCreated = () => {
+    const handleCourseCreated = async () => {
         setCreateDialogOpen(false);
-        window.location.reload();
+        await fetchCourses();
     };
 
     const handleDeleteCourse = async (id: number) => {
         try {
-            const response = await fetch(`api/v1/courses/${id}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to delete course");
-            }
+            await client.delete(`api/v1/courses/${id}`);
             toaster.create({
                 title: "Course deleted successfully",
                 type: "success",
             });
-            window.location.reload();
+            await fetchCourses();
         } catch (error) {
             console.error("Error deleting course:", error);
             toaster.create({
@@ -54,9 +76,9 @@ const Courses = () => {
         }
     };
 
-    const handleUpdateCourse = (id: number, updatedCourse: unknown) => {
+    const handleUpdateCourse = async (id: number, updatedCourse: unknown) => {
         console.log(`Course with id ${id} updated`, updatedCourse);
-        window.location.reload();
+        await fetchCourses();
     };
 
     return (
@@ -95,9 +117,10 @@ const Courses = () => {
                 </Flex>
             </Flex>
             <CourseList
-                category={selectedCategory}
                 onDelete={handleDeleteCourse}
                 onUpdate={handleUpdateCourse}
+                isLoading={loading}
+                courses={courses}
             />
             <CreateCourseDialog
                 onCourseCreated={handleCourseCreated}
