@@ -42,7 +42,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
@@ -50,5 +50,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}
+          secrets: |
+            "openai_api_key=${{ secrets.VITE_OPENAI_API_KEY }}"
