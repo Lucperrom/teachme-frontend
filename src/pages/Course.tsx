@@ -118,201 +118,202 @@ const Course: React.FC = () => {
     }
 
     return (
-        <Box p={4}>
-            <Flex position="relative" direction={{base: 'column', md: 'row'}} gap={4}>
+        <Flex p={4} position="relative" height={isLargerThan800 ? "90vh" : "full"} direction={{base: 'column', md: 'row'}} gap={4}>
+            {
+                confetti &&
+                <Box position="absolute" right="50%" bottom="50%">
+                    <ConfettiExplosion {...largeProps} />
+                </Box>
+            }
+            <Box maxHeight="88vh" overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md"
+                 borderRadius="md">
                 {
-                    confetti &&
-                    <Box position="absolute" right="50%" bottom="50%">
-                        <ConfettiExplosion {...largeProps} />
-                    </Box>
+                    !isAdmin() &&
+                    (!student?.completedCourses.includes(String(course.id)) ?
+                        <MenuRoot positioning={{placement: "bottom-start"}}>
+                            <MenuTrigger asChild>
+                                <Button _hover={{color: "gray"}}
+                                        style={{
+                                            zIndex: 999,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                        unstyled height={10}
+                                        width={10} cursor="pointer" position="absolute" right={3}
+                                        top={3}>
+                                    <HiOutlineDotsVertical size={22}/>
+                                </Button>
+                            </MenuTrigger>
+                            <MenuContent>
+                                <MenuItem onClick={async (e) => {
+                                    e.stopPropagation();
+                                    await handleCompleteCourse();
+                                }}
+                                          cursor="pointer"
+                                          color="green.500"
+                                          value="complete"
+                                          valueText="complete">
+                                    <FaRegCheckCircle/>
+                                    <Box flex="1">Complete Course</Box>
+                                </MenuItem>
+                            </MenuContent>
+                        </MenuRoot> :
+                        <>
+                            {
+                                <Button _hover={{color: "gray"}}
+                                        style={{
+                                            zIndex: 999,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(AppRoute.CERTIFICATES);
+                                        }}
+                                        unstyled height={10}
+                                        width={10} cursor="pointer" position="absolute" right={3}
+                                        top={3}>
+                                    <Tooltip content={"Certificate issued"}>
+                                        <LiaCertificateSolid cursor="pointer" size={22}/>
+                                    </Tooltip>
+                                </Button>
+                            }
+                        </>)
                 }
-                <Box maxHeight="85vh" overflow="hidden" position="relative" flex="1" p={4} bg="white" boxShadow="md"
-                     borderRadius="md">
-                    {
-                        !isAdmin() &&
-                        (!student?.completedCourses.includes(String(course.id)) ?
-                            <MenuRoot positioning={{placement: "bottom-start"}}>
-                                <MenuTrigger asChild>
-                                    <Button _hover={{color: "gray"}}
-                                            style={{
-                                                zIndex: 999,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center"
-                                            }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                            }}
-                                            unstyled height={10}
-                                            width={10} cursor="pointer" position="absolute" right={3}
-                                            top={3}>
-                                        <HiOutlineDotsVertical size={22}/>
-                                    </Button>
-                                </MenuTrigger>
-                                <MenuContent>
-                                    <MenuItem onClick={async (e) => {
-                                        e.stopPropagation();
-                                        await handleCompleteCourse();
-                                    }}
-                                              cursor="pointer"
-                                              color="green.500"
-                                              value="complete"
-                                              valueText="complete">
-                                        <FaRegCheckCircle/>
-                                        <Box flex="1">Complete Course</Box>
-                                    </MenuItem>
-                                </MenuContent>
-                            </MenuRoot> :
-                            <>
-                                {
-                                    <Button _hover={{color: "gray"}}
-                                            style={{
-                                                zIndex: 999,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center"
-                                            }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                navigate(AppRoute.CERTIFICATES);
-                                            }}
-                                            unstyled height={10}
-                                            width={10} cursor="pointer" position="absolute" right={3}
-                                            top={3}>
-                                        <Tooltip content={"Certificate issued"}>
-                                            <LiaCertificateSolid cursor="pointer" size={22}/>
-                                        </Tooltip>
-                                    </Button>
-                                }
-                            </>)
-                    }
 
-                    <Flex position="relative" height="full" direction="column" justifyContent="space-between">
-                        <Flex direction="column">
-                            <Heading fontSize="2xl" mb={4}>{course.name}</Heading>
-                            <Flex direction="row" gap={4} flexWrap="wrap">
-                                <Badge colorPalette="teal">
-                                    <TbCategory/>
-                                    {course.category}
-                                </Badge>
-                                <Badge colorPalette="blue">
-                                    <LuHourglass/>
-                                    {course.duration}
-                                </Badge>
-                                <Badge colorPalette="purple">
-                                    <IoBookOutline/>
-                                    {course.level}
-                                </Badge>
-                            </Flex>
-                            <Flex mt={2} gap={1} alignItems="center">
-                                <MdNewReleases size={20}/>
-                                <Text fontSize="md">
-                                    Created on {new Date(course.creationDate).toLocaleDateString()}
-                                </Text>
-                            </Flex>
-
-                            <Flex mt={2} gap={1} alignItems="center" cursor="pointer">
-                                <Flex direction="row" gap={1}>
-                                    <Text fontWeight="bold" fontSize="md">{course.rating | 0},0</Text>
-                                    <Rating colorPalette="orange" value={course.rating | 0} defaultValue={0}
-                                            size="sm"/>
-                                    <Button unstyled onClick={() => navigate(`/courses/${id}/ratings`)}>
-                                        <Text _hover={{textDecoration: "underline", cursor: "pointer"}} fontWeight="md"
-                                              color="gray" fontSize="md">add review</Text>
-                                    </Button>
-                                </Flex>
-                            </Flex>
-                            <Text mt={4} mb={4} fontSize="lg" color="gray.700">{course.description}</Text>
+                <Flex position="relative" height="full" direction="column" justifyContent="space-between">
+                    <Flex direction="column">
+                        <Heading fontSize="2xl" mb={4} pr={5}>{course.name}</Heading>
+                        <Flex direction="row" gap={4} flexWrap="wrap">
+                            <Badge colorPalette="teal">
+                                <TbCategory/>
+                                {course.category}
+                            </Badge>
+                            <Badge colorPalette="blue">
+                                <LuHourglass/>
+                                {course.duration}
+                            </Badge>
+                            <Badge colorPalette="purple">
+                                <IoBookOutline/>
+                                {course.level}
+                            </Badge>
+                        </Flex>
+                        <Flex mt={4} gap={1} alignItems="center">
+                            <MdNewReleases size={20}/>
+                            <Text fontSize="md">
+                                Created on {new Date(course.creationDate).toLocaleDateString()}
+                            </Text>
                         </Flex>
 
-                        <Box border={1} left={-4} bottom={-5} p={5} mt={6}>
-                            <Flex alignItems="center" gap={1} justifyContent="space-between">
-                                <Text fontWeight="bold">Want to join the Community?</Text>
-                                <LinkButton colorScheme="teal" variant="solid" to={`/forums/${id}`}>
-                                    Join
-                                    <MessageSquareMore/>
-                                </LinkButton>
+                        <Flex mt={2} gap={1} alignItems="center" cursor="pointer">
+                            <Flex direction="row" gap={1}>
+                                <Text fontWeight="bold" fontSize="md">{course.rating | 0},0</Text>
+                                <Rating colorPalette="orange" value={course.rating | 0} defaultValue={0}
+                                        size="sm"/>
+                                <Button unstyled onClick={() => navigate(`/courses/${id}/ratings`)}>
+                                    <Text _hover={{textDecoration: "underline", cursor: "pointer"}} fontWeight="md"
+                                          color="gray" fontSize="md">add review</Text>
+                                </Button>
                             </Flex>
-                        </Box>
+                        </Flex>
+                        <Text mt={4} mb={4} fontSize="md" color="gray.700">{course.description}</Text>
                     </Flex>
-                </Box>
-                <Box flex="1" maxHeight="85vh" p={4} bg="white" boxShadow="md" borderRadius="md" overflowY="scroll"
-                     maxWidth={isLargerThan800 ? "50vw" : "100vw"}>
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                        Lectures
-                    </Text>
-                    <VStack maxWidth="100%" boxSizing="border-box" align="start">
-                        {course.additionalResources.map((video) => {
-                            return (
-                                <Collapsible.Root width="100%" key={video.url}>
-                                    <Collapsible.Trigger width="100%" paddingY="1">
-                                        <Card.Root
-                                            borderWidth="1px"
-                                            borderRadius="lg"
+
+                    <Box border={1} left={-4} bottom={-5} p={5} mt={6}>
+                        <Flex alignItems="center" gap={1} justifyContent="space-between">
+                            <Text fontWeight="bold">Want to join the Community?</Text>
+                            <LinkButton colorScheme="teal" variant="solid" to={`/forums/${id}`}>
+                                Join
+                                <MessageSquareMore/>
+                            </LinkButton>
+                        </Flex>
+                    </Box>
+                </Flex>
+            </Box>
+            <Box flex="1" height={isLargerThan800 ? "min-content" : "full"} maxHeight={isLargerThan800 ? "90vh" : "full"} p={4} bg="white" boxShadow="md" borderRadius="md" overflowY="scroll"
+                 maxWidth={isLargerThan800 ? "50vw" : "100vw"}>
+                <Text fontSize="xl" fontWeight="bold" mb={2}>
+                    Lectures
+                </Text>
+                <Text fontSize="md" color="gray.600" mb={4}>
+                    Explore these the lectures to start your journey. Click on any card to learn start!
+                </Text>
+                <VStack maxWidth="100%" boxSizing="border-box" align="start">
+                    {course.additionalResources.map((video) => {
+                        return (
+                            <Collapsible.Root width="100%" key={video.url}>
+                                <Collapsible.Trigger width="100%" paddingY="1">
+                                    <Card.Root
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        width="100%"
+                                        p={5}
+                                        boxShadow="xs"
+                                        _hover={{boxShadow: 'lg', transform: 'scale(1.01)'}}
+                                        transition="all 0.2s"
+                                        display="block"
+                                        cursor="pointer"
+                                        position="relative"
+                                    >
+                                        <Flex
+                                            flex="1"
                                             width="100%"
-                                            p={5}
-                                            boxShadow="xs"
-                                            _hover={{boxShadow: 'lg', transform: 'scale(1.01)'}}
-                                            transition="all 0.2s"
-                                            display="block"
-                                            cursor="pointer"
-                                            position="relative"
+                                            fontWeight="bold"
+                                            direction="row"
+                                            alignItems="center"
+                                            gap={1}
+                                            overflow="hidden"
                                         >
-                                            <Flex
-                                                flex="1"
-                                                width="100%"
-                                                fontWeight="bold"
-                                                direction="row"
-                                                alignItems="center"
-                                                gap={1}
-                                                overflow="hidden"
-                                            >
-                                                <FaBook style={{flexShrink: 0}}/>
-                                                <GoDotFill style={{flexShrink: 0}} size={10}/>
-                                                <Text
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: video.title,
-                                                    }}
-                                                    style={{
-                                                        whiteSpace: "nowrap",
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis",
-                                                        flex: "1",
-                                                    }}
-                                                ></Text>
-                                            </Flex>
-                                        </Card.Root>
-                                    </Collapsible.Trigger>
-                                    <Collapsible.Content>
-                                        <Flex p={5} borderWidth="1px">
-                                            {
-                                                <Text textWrap="wrap"
-                                                      style={{
-                                                          flexGrow: 1,
-                                                          maxWidth: "50%",
-                                                          overflow: "hidden",
-                                                          textOverflow: "ellipsis",
-                                                          whiteSpace: "normal",
-                                                      }}
-                                                >{video.description}</Text>
-                                            }
-                                            <iframe
-                                                width="50%"
-                                                src={`https://www.youtube.com/embed/${video.url.replace("https://www.youtube.com/watch?v=", "")}`}
-                                                title={video.title}
-                                                style={{border: "none"}}
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe>
+                                            <FaBook style={{flexShrink: 0}}/>
+                                            <GoDotFill style={{flexShrink: 0}} size={10}/>
+                                            <Text
+                                                dangerouslySetInnerHTML={{
+                                                    __html: video.title,
+                                                }}
+                                                style={{
+                                                    whiteSpace: "nowrap",
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    flex: "1",
+                                                }}
+                                            ></Text>
                                         </Flex>
-                                    </Collapsible.Content>
-                                </Collapsible.Root>
-                            )
-                        })}
-                    </VStack>
-                </Box>
-            </Flex>
-        </Box>
+                                    </Card.Root>
+                                </Collapsible.Trigger>
+                                <Collapsible.Content>
+                                    <Flex p={5} gap={2} borderWidth="1px">
+                                        {
+                                            <Text textWrap="wrap"
+                                                  style={{
+                                                      flexGrow: 1,
+                                                      maxWidth: "50%",
+                                                      overflow: "hidden",
+                                                      textOverflow: "ellipsis",
+                                                      whiteSpace: "normal",
+                                                  }}
+                                            >{video.description}</Text>
+                                        }
+                                        <iframe
+                                            width="50%"
+                                            src={`https://www.youtube.com/embed/${video.url.replace("https://www.youtube.com/watch?v=", "")}`}
+                                            title={video.title}
+                                            style={{border: "none"}}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    </Flex>
+                                </Collapsible.Content>
+                            </Collapsible.Root>
+                        )
+                    })}
+                </VStack>
+            </Box>
+        </Flex>
     );
 };
 

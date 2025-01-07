@@ -28,12 +28,12 @@ const CertificateCard: FC<CertificateCardProps> = ({certificate}) => {
                 pb={3}
                 bg="white"
             >
-                <Flex justifyContent="space-between" mb={4} direction="row" gap={2} alignItems="center">
+                <Flex justifyContent="space-between" mb={4} direction="row" gap={2} alignItems="self-start">
                     <Heading size="lg" color="gray.700">
                         {certificate.courseName}
                     </Heading>
 
-                    <PiCertificateBold size={28} color="#caa271"/>
+                    <PiCertificateBold style={{flexShrink: 0}} size={28} color="#caa271"/>
                 </Flex>
                 <Flex justifyContent="space-between" alignItems="center">
                     <Flex gap={2} alignItems="center">

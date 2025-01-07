@@ -219,7 +219,7 @@ const CourseCard: FC<CourseCardProps> = ({
                     }
                     <Card.Title mb="2">
                         <Flex alignItems="center" justifyContent="space-between">
-                            {name}
+                            <Text pr={5}>{name}</Text>
                             {
                                 certified &&
                                 <Flex _hover={{color: "gray"}}>
@@ -235,7 +235,6 @@ const CourseCard: FC<CourseCardProps> = ({
                             }
                         </Flex>
                     </Card.Title>
-                    <Card.Description mb={4}>{truncateDescription(description)}</Card.Description>
                     <Flex direction="row" gap={4} flexWrap="wrap">
                         <Badge colorPalette="teal">
                             <TbCategory/>
@@ -250,6 +249,7 @@ const CourseCard: FC<CourseCardProps> = ({
                             {level}
                         </Badge>
                     </Flex>
+                    <Card.Description mt={2}>{truncateDescription(description)}</Card.Description>
                 </Card.Body>
                 <Card.Footer>
                     <Flex width="full" direction="row" alignItems="center" gap={2}>
