@@ -8,7 +8,8 @@ RUN npm install
 
 COPY . .
 
-RUN --mount=type=secret,id=openai_api_key,env=VITE_OPENAI_API_KEY npm run build
+RUN --mount=type=secret,id=openai_api_key,env=VITE_OPENAI_API_KEY \
+    --mount=type=secret,id=websocket_server,env=VITE_WS_URI npm run build
 
 FROM node:23-alpine
 

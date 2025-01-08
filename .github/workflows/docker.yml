@@ -52,3 +52,4 @@ jobs:
           cache-to: type=gha,mode=max
           secrets: |
             "openai_api_key=${{ secrets.VITE_OPENAI_API_KEY }}"
+            "websocket_server=${{ secrets.VITE_WS_URI }}"
